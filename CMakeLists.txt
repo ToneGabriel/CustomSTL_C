@@ -1,47 +1,44 @@
 cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
 
-include(FetchContent)
-
-project(custom_stl_c VERSION 0.0.0 LANGUAGES C CXX)
+project(your_project_name VERSION 0.0.0 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-FetchContent_Declare(
-googletest
-GIT_REPOSITORY https://github.com/google/googletest.git
-GIT_TAG main
-)
+set(TEST_YOUR_PROJECT_NAME_EXE_NAME test_your_project_name)
+add_executable(${TEST_YOUR_PROJECT_NAME_EXE_NAME} ${CMAKE_SOURCE_DIR}/test/main.c)
 
-set(INSTALL_GTEST OFF CACHE BOOL "Disable installation of googletest" FORCE)
-
-FetchContent_MakeAvailable(googletest)
-
-set(GTEST_CMAKE_LIB_NAME gtest)
-set(GMOCK_CMAKE_LIB_NAME gmock)
-
-set(TEST_CUSTOM_STL_C_EXE_NAME test_custom_stl_c)
-add_executable(${TEST_CUSTOM_STL_C_EXE_NAME} ${CMAKE_SOURCE_DIR}/test/main.cpp)
-
-target_link_libraries(${TEST_CUSTOM_STL_C_EXE_NAME} PRIVATE
-${GTEST_CMAKE_LIB_NAME}
-${GMOCK_CMAKE_LIB_NAME}
-)
-
-target_include_directories(${TEST_CUSTOM_STL_C_EXE_NAME} PRIVATE
+target_include_directories(${TEST_YOUR_PROJECT_NAME_EXE_NAME} PRIVATE
 ${CMAKE_SOURCE_DIR}/include
 )
 
-target_sources(${TEST_CUSTOM_STL_C_EXE_NAME} PRIVATE
+target_sources(${TEST_YOUR_PROJECT_NAME_EXE_NAME} PRIVATE
 ${CMAKE_SOURCE_DIR}/test/test_priority_queue.c
+)
+
+target_compile_definitions(${TEST_YOUR_PROJECT_NAME_EXE_NAME} PRIVATE
+DEF_EXAMPLE
+DEF_VAL_EXAMPLE=value
+DEF_STR_EXAMPLE="string"
+)
+
+include(FetchContent)
+FetchContent_Declare(
+Unity
+GIT_REPOSITORY https://github.com/ThrowTheSwitch/Unity.git
+GIT_TAG master
+)
+
+FetchContent_MakeAvailable(Unity)
+
+set(UNITY_CMAKE_LIB_NAME Unity)
+
+target_link_libraries(${TEST_YOUR_PROJECT_NAME_EXE_NAME} PRIVATE
+${UNITY_CMAKE_LIB_NAME}
 )
 
