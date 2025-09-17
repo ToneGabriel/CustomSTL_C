@@ -161,7 +161,7 @@ static void _C_PUBLIC_MEMBER(PQ_NAME, pop)(PQ_NAME* target)                     
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
     if (_C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, empty)(&target->vec)) return;                                                               \
-    _C_PUBLIC_MEMBER(TYPE, move)(                                                                                                           \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(                                                                                                \
         _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_at)(&target->vec, 0),                                                               \
         _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_at)(&target->vec, _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec) - 1)  \
     );                                                                                                                                      \

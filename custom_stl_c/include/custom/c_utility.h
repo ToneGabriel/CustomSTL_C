@@ -58,7 +58,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(ALIAS)                                
 
 /**
  * @def DEFINE_GENERIC_SWAP_FUNCTION
- * @brief Defines a generic swap function for a given type and copy function.
+ * @brief Defines a generic swap function for a given type.
  *
  * This macro instantiates:
  * 
@@ -75,9 +75,9 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(ALIAS)                                
 static void _C_PUBLIC_MEMBER(SWAP_FUNC_NAME_PREFIX, do_swap)(TYPE* left, TYPE* right)   \
 {                                                                                       \
     TYPE temp;                                                                          \
-    _C_PUBLIC_MEMBER(TYPE, move)(&temp, left);                                          \
-    _C_PUBLIC_MEMBER(TYPE, move)(left, right);                                          \
-    _C_PUBLIC_MEMBER(TYPE, move)(right, &temp);                                         \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(&temp, left);                               \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(left, right);                               \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(right, &temp);                              \
 }                                                                                       \
 
 
