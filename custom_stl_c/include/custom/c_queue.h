@@ -30,38 +30,75 @@ typedef struct                                                                  
     QUEUE_LIST_HELPER_NAME list;                                                                                \
 } QUEUE_NAME;                                                                                                   \
                                                                                                                 \
-static QUEUE_NAME   _C_PUBLIC_MEMBER(QUEUE_NAME, create)();                                                     \
-static void         _C_PUBLIC_MEMBER(QUEUE_NAME, destroy)(QUEUE_NAME* queue);                                   \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(QUEUE_NAME);                                                           \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(QUEUE_NAME);                                                          \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(QUEUE_NAME);                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(QUEUE_NAME);                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(QUEUE_NAME);                                                           \
+                                                                                                                \
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, clear)(QUEUE_NAME* queue);                                     \
-static void         _C_PUBLIC_MEMBER(QUEUE_NAME, copy)(QUEUE_NAME* dest, const QUEUE_NAME* source);             \
-static void         _C_PUBLIC_MEMBER(QUEUE_NAME, move)(QUEUE_NAME* dest, QUEUE_NAME* source);                   \
 static size_t       _C_PUBLIC_MEMBER(QUEUE_NAME, size)(QUEUE_NAME* queue);                                      \
 static bool         _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(QUEUE_NAME* queue);                                     \
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert)(QUEUE_NAME* queue, const TYPE* item);                  \
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, pop)(QUEUE_NAME* queue);                                       \
 static TYPE*        _C_PUBLIC_MEMBER(QUEUE_NAME, peek)(QUEUE_NAME* queue);                                      \
-static bool         _C_PUBLIC_MEMBER(QUEUE_NAME, equals)(const QUEUE_NAME* left, const QUEUE_NAME* right);      \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Creates a new queue. Initialize internal list.                                                        \
  * @return A new instance of QUEUE_NAME.                                                                        \
  */                                                                                                             \
-static QUEUE_NAME _C_PUBLIC_MEMBER(QUEUE_NAME, create)()                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(QUEUE_NAME)                                                            \
 {                                                                                                               \
-    QUEUE_NAME queue = {                                                                                        \
-        .list = _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, create)()                                              \
+    return (QUEUE_NAME){                                                                                        \
+        .list = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(QUEUE_LIST_HELPER_NAME)()                                   \
     };                                                                                                          \
-    return queue;                                                                                               \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Destroys the queue and its internal data.                                                             \
- * @param queue Pointer to the queue.                                                                           \
+ * @param target Pointer to the queue.                                                                          \
  */                                                                                                             \
-static void _C_PUBLIC_MEMBER(QUEUE_NAME, destroy)(QUEUE_NAME* queue)                                            \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(QUEUE_NAME)                                                           \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != queue, "Queue is NULL");                                                           \
-    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, destroy)(&queue->list);                                            \
+    _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(QUEUE_LIST_HELPER_NAME)(&target->list);                                \
+}                                                                                                               \
+                                                                                                                \
+/**                                                                                                             \
+ * @brief Copies contents of one queue to another.                                                              \
+ * @param dest Destination queue pointer.                                                                       \
+ * @param source Source queue pointer.                                                                          \
+ */                                                                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(QUEUE_NAME)                                                              \
+{                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != dest, "Queue dest is NULL");                                                       \
+    _C_CUSTOM_ASSERT(NULL != source, "Queue source is NULL");                                                   \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(QUEUE_LIST_HELPER_NAME)(&dest->list, &source->list);                      \
+}                                                                                                               \
+                                                                                                                \
+/**                                                                                                             \
+ * @brief Move contents of one queue to another.                                                                \
+ * @param dest Destination queue pointer.                                                                       \
+ * @param source Source queue pointer.                                                                          \
+ */                                                                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(QUEUE_NAME)                                                              \
+{                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != dest, "Queue dest is NULL");                                                       \
+    _C_CUSTOM_ASSERT(NULL != source, "Queue source is NULL");                                                   \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(QUEUE_LIST_HELPER_NAME)(&dest->list, &source->list);                      \
+}                                                                                                               \
+                                                                                                                \
+/**                                                                                                             \
+ * @brief Checks whether two queues are equal by comparing each element.                                        \
+ * @param left Left-hand side pointer to a queue.                                                               \
+ * @param right Right-hand side pointer to a queue.                                                             \
+ * @return `true` if equal, `false` otherwise.                                                                  \
+ */                                                                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(QUEUE_NAME)                                                            \
+{                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != left, "Queue left is NULL");                                                       \
+    _C_CUSTOM_ASSERT(NULL != right, "Queue right is NULL");                                                     \
+    return _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(QUEUE_LIST_HELPER_NAME)(&left->list, &right->list);              \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
@@ -72,30 +109,6 @@ static void _C_PUBLIC_MEMBER(QUEUE_NAME, clear)(QUEUE_NAME* queue)              
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != queue, "Queue is NULL");                                                           \
     _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, clear)(&queue->list);                                              \
-}                                                                                                               \
-                                                                                                                \
-/**                                                                                                             \
- * @brief Copies contents of one queue to another.                                                              \
- * @param dest Destination queue pointer.                                                                       \
- * @param source Source queue pointer.                                                                          \
- */                                                                                                             \
-static void _C_PUBLIC_MEMBER(QUEUE_NAME, copy)(QUEUE_NAME* dest, const QUEUE_NAME* source)                      \
-{                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != dest, "Queue dest is NULL");                                                       \
-    _C_CUSTOM_ASSERT(NULL != source, "Queue source is NULL");                                                   \
-    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, copy)(&dest->list, &source->list);                                 \
-}                                                                                                               \
-                                                                                                                \
-/**                                                                                                             \
- * @brief Move contents of one queue to another.                                                                \
- * @param dest Destination queue pointer.                                                                       \
- * @param source Source queue pointer.                                                                          \
- */                                                                                                             \
-static void _C_PUBLIC_MEMBER(QUEUE_NAME, move)(QUEUE_NAME* dest, QUEUE_NAME* source)                            \
-{                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != dest, "Queue dest is NULL");                                                       \
-    _C_CUSTOM_ASSERT(NULL != source, "Queue source is NULL");                                                   \
-    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, move)(&dest->list, &source->list);                                 \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
@@ -150,19 +163,6 @@ static TYPE* _C_PUBLIC_MEMBER(QUEUE_NAME, peek)(QUEUE_NAME* queue)              
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != queue, "Queue is NULL");                                                           \
     return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, element_front)(&queue->list);                               \
-}                                                                                                               \
-                                                                                                                \
-/**                                                                                                             \
- * @brief Checks whether two queues are equal by comparing each element.                                        \
- * @param left Left-hand side pointer to a queue.                                                               \
- * @param right Right-hand side pointer to a queue.                                                             \
- * @return `true` if equal, `false` otherwise.                                                                  \
- */                                                                                                             \
-static bool _C_PUBLIC_MEMBER(QUEUE_NAME, equals)(const QUEUE_NAME* left, const QUEUE_NAME* right)               \
-{                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != left, "Queue left is NULL");                                                       \
-    _C_CUSTOM_ASSERT(NULL != right, "Queue right is NULL");                                                     \
-    return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, equals)(&left->list, &right->list);                         \
 }                                                                                                               \
 
 

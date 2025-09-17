@@ -5,7 +5,7 @@
 // Setup ==========================
 
 
-DEFINE_DEFAULT_TYPE_OPERATIONS(unsigned int, myuint_t)
+DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(unsigned int, myuint_t)
 DEFINE_GENERIC_STACK(StackUINT, myuint_t)
 
 

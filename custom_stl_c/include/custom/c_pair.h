@@ -17,49 +17,49 @@ typedef struct                                                                  
     TYPE_2 second;                                                                                          \
 } PAIR_NAME;                                                                                                \
                                                                                                             \
-static PAIR_NAME    _C_PUBLIC_MEMBER(PAIR_NAME, create)(const TYPE_1* first, const TYPE_2* second);         \
-static void         _C_PUBLIC_MEMBER(PAIR_NAME, destroy)(PAIR_NAME* pair);                                  \
-static void         _C_PUBLIC_MEMBER(PAIR_NAME, copy)(PAIR_NAME* dest, const PAIR_NAME* source);            \
-static void         _C_PUBLIC_MEMBER(PAIR_NAME, move)(PAIR_NAME* dest, PAIR_NAME* source);                  \
-static bool         _C_PUBLIC_MEMBER(PAIR_NAME, equals)(const PAIR_NAME* left, const PAIR_NAME* right);     \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(PAIR_NAME);                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(PAIR_NAME);                                                       \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(PAIR_NAME);                                                          \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(PAIR_NAME);                                                          \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PAIR_NAME);                                                        \
                                                                                                             \
-static PAIR_NAME _C_PUBLIC_MEMBER(PAIR_NAME, create)(const TYPE_1* first, const TYPE_2* second)             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(PAIR_NAME)                                                         \
 {                                                                                                           \
-    PAIR_NAME pair = {};                                                                                    \
-    _C_PUBLIC_MEMBER(TYPE_1, copy)(&pair.first, first);                                                     \
-    _C_PUBLIC_MEMBER(TYPE_2, copy)(&pair.second, second);                                                   \
-    return pair;                                                                                            \
+    return (PAIR_NAME){                                                                                     \
+        .first = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE_1)(),                                             \
+        .second = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE_2)()                                             \
+    };                                                                                                      \
 }                                                                                                           \
                                                                                                             \
-static void _C_PUBLIC_MEMBER(PAIR_NAME, destroy)(PAIR_NAME* pair)                                           \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(PAIR_NAME)                                                        \
 {                                                                                                           \
-    _C_CUSTOM_ASSERT(NULL != pair, "Pair is NULL");                                                         \
-    _C_PUBLIC_MEMBER(TYPE_1, destroy)(&pair->first);                                                        \
-    _C_PUBLIC_MEMBER(TYPE_2, destroy)(&pair->second);                                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "Pair is NULL");                                                       \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE_1)(&target->first);                                           \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE_2)(&target->second);                                          \
 }                                                                                                           \
                                                                                                             \
-static void _C_PUBLIC_MEMBER(PAIR_NAME, copy)(PAIR_NAME* dest, const PAIR_NAME* source)                     \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(PAIR_NAME)                                                           \
 {                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != dest, "Pair dest is NULL");                                                    \
     _C_CUSTOM_ASSERT(NULL != source, "Pair source is NULL");                                                \
     if (dest == source) return;                                                                             \
-    _C_PUBLIC_MEMBER(TYPE_1, copy)(&dest->first, &source->first);                                           \
-    _C_PUBLIC_MEMBER(TYPE_2, copy)(&dest->second, &source->second);                                         \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE_1)(&dest->first, &source->first);                                \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE_2)(&dest->second, &source->second);                              \
 }                                                                                                           \
                                                                                                             \
-static void _C_PUBLIC_MEMBER(PAIR_NAME, move)(PAIR_NAME* dest, PAIR_NAME* source)                           \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(PAIR_NAME)                                                           \
 {                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != dest, "Pair dest is NULL");                                                    \
     _C_CUSTOM_ASSERT(NULL != source, "Pair source is NULL");                                                \
     if (dest == source) return;                                                                             \
-    _C_PUBLIC_MEMBER(TYPE_1, move)(&dest->first, &source->first);                                           \
-    _C_PUBLIC_MEMBER(TYPE_2, move)(&dest->second, &source->second);                                         \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE_1)(&dest->first, &source->first);                                \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE_2)(&dest->second, &source->second);                              \
 }                                                                                                           \
                                                                                                             \
-static bool _C_PUBLIC_MEMBER(PAIR_NAME, equals)(const PAIR_NAME* left, const PAIR_NAME* right)              \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PAIR_NAME)                                                         \
 {                                                                                                           \
-    return  _C_PUBLIC_MEMBER(TYPE_1, equals)(&left->first, &right->first) &&                                \
-            _C_PUBLIC_MEMBER(TYPE_2, equals)(&left->second, &right->second);                                \
+    return  _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE_1)(&left->first, &right->first) &&                     \
+            _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE_2)(&left->second, &right->second);                     \
 }                                                                                                           \
 
 

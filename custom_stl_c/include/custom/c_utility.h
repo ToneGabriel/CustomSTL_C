@@ -5,46 +5,49 @@
 #include "custom/_c_stlcore.h"
 
 
-#define DEFINE_DEFAULT_TYPE_OPERATIONS(TYPE, ALIAS)                                                                 \
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)      static TYPE _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)()
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)     static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(TYPE* target)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)        static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(TYPE* dest, const TYPE* source)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)        static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(TYPE* dest, TYPE* source)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)      static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)(const TYPE* left, const TYPE* right)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)        static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)(const TYPE* left, const TYPE* right)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)     static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)(const TYPE* left, const TYPE* right)
+
+
+#define DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(TYPE, ALIAS)                                                             \
 typedef TYPE ALIAS;                                                                                                 \
                                                                                                                     \
-static ALIAS    _C_PUBLIC_MEMBER(ALIAS, create)();                                                                  \
-static void     _C_PUBLIC_MEMBER(ALIAS, destroy)(ALIAS* target);                                                    \
-static void     _C_PUBLIC_MEMBER(ALIAS, copy)(ALIAS* dest, const ALIAS* src);                                       \
-static void     _C_PUBLIC_MEMBER(ALIAS, move)(ALIAS* dest, ALIAS* src);                                             \
-static bool     _C_PUBLIC_MEMBER(ALIAS, equals)(const ALIAS* left, const ALIAS* right);                             \
-static bool     _C_PUBLIC_MEMBER(ALIAS, less)(const ALIAS* left, const ALIAS* right);                               \
-static bool     _C_PUBLIC_MEMBER(ALIAS, greater)(const ALIAS* left, const ALIAS* right);                            \
-                                                                                                                    \
-static ALIAS _C_PUBLIC_MEMBER(ALIAS, create)()                                                                      \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(ALIAS)                                                                     \
 {                                                                                                                   \
-    ALIAS ret = {0};                                                                                                \
-    return ret;                                                                                                     \
+    return (ALIAS){0};                                                                                              \
 }                                                                                                                   \
                                                                                                                     \
-static void _C_PUBLIC_MEMBER(ALIAS, destroy)(ALIAS* target) { /*Empty*/ }                                           \
-                                                                                                                    \
-static void _C_PUBLIC_MEMBER(ALIAS, copy)(ALIAS* dest, const ALIAS* src)                                            \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(ALIAS)                                                                    \
 {                                                                                                                   \
-    *dest = *src;                                                                                                   \
+    /*Empty*/                                                                                                       \
 }                                                                                                                   \
                                                                                                                     \
-static void _C_PUBLIC_MEMBER(ALIAS, move)(ALIAS* dest, ALIAS* src)                                                  \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(ALIAS)                                                                       \
 {                                                                                                                   \
-    *dest = *src;                                                                                                   \
+    *dest = *source;                                                                                                \
 }                                                                                                                   \
                                                                                                                     \
-static bool _C_PUBLIC_MEMBER(ALIAS, equals)(const ALIAS* left, const ALIAS* right)                                  \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(ALIAS)                                                                       \
+{                                                                                                                   \
+    *dest = *source;                                                                                                \
+}                                                                                                                   \
+                                                                                                                    \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(ALIAS)                                                                     \
 {                                                                                                                   \
     return *left == *right;                                                                                         \
 }                                                                                                                   \
                                                                                                                     \
-static bool _C_PUBLIC_MEMBER(ALIAS, less)(const ALIAS* left, const ALIAS* right)                                    \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(ALIAS)                                                                       \
 {                                                                                                                   \
     return *left < *right;                                                                                          \
 }                                                                                                                   \
                                                                                                                     \
-static bool _C_PUBLIC_MEMBER(ALIAS, greater)(const ALIAS* left, const ALIAS* right)                                 \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(ALIAS)                                                                    \
 {                                                                                                                   \
     return *left > *right;                                                                                          \
 }                                                                                                                   \

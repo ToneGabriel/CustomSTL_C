@@ -72,8 +72,21 @@ _C_IDENTIFIER_BIND_IMPL_SELECTOR_HELPER(        \
 
 
 // Member identifier binders
-#define _C_PUBLIC_MEMBER(ContextName, MemberName)   _C_IDENTIFIER_BIND(ContextName, MemberName)
-#define _C_PRIVATE_MEMBER(ContextName, MemberName)  _C_IDENTIFIER_BIND(ContextName, PRIVATE, MemberName)
+#define _C_PUBLIC_MEMBER(ContextName, MemberName)           _C_IDENTIFIER_BIND(ContextName, MemberName)
+#define _C_PRIVATE_MEMBER(ContextName, MemberName)          _C_IDENTIFIER_BIND(ContextName, PRIVATE, MemberName)
+
+
+// Mandatory member identifiers
+#define _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)           _C_PUBLIC_MEMBER(TYPE, create)
+#define _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)          _C_PUBLIC_MEMBER(TYPE, destroy)
+#define _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)             _C_PUBLIC_MEMBER(TYPE, copy)
+#define _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)             _C_PUBLIC_MEMBER(TYPE, move)
+#define _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)           _C_PUBLIC_MEMBER(TYPE, equals)
+
+
+// Optional member identifiers
+#define _C_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)             _C_PUBLIC_MEMBER(TYPE, less)
+#define _C_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)          _C_PUBLIC_MEMBER(TYPE, greater)
 
 
 #endif  // _C_STLCORE_H

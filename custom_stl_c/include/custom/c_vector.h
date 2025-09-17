@@ -141,12 +141,14 @@ static bool _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, equals)(VECTOR_ITERATOR_NAME*
     TYPE                                                                                                                \
 )                                                                                                                       \
                                                                                                                         \
-static VECTOR_NAME          _C_PUBLIC_MEMBER(VECTOR_NAME, create)();                                                    \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_NAME);                                                                  \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME);                                                                 \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(VECTOR_NAME);                                                                    \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(VECTOR_NAME);                                                                    \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_NAME);                                                                  \
+                                                                                                                        \
 static VECTOR_NAME          _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(size_t capacity);                            \
-static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, destroy)(VECTOR_NAME* vec);                                   \
 static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, clear)(VECTOR_NAME* vec);                                     \
-static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, copy)(VECTOR_NAME* dest, const VECTOR_NAME* source);          \
-static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, move)(VECTOR_NAME* dest, VECTOR_NAME* source);                \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, data)(const VECTOR_NAME* vec);                                \
 static size_t               _C_PUBLIC_MEMBER(VECTOR_NAME, size)(const VECTOR_NAME* vec);                                \
 static size_t               _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(const VECTOR_NAME* vec);                            \
@@ -156,7 +158,6 @@ static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, pop_back)(VECTOR_NAME*
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_front)(VECTOR_NAME* vec);                             \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_back)(VECTOR_NAME* vec);                              \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* vec, size_t index);                  \
-static bool                 _C_PUBLIC_MEMBER(VECTOR_NAME, equals)(const VECTOR_NAME* left, const VECTOR_NAME* right);   \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, begin)(VECTOR_NAME* vec);                                     \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, end)(VECTOR_NAME* vec);                                       \
                                                                                                                         \
@@ -164,9 +165,78 @@ static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, end)(VECTOR_NAME* vec)
  * @brief Creates a vector struct and allocates dynamic array with default capacity.                                    \
  * @return A new instance of VECTOR_NAME.                                                                               \
  */                                                                                                                     \
-static VECTOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, create)()                                                              \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_NAME)                                                                   \
 {                                                                                                                       \
     return _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(GENERIC_VECTOR_DEFAULT_CAPACITY);                             \
+}                                                                                                                       \
+                                                                                                                        \
+/**                                                                                                                     \
+ * @brief Destroys a vector and releases allocated memory.                                                              \
+ * @param target Pointer to the vector.                                                                                 \
+ */                                                                                                                     \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)                                                                  \
+{                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                 \
+    if (NULL == target->first) return;                                                                                  \
+    size_t vec_size = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(target);                                                      \
+    for (size_t i = 0; i < vec_size; ++i)                                                                               \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(target->first + i);                                                  \
+    free(target->first);                                                                                                \
+    target->first = target->last = target->final = NULL;                                                                \
+}                                                                                                                       \
+                                                                                                                        \
+/**                                                                                                                     \
+ * @brief Copies contents of one vector to another.                                                                     \
+ * @param dest Destination vector pointer.                                                                              \
+ * @param source Source vector pointer.                                                                                 \
+ */                                                                                                                     \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(VECTOR_NAME)                                                                     \
+{                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != dest, "Vector dest is NULL");                                                              \
+    _C_CUSTOM_ASSERT(NULL != source, "Vector source is NULL");                                                          \
+    if (dest == source) return;                                                                                         \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)(dest);                                                            \
+    if (NULL == source->first) return;                                                                                  \
+    size_t newCapacity = _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(source);                                               \
+    size_t newSize = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(source);                                                       \
+    *dest = _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(newCapacity);                                                \
+    for (size_t i = 0; i < newSize; ++i)                                                                                \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(dest->first + i, source->first + i);                                    \
+    dest->last = dest->first + newSize;                                                                                 \
+}                                                                                                                       \
+                                                                                                                        \
+/**                                                                                                                     \
+ * @brief Moves contents from one vector to another.                                                                    \
+ * @param dest Destination vector pointer.                                                                              \
+ * @param source Source vector pointer.                                                                                 \
+ */                                                                                                                     \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(VECTOR_NAME)                                                                     \
+{                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != dest, "Vector dest is NULL");                                                              \
+    _C_CUSTOM_ASSERT(NULL != source, "Vector source is NULL");                                                          \
+    if (dest == source) return;                                                                                         \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)(dest);                                                            \
+    if (NULL == source->first) return;                                                                                  \
+    *dest = *source;                                                                                                    \
+    source->first = source->last = source->final = NULL;                                                                \
+}                                                                                                                       \
+                                                                                                                        \
+/**                                                                                                                     \
+ * @brief Checks whether two vectors are equal by comparing each element.                                               \
+ * @param left Left-hand side pointer to a vector.                                                                      \
+ * @param right Right-hand side pointer to a vector.                                                                    \
+ * @return `true` if equal, `false` otherwise.                                                                          \
+ */                                                                                                                     \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_NAME)                                                                   \
+{                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != left, "Vector left is NULL");                                                              \
+    _C_CUSTOM_ASSERT(NULL != right, "Vector right is NULL");                                                            \
+    if (_C_PUBLIC_MEMBER(VECTOR_NAME, size)(left) !=                                                                    \
+        _C_PUBLIC_MEMBER(VECTOR_NAME, size)(right)) return false;                                                       \
+    size_t s = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(left);                                                               \
+    for (size_t i = 0; i < s; ++i)                                                                                      \
+        if (!_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)(left->first + i, right->first + i)) return false;                \
+    return true;                                                                                                        \
 }                                                                                                                       \
                                                                                                                         \
 /**                                                                                                                     \
@@ -178,27 +248,11 @@ static VECTOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(size_t capacit
 {                                                                                                                       \
     size_t newCapacity = capacity > GENERIC_VECTOR_DEFAULT_CAPACITY ? capacity : GENERIC_VECTOR_DEFAULT_CAPACITY;       \
     TYPE* arr = (TYPE*)malloc(sizeof(TYPE) * newCapacity);                                                              \
-    VECTOR_NAME vec = {                                                                                                 \
+    return (VECTOR_NAME){                                                                                               \
         .first = arr,                                                                                                   \
         .last = arr,                                                                                                    \
         .final = arr + newCapacity                                                                                      \
     };                                                                                                                  \
-    return vec;                                                                                                         \
-}                                                                                                                       \
-                                                                                                                        \
-/**                                                                                                                     \
- * @brief Destroys a vector and releases allocated memory.                                                              \
- * @param vec Pointer to the vector.                                                                                    \
- */                                                                                                                     \
-static void _C_PUBLIC_MEMBER(VECTOR_NAME, destroy)(VECTOR_NAME* vec)                                                    \
-{                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != vec, "Vector is NULL");                                                                    \
-    if (NULL == vec->first) return;                                                                                     \
-    size_t vec_size = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(vec);                                                         \
-    for (size_t i = 0; i < vec_size; ++i)                                                                               \
-        _C_PUBLIC_MEMBER(TYPE, destroy)(vec->first + i);                                                                \
-    free(vec->first);                                                                                                   \
-    vec->first = vec->last = vec->final = NULL;                                                                         \
 }                                                                                                                       \
                                                                                                                         \
 /**                                                                                                                     \
@@ -211,44 +265,8 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, clear)(VECTOR_NAME* vec)              
     if (NULL == vec->first) return;                                                                                     \
     size_t vec_size = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(vec);                                                         \
     for (size_t i = 0; i < vec_size; ++i)                                                                               \
-        _C_PUBLIC_MEMBER(TYPE, destroy)(vec->first + i);                                                                \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(vec->first + i);                                                     \
     vec->last = vec->first;                                                                                             \
-}                                                                                                                       \
-                                                                                                                        \
-/**                                                                                                                     \
- * @brief Copies contents of one vector to another.                                                                     \
- * @param dest Destination vector pointer.                                                                              \
- * @param source Source vector pointer.                                                                                 \
- */                                                                                                                     \
-static void _C_PUBLIC_MEMBER(VECTOR_NAME, copy)(VECTOR_NAME* dest, const VECTOR_NAME* source)                           \
-{                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != dest, "Vector dest is NULL");                                                              \
-    _C_CUSTOM_ASSERT(NULL != source, "Vector source is NULL");                                                          \
-    if (dest == source) return;                                                                                         \
-    _C_PUBLIC_MEMBER(VECTOR_NAME, destroy)(dest);                                                                       \
-    if (NULL == source->first) return;                                                                                  \
-    size_t newCapacity = _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(source);                                               \
-    size_t newSize = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(source);                                                       \
-    *dest = _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(newCapacity);                                                \
-    for (size_t i = 0; i < newSize; ++i)                                                                                \
-        _C_PUBLIC_MEMBER(TYPE, copy)(dest->first + i, source->first + i);                                               \
-    dest->last = dest->first + newSize;                                                                                 \
-}                                                                                                                       \
-                                                                                                                        \
-/**                                                                                                                     \
- * @brief Moves contents from one vector to another.                                                                    \
- * @param dest Destination vector pointer.                                                                              \
- * @param source Source vector pointer.                                                                                 \
- */                                                                                                                     \
-static void _C_PUBLIC_MEMBER(VECTOR_NAME, move)(VECTOR_NAME* dest, VECTOR_NAME* source)                                 \
-{                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != dest, "Vector dest is NULL");                                                              \
-    _C_CUSTOM_ASSERT(NULL != source, "Vector source is NULL");                                                          \
-    if (dest == source) return;                                                                                         \
-    _C_PUBLIC_MEMBER(VECTOR_NAME, destroy)(dest);                                                                       \
-    if (NULL == source->first) return;                                                                                  \
-    *dest = *source;                                                                                                    \
-    source->first = source->last = source->final = NULL;                                                                \
 }                                                                                                                       \
                                                                                                                         \
 /**                                                                                                                     \
@@ -313,7 +331,7 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME* vec, const TYP
         vec->last = vec->first + oldSize;                                                                               \
         vec->final = vec->first + newCapacity;                                                                          \
     }                                                                                                                   \
-    _C_PUBLIC_MEMBER(TYPE, copy)(vec->last++, item);                                                                    \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(vec->last++, item);                                                         \
 }                                                                                                                       \
                                                                                                                         \
 /**                                                                                                                     \
@@ -324,7 +342,7 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, pop_back)(VECTOR_NAME* vec)           
 {                                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != vec, "Vector is NULL");                                                                    \
     if (vec->first == vec->last) return;                                                                                \
-    _C_PUBLIC_MEMBER(TYPE, destroy)(--vec->last);                                                                       \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(--vec->last);                                                            \
 }                                                                                                                       \
                                                                                                                         \
 /**                                                                                                                     \
@@ -362,24 +380,6 @@ static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* vec, size_t 
     _C_CUSTOM_ASSERT(NULL != vec, "Vector is NULL");                                                                    \
     if (vec->first + index >= vec->last) return NULL;                                                                   \
     return vec->first + index;                                                                                          \
-}                                                                                                                       \
-                                                                                                                        \
-/**                                                                                                                     \
- * @brief Checks whether two vectors are equal by comparing each element.                                               \
- * @param left Left-hand side pointer to a vector.                                                                      \
- * @param right Right-hand side pointer to a vector.                                                                    \
- * @return `true` if equal, `false` otherwise.                                                                          \
- */                                                                                                                     \
-static bool _C_PUBLIC_MEMBER(VECTOR_NAME, equals)(const VECTOR_NAME* left, const VECTOR_NAME* right)                    \
-{                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != left, "Vector left is NULL");                                                              \
-    _C_CUSTOM_ASSERT(NULL != right, "Vector right is NULL");                                                            \
-    if (_C_PUBLIC_MEMBER(VECTOR_NAME, size)(left) !=                                                                    \
-        _C_PUBLIC_MEMBER(VECTOR_NAME, size)(right)) return false;                                                       \
-    size_t s = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(left);                                                               \
-    for (size_t i = 0; i < s; ++i)                                                                                      \
-        if (!_C_PUBLIC_MEMBER(TYPE, equals)(left->first + i, right->first + i)) return false;                           \
-    return true;                                                                                                        \
 }                                                                                                                       \
                                                                                                                         \
 /**                                                                                                                     \

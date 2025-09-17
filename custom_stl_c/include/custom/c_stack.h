@@ -30,38 +30,75 @@ typedef struct                                                                  
     STACK_VECTOR_HELPER_NAME vec;                                                                               \
 } STACK_NAME;                                                                                                   \
                                                                                                                 \
-static STACK_NAME   _C_PUBLIC_MEMBER(STACK_NAME, create)();                                                     \
-static void         _C_PUBLIC_MEMBER(STACK_NAME, destroy)(STACK_NAME* stack);                                   \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(STACK_NAME);                                                           \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(STACK_NAME);                                                          \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(STACK_NAME);                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(STACK_NAME);                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(STACK_NAME);                                                           \
+                                                                                                                \
 static void         _C_PUBLIC_MEMBER(STACK_NAME, clear)(STACK_NAME* stack);                                     \
-static void         _C_PUBLIC_MEMBER(STACK_NAME, copy)(STACK_NAME* dest, const STACK_NAME* source);             \
-static void         _C_PUBLIC_MEMBER(STACK_NAME, move)(STACK_NAME* dest, STACK_NAME* source);                   \
 static size_t       _C_PUBLIC_MEMBER(STACK_NAME, size)(STACK_NAME* stack);                                      \
 static bool         _C_PUBLIC_MEMBER(STACK_NAME, empty)(STACK_NAME* stack);                                     \
 static void         _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* stack, const TYPE* item);                  \
 static void         _C_PUBLIC_MEMBER(STACK_NAME, pop)(STACK_NAME* stack);                                       \
 static TYPE*        _C_PUBLIC_MEMBER(STACK_NAME, peek)(STACK_NAME* stack);                                      \
-static bool         _C_PUBLIC_MEMBER(STACK_NAME, equals)(const STACK_NAME* left, const STACK_NAME* right);      \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Creates a new stack. Initialize internal vector.                                                      \
  * @return A new instance of STACK_NAME.                                                                        \
  */                                                                                                             \
-static STACK_NAME _C_PUBLIC_MEMBER(STACK_NAME, create)()                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(STACK_NAME)                                                            \
 {                                                                                                               \
-    STACK_NAME stack = {                                                                                        \
-        .vec = _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, create)()                                             \
+    return (STACK_NAME){                                                                                        \
+        .vec = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(STACK_VECTOR_HELPER_NAME)()                                  \
     };                                                                                                          \
-    return stack;                                                                                               \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Destroys the stack and its internal data.                                                             \
- * @param stack Pointer to the stack.                                                                           \
+ * @param target Pointer to the stack.                                                                          \
  */                                                                                                             \
-static void _C_PUBLIC_MEMBER(STACK_NAME, destroy)(STACK_NAME* stack)                                            \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(STACK_NAME)                                                           \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != stack, "Stack is NULL");                                                           \
-    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, destroy)(&stack->vec);                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(STACK_VECTOR_HELPER_NAME)(&target->vec);                               \
+}                                                                                                               \
+                                                                                                                \
+/**                                                                                                             \
+ * @brief Copies contents of one stack to another.                                                              \
+ * @param dest Destination stack pointer.                                                                       \
+ * @param source Source stack pointer.                                                                          \
+ */                                                                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(STACK_NAME)                                                              \
+{                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != dest, "Stack dest is NULL");                                                       \
+    _C_CUSTOM_ASSERT(NULL != source, "Stack source is NULL");                                                   \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(STACK_VECTOR_HELPER_NAME)(&dest->vec, &source->vec);                      \
+}                                                                                                               \
+                                                                                                                \
+/**                                                                                                             \
+ * @brief Move contents of one stack to another.                                                                \
+ * @param dest Destination stack pointer.                                                                       \
+ * @param source Source stack pointer.                                                                          \
+ */                                                                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(STACK_NAME)                                                              \
+{                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != dest, "Stack dest is NULL");                                                       \
+    _C_CUSTOM_ASSERT(NULL != source, "Stack source is NULL");                                                   \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(STACK_VECTOR_HELPER_NAME)(&dest->vec, &source->vec);                      \
+}                                                                                                               \
+                                                                                                                \
+/**                                                                                                             \
+ * @brief Checks whether two stacks are equal by comparing each element.                                        \
+ * @param left Left-hand side pointer to a stack.                                                               \
+ * @param right Right-hand side pointer to a stack.                                                             \
+ * @return `true` if equal, `false` otherwise.                                                                  \
+ */                                                                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(STACK_NAME)                                                            \
+{                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != left, "Stack left is NULL");                                                       \
+    _C_CUSTOM_ASSERT(NULL != right, "Stack right is NULL");                                                     \
+    return _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(STACK_VECTOR_HELPER_NAME)(&left->vec, &right->vec);              \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
@@ -72,30 +109,6 @@ static void _C_PUBLIC_MEMBER(STACK_NAME, clear)(STACK_NAME* stack)              
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != stack, "Stack is NULL");                                                           \
     _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, clear)(&stack->vec);                                             \
-}                                                                                                               \
-                                                                                                                \
-/**                                                                                                             \
- * @brief Copies contents of one stack to another.                                                              \
- * @param dest Destination stack pointer.                                                                       \
- * @param source Source stack pointer.                                                                          \
- */                                                                                                             \
-static void _C_PUBLIC_MEMBER(STACK_NAME, copy)(STACK_NAME* dest, const STACK_NAME* source)                      \
-{                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != dest, "Stack dest is NULL");                                                       \
-    _C_CUSTOM_ASSERT(NULL != source, "Stack source is NULL");                                                   \
-    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, copy)(&dest->vec, &source->vec);                                 \
-}                                                                                                               \
-                                                                                                                \
-/**                                                                                                             \
- * @brief Move contents of one stack to another.                                                                \
- * @param dest Destination stack pointer.                                                                       \
- * @param source Source stack pointer.                                                                          \
- */                                                                                                             \
-static void _C_PUBLIC_MEMBER(STACK_NAME, move)(STACK_NAME* dest, STACK_NAME* source)                            \
-{                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != dest, "Stack dest is NULL");                                                       \
-    _C_CUSTOM_ASSERT(NULL != source, "Stack source is NULL");                                                   \
-    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, move)(&dest->vec, &source->vec);                                 \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
@@ -150,19 +163,6 @@ static TYPE* _C_PUBLIC_MEMBER(STACK_NAME, peek)(STACK_NAME* stack)              
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != stack, "Stack is NULL");                                                           \
     return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, element_back)(&stack->vec);                               \
-}                                                                                                               \
-                                                                                                                \
-/**                                                                                                             \
- * @brief Checks whether two stacks are equal by comparing each element.                                        \
- * @param left Left-hand side pointer to a stack.                                                               \
- * @param right Right-hand side pointer to a stack.                                                             \
- * @return `true` if equal, `false` otherwise.                                                                  \
- */                                                                                                             \
-static bool _C_PUBLIC_MEMBER(STACK_NAME, equals)(const STACK_NAME* left, const STACK_NAME* right)               \
-{                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != left, "Stack left is NULL");                                                       \
-    _C_CUSTOM_ASSERT(NULL != right, "Stack right is NULL");                                                     \
-    return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, equals)(&left->vec, &right->vec);                         \
 }                                                                                                               \
 
 
