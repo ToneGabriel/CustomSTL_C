@@ -36,12 +36,12 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(QUEUE_NAME);                             
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(QUEUE_NAME);                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(QUEUE_NAME);                                                           \
                                                                                                                 \
-static void         _C_PUBLIC_MEMBER(QUEUE_NAME, clear)(QUEUE_NAME* queue);                                     \
-static size_t       _C_PUBLIC_MEMBER(QUEUE_NAME, size)(QUEUE_NAME* queue);                                      \
-static bool         _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(QUEUE_NAME* queue);                                     \
-static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert)(QUEUE_NAME* queue, const TYPE* item);                  \
-static void         _C_PUBLIC_MEMBER(QUEUE_NAME, pop)(QUEUE_NAME* queue);                                       \
-static TYPE*        _C_PUBLIC_MEMBER(QUEUE_NAME, peek)(QUEUE_NAME* queue);                                      \
+static void         _C_PUBLIC_MEMBER(QUEUE_NAME, clear)(QUEUE_NAME* target);                                    \
+static size_t       _C_PUBLIC_MEMBER(QUEUE_NAME, size)(QUEUE_NAME* target);                                     \
+static bool         _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(QUEUE_NAME* target);                                    \
+static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert)(QUEUE_NAME* target, const TYPE* item);                 \
+static void         _C_PUBLIC_MEMBER(QUEUE_NAME, pop)(QUEUE_NAME* target);                                      \
+static TYPE*        _C_PUBLIC_MEMBER(QUEUE_NAME, peek)(QUEUE_NAME* target);                                     \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Creates a new queue. Initialize internal list.                                                        \
@@ -103,66 +103,66 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(QUEUE_NAME)                            
                                                                                                                 \
 /**                                                                                                             \
  * @brief Clears all elements from the queue without destroying it.                                             \
- * @param queue Pointer to the queue.                                                                           \
+ * @param target Pointer to the queue.                                                                          \
  */                                                                                                             \
-static void _C_PUBLIC_MEMBER(QUEUE_NAME, clear)(QUEUE_NAME* queue)                                              \
+static void _C_PUBLIC_MEMBER(QUEUE_NAME, clear)(QUEUE_NAME* target)                                             \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != queue, "Queue is NULL");                                                           \
-    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, clear)(&queue->list);                                              \
+    _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
+    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, clear)(&target->list);                                             \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Returns the number of elements in the queue.                                                          \
- * @param queue Pointer to the queue.                                                                           \
+ * @param target Pointer to the queue.                                                                          \
  * @return The number of elements.                                                                              \
  */                                                                                                             \
-static size_t _C_PUBLIC_MEMBER(QUEUE_NAME, size)(QUEUE_NAME* queue)                                             \
+static size_t _C_PUBLIC_MEMBER(QUEUE_NAME, size)(QUEUE_NAME* target)                                            \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != queue, "Queue is NULL");                                                           \
-    return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, size)(&queue->list);                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
+    return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, size)(&target->list);                                       \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Checks if the queue is empty.                                                                         \
- * @param queue Pointer to the queue.                                                                           \
+ * @param target Pointer to the queue.                                                                          \
  * @return `true` if empty, `false` otherwise.                                                                  \
  */                                                                                                             \
-static bool _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(QUEUE_NAME* queue)                                              \
+static bool _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(QUEUE_NAME* target)                                             \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != queue, "Queue is NULL");                                                           \
-    return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, empty)(&queue->list);                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
+    return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, empty)(&target->list);                                      \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Inserts a new element into the queue.                                                                 \
- * @param queue Pointer to the queue.                                                                           \
+ * @param target Pointer to the queue.                                                                          \
  * @param item Pointer to the element to insert.                                                                \
  */                                                                                                             \
-static void _C_PUBLIC_MEMBER(QUEUE_NAME, insert)(QUEUE_NAME* queue, const TYPE* item)                           \
+static void _C_PUBLIC_MEMBER(QUEUE_NAME, insert)(QUEUE_NAME* target, const TYPE* item)                          \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != queue, "Queue is NULL");                                                           \
-    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, push_back)(&queue->list, item);                                    \
+    _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
+    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, push_back)(&target->list, item);                                   \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Removes the first element from the queue.                                                             \
- * @param queue Pointer to the queue.                                                                           \
+ * @param target Pointer to the queue.                                                                          \
  */                                                                                                             \
-static void _C_PUBLIC_MEMBER(QUEUE_NAME, pop)(QUEUE_NAME* queue)                                                \
+static void _C_PUBLIC_MEMBER(QUEUE_NAME, pop)(QUEUE_NAME* target)                                               \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != queue, "Queue is NULL");                                                           \
-    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, pop_front)(&queue->list);                                          \
+    _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
+    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, pop_front)(&target->list);                                         \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Returns a pointer to the first element of the queue.                                                  \
- * @param queue Pointer to the queue.                                                                           \
+ * @param target Pointer to the queue.                                                                          \
  * @return Pointer to the top element.                                                                          \
  */                                                                                                             \
-static TYPE* _C_PUBLIC_MEMBER(QUEUE_NAME, peek)(QUEUE_NAME* queue)                                              \
+static TYPE* _C_PUBLIC_MEMBER(QUEUE_NAME, peek)(QUEUE_NAME* target)                                             \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != queue, "Queue is NULL");                                                           \
-    return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, element_front)(&queue->list);                               \
+    _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
+    return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, element_front)(&target->list);                              \
 }                                                                                                               \
 
 

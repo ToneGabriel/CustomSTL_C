@@ -17,172 +17,172 @@
  * @param PQ_VECTOR_HELPER_NAME     Name prefix for the vector implementation used internally (defined beforehand via another macro)
  * @param TYPE                      Type of elements to be stored in the priority queue
  */
-#define _DEFINE_GENERIC_PRIORITY_QUEUE_IMPL(                                                                                            \
-    PQ_NAME,                                                                                                                            \
-    PQ_HEAPIFY_HELPER_NAME,                                                                                                             \
-    PQ_VECTOR_HELPER_NAME,                                                                                                              \
-    TYPE                                                                                                                                \
-)                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @struct PQ_NAME                                                                                                                      \
- * @brief Struct representing the priority queue. Contains the internal vector.                                                         \
- */                                                                                                                                     \
-typedef struct                                                                                                                          \
-{                                                                                                                                       \
-    PQ_VECTOR_HELPER_NAME vec;                                                                                                          \
-} PQ_NAME;                                                                                                                              \
-                                                                                                                                        \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(PQ_NAME);                                                                                      \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(PQ_NAME);                                                                                     \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(PQ_NAME);                                                                                        \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(PQ_NAME);                                                                                        \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PQ_NAME);                                                                                      \
-                                                                                                                                        \
-static void     _C_PUBLIC_MEMBER(PQ_NAME, clear)(PQ_NAME* pq);                                                                          \
-static size_t   _C_PUBLIC_MEMBER(PQ_NAME, size)(PQ_NAME* pq);                                                                           \
-static bool     _C_PUBLIC_MEMBER(PQ_NAME, empty)(PQ_NAME* pq);                                                                          \
-static void     _C_PUBLIC_MEMBER(PQ_NAME, insert)(PQ_NAME* pq, const TYPE* item);                                                       \
-static void     _C_PUBLIC_MEMBER(PQ_NAME, pop)(PQ_NAME* pq);                                                                            \
-static TYPE*    _C_PUBLIC_MEMBER(PQ_NAME, peek)(PQ_NAME* pq);                                                                           \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Creates new priority queue. Initialize internal vector.                                                                       \
- * @return A new instance of PQ_NAME.                                                                                                   \
- */                                                                                                                                     \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(PQ_NAME)                                                                                       \
-{                                                                                                                                       \
-    return (PQ_NAME){                                                                                                                   \
-        .vec = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(PQ_VECTOR_HELPER_NAME)()                                                             \
-    };                                                                                                                                  \
-}                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Destroys the priority queue and its internal data.                                                                            \
- * @param target Pointer to the priority queue.                                                                                         \
- */                                                                                                                                     \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(PQ_NAME)                                                                                      \
-{                                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                         \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(PQ_VECTOR_HELPER_NAME)(&target->vec);                                                          \
-}                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Copies contents of one pq to another.                                                                                         \
- * @param dest Destination pq pointer.                                                                                                  \
- * @param source Source pq pointer.                                                                                                     \
- */                                                                                                                                     \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(PQ_NAME)                                                                                         \
-{                                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != dest, "PQ dest is NULL");                                                                                  \
-    _C_CUSTOM_ASSERT(NULL != source, "PQ source is NULL");                                                                              \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(PQ_VECTOR_HELPER_NAME)(&dest->vec, &source->vec);                                                 \
-}                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Move contents of one pq to another.                                                                                           \
- * @param dest Destination pq pointer.                                                                                                  \
- * @param source Source pq pointer.                                                                                                     \
- */                                                                                                                                     \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(PQ_NAME)                                                                                         \
-{                                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != dest, "PQ dest is NULL");                                                                                  \
-    _C_CUSTOM_ASSERT(NULL != source, "PQ source is NULL");                                                                              \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(PQ_VECTOR_HELPER_NAME)(&dest->vec, &source->vec);                                                 \
-}                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Checks whether two pq are equal by comparing each element.                                                                    \
- * @param left Left-hand side pointer to a pq.                                                                                          \
- * @param right Right-hand side pointer to a pq.                                                                                        \
- * @return `true` if equal, `false` otherwise.                                                                                          \
- */                                                                                                                                     \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PQ_NAME)                                                                                       \
-{                                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != left, "PQ left is NULL");                                                                                  \
-    _C_CUSTOM_ASSERT(NULL != right, "PQ right is NULL");                                                                                \
-    return _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PQ_VECTOR_HELPER_NAME)(&left->vec, &right->vec);                                         \
-}                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Clears all elements from the priority queue without destroying it.                                                            \
- * @param pq Pointer to the priority queue.                                                                                             \
- */                                                                                                                                     \
-static void _C_PUBLIC_MEMBER(PQ_NAME, clear)(PQ_NAME* pq)                                                                               \
-{                                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != pq, "Priority Queue is NULL");                                                                             \
-    _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, clear)(&pq->vec);                                                                           \
-}                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Returns the number of elements in the priority queue.                                                                         \
- * @param pq Pointer to the priority queue.                                                                                             \
- * @return The number of elements.                                                                                                      \
- */                                                                                                                                     \
-static size_t _C_PUBLIC_MEMBER(PQ_NAME, size)(PQ_NAME* pq)                                                                              \
-{                                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != pq, "Priority Queue is NULL");                                                                             \
-    return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&pq->vec);                                                                     \
-}                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Checks if the priority queue is empty.                                                                                        \
- * @param pq Pointer to the priority queue.                                                                                             \
- * @return `true` if empty, `false` otherwise.                                                                                          \
- */                                                                                                                                     \
-static bool _C_PUBLIC_MEMBER(PQ_NAME, empty)(PQ_NAME* pq)                                                                               \
-{                                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != pq, "Priority Queue is NULL");                                                                             \
-    return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, empty)(&pq->vec);                                                                    \
-}                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Inserts a new element into the priority queue.                                                                                \
- * Performs a heapify-up after insertion to maintain heap order.                                                                        \
- * @param pq Pointer to the priority queue.                                                                                             \
- * @param item Pointer to the element to insert.                                                                                        \
- */                                                                                                                                     \
-static void _C_PUBLIC_MEMBER(PQ_NAME, insert)(PQ_NAME* pq, const TYPE* item)                                                            \
-{                                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != pq, "Priority Queue is NULL");                                                                             \
-    _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, push_back)(&pq->vec, item);                                                                 \
-    _C_PUBLIC_MEMBER(PQ_HEAPIFY_HELPER_NAME, heapify_up)(                                                                               \
-        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, data)(&pq->vec),                                                                        \
-        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&pq->vec),                                                                        \
-        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&pq->vec) - 1);                                                                   \
-}                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Removes the top element (highest priority) from the priority queue.                                                           \
- * Performs a heapify-down after removal to maintain heap order.                                                                        \
- * @param pq Pointer to the priority queue.                                                                                             \
- */                                                                                                                                     \
-static void _C_PUBLIC_MEMBER(PQ_NAME, pop)(PQ_NAME* pq)                                                                                 \
-{                                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != pq, "Priority Queue is NULL");                                                                             \
-    if (_C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, empty)(&pq->vec)) return;                                                               \
-    _C_PUBLIC_MEMBER(TYPE, move)(                                                                                                       \
-        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_at)(&pq->vec, 0),                                                               \
-        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_at)(&pq->vec, _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&pq->vec) - 1)      \
-    );                                                                                                                                  \
-    _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, pop_back)(&pq->vec);                                                                        \
-    _C_PUBLIC_MEMBER(PQ_HEAPIFY_HELPER_NAME, heapify_down)(                                                                             \
-        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, data)(&pq->vec),                                                                        \
-        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&pq->vec),                                                                        \
-        0                                                                                                                               \
-    );                                                                                                                                  \
-}                                                                                                                                       \
-                                                                                                                                        \
-/**                                                                                                                                     \
- * @brief Returns a pointer to the top element (highest priority) of the queue.                                                         \
- * @param pq Pointer to the priority queue.                                                                                             \
- * @return Pointer to the top element.                                                                                                  \
- */                                                                                                                                     \
-static TYPE* _C_PUBLIC_MEMBER(PQ_NAME, peek)(PQ_NAME* pq)                                                                               \
-{                                                                                                                                       \
-    _C_CUSTOM_ASSERT(NULL != pq, "Priority Queue is NULL");                                                                             \
-    return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_front)(&pq->vec);                                                            \
-}                                                                                                                                       \
+#define _DEFINE_GENERIC_PRIORITY_QUEUE_IMPL(                                                                                                \
+    PQ_NAME,                                                                                                                                \
+    PQ_HEAPIFY_HELPER_NAME,                                                                                                                 \
+    PQ_VECTOR_HELPER_NAME,                                                                                                                  \
+    TYPE                                                                                                                                    \
+)                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @struct PQ_NAME                                                                                                                          \
+ * @brief Struct representing the priority queue. Contains the internal vector.                                                             \
+ */                                                                                                                                         \
+typedef struct                                                                                                                              \
+{                                                                                                                                           \
+    PQ_VECTOR_HELPER_NAME vec;                                                                                                              \
+} PQ_NAME;                                                                                                                                  \
+                                                                                                                                            \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(PQ_NAME);                                                                                          \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(PQ_NAME);                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(PQ_NAME);                                                                                            \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(PQ_NAME);                                                                                            \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PQ_NAME);                                                                                          \
+                                                                                                                                            \
+static void     _C_PUBLIC_MEMBER(PQ_NAME, clear)(PQ_NAME* target);                                                                          \
+static size_t   _C_PUBLIC_MEMBER(PQ_NAME, size)(PQ_NAME* target);                                                                           \
+static bool     _C_PUBLIC_MEMBER(PQ_NAME, empty)(PQ_NAME* target);                                                                          \
+static void     _C_PUBLIC_MEMBER(PQ_NAME, insert)(PQ_NAME* target, const TYPE* item);                                                       \
+static void     _C_PUBLIC_MEMBER(PQ_NAME, pop)(PQ_NAME* target);                                                                            \
+static TYPE*    _C_PUBLIC_MEMBER(PQ_NAME, peek)(PQ_NAME* target);                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Creates new priority queue. Initialize internal vector.                                                                           \
+ * @return A new instance of PQ_NAME.                                                                                                       \
+ */                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(PQ_NAME)                                                                                           \
+{                                                                                                                                           \
+    return (PQ_NAME){                                                                                                                       \
+        .vec = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(PQ_VECTOR_HELPER_NAME)()                                                                 \
+    };                                                                                                                                      \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Destroys the priority queue and its internal data.                                                                                \
+ * @param target Pointer to the priority queue.                                                                                             \
+ */                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(PQ_NAME)                                                                                          \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(PQ_VECTOR_HELPER_NAME)(&target->vec);                                                              \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Copies contents of one pq to another.                                                                                             \
+ * @param dest Destination pq pointer.                                                                                                      \
+ * @param source Source pq pointer.                                                                                                         \
+ */                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(PQ_NAME)                                                                                             \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != dest, "PQ dest is NULL");                                                                                      \
+    _C_CUSTOM_ASSERT(NULL != source, "PQ source is NULL");                                                                                  \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(PQ_VECTOR_HELPER_NAME)(&dest->vec, &source->vec);                                                     \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Move contents of one pq to another.                                                                                               \
+ * @param dest Destination pq pointer.                                                                                                      \
+ * @param source Source pq pointer.                                                                                                         \
+ */                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(PQ_NAME)                                                                                             \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != dest, "PQ dest is NULL");                                                                                      \
+    _C_CUSTOM_ASSERT(NULL != source, "PQ source is NULL");                                                                                  \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(PQ_VECTOR_HELPER_NAME)(&dest->vec, &source->vec);                                                     \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Checks whether two pq are equal by comparing each element.                                                                        \
+ * @param left Left-hand side pointer to a pq.                                                                                              \
+ * @param right Right-hand side pointer to a pq.                                                                                            \
+ * @return `true` if equal, `false` otherwise.                                                                                              \
+ */                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PQ_NAME)                                                                                           \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != left, "PQ left is NULL");                                                                                      \
+    _C_CUSTOM_ASSERT(NULL != right, "PQ right is NULL");                                                                                    \
+    return _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PQ_VECTOR_HELPER_NAME)(&left->vec, &right->vec);                                             \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Clears all elements from the priority queue without destroying it.                                                                \
+ * @param target Pointer to the priority queue.                                                                                             \
+ */                                                                                                                                         \
+static void _C_PUBLIC_MEMBER(PQ_NAME, clear)(PQ_NAME* target)                                                                               \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
+    _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, clear)(&target->vec);                                                                           \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Returns the number of elements in the priority queue.                                                                             \
+ * @param target Pointer to the priority queue.                                                                                             \
+ * @return The number of elements.                                                                                                          \
+ */                                                                                                                                         \
+static size_t _C_PUBLIC_MEMBER(PQ_NAME, size)(PQ_NAME* target)                                                                              \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
+    return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec);                                                                     \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Checks if the priority queue is empty.                                                                                            \
+ * @param target Pointer to the priority queue.                                                                                             \
+ * @return `true` if empty, `false` otherwise.                                                                                              \
+ */                                                                                                                                         \
+static bool _C_PUBLIC_MEMBER(PQ_NAME, empty)(PQ_NAME* target)                                                                               \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
+    return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, empty)(&target->vec);                                                                    \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Inserts a new element into the priority queue.                                                                                    \
+ * Performs a heapify-up after insertion to maintain heap order.                                                                            \
+ * @param target Pointer to the priority queue.                                                                                             \
+ * @param item Pointer to the element to insert.                                                                                            \
+ */                                                                                                                                         \
+static void _C_PUBLIC_MEMBER(PQ_NAME, insert)(PQ_NAME* target, const TYPE* item)                                                            \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
+    _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, push_back)(&target->vec, item);                                                                 \
+    _C_PUBLIC_MEMBER(PQ_HEAPIFY_HELPER_NAME, heapify_up)(                                                                                   \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, data)(&target->vec),                                                                        \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec),                                                                        \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec) - 1);                                                                   \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Removes the top element (highest priority) from the priority queue.                                                               \
+ * Performs a heapify-down after removal to maintain heap order.                                                                            \
+ * @param target Pointer to the priority queue.                                                                                             \
+ */                                                                                                                                         \
+static void _C_PUBLIC_MEMBER(PQ_NAME, pop)(PQ_NAME* target)                                                                                 \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
+    if (_C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, empty)(&target->vec)) return;                                                               \
+    _C_PUBLIC_MEMBER(TYPE, move)(                                                                                                           \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_at)(&target->vec, 0),                                                               \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_at)(&target->vec, _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec) - 1)  \
+    );                                                                                                                                      \
+    _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, pop_back)(&target->vec);                                                                        \
+    _C_PUBLIC_MEMBER(PQ_HEAPIFY_HELPER_NAME, heapify_down)(                                                                                 \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, data)(&target->vec),                                                                        \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec),                                                                        \
+        0                                                                                                                                   \
+    );                                                                                                                                      \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Returns a pointer to the top element (highest priority) of the queue.                                                             \
+ * @param target Pointer to the priority queue.                                                                                             \
+ * @return Pointer to the top element.                                                                                                      \
+ */                                                                                                                                         \
+static TYPE* _C_PUBLIC_MEMBER(PQ_NAME, peek)(PQ_NAME* target)                                                                               \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
+    return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_front)(&target->vec);                                                            \
+}                                                                                                                                           \
 
 
 /**

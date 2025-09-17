@@ -36,12 +36,12 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(STACK_NAME);                             
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(STACK_NAME);                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(STACK_NAME);                                                           \
                                                                                                                 \
-static void         _C_PUBLIC_MEMBER(STACK_NAME, clear)(STACK_NAME* stack);                                     \
-static size_t       _C_PUBLIC_MEMBER(STACK_NAME, size)(STACK_NAME* stack);                                      \
-static bool         _C_PUBLIC_MEMBER(STACK_NAME, empty)(STACK_NAME* stack);                                     \
-static void         _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* stack, const TYPE* item);                  \
-static void         _C_PUBLIC_MEMBER(STACK_NAME, pop)(STACK_NAME* stack);                                       \
-static TYPE*        _C_PUBLIC_MEMBER(STACK_NAME, peek)(STACK_NAME* stack);                                      \
+static void         _C_PUBLIC_MEMBER(STACK_NAME, clear)(STACK_NAME* target);                                    \
+static size_t       _C_PUBLIC_MEMBER(STACK_NAME, size)(STACK_NAME* target);                                     \
+static bool         _C_PUBLIC_MEMBER(STACK_NAME, empty)(STACK_NAME* target);                                    \
+static void         _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* target, const TYPE* item);                 \
+static void         _C_PUBLIC_MEMBER(STACK_NAME, pop)(STACK_NAME* target);                                      \
+static TYPE*        _C_PUBLIC_MEMBER(STACK_NAME, peek)(STACK_NAME* target);                                     \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Creates a new stack. Initialize internal vector.                                                      \
@@ -103,66 +103,66 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(STACK_NAME)                            
                                                                                                                 \
 /**                                                                                                             \
  * @brief Clears all elements from the stack without destroying it.                                             \
- * @param stack Pointer to the stack.                                                                           \
+ * @param target Pointer to the stack.                                                                          \
  */                                                                                                             \
-static void _C_PUBLIC_MEMBER(STACK_NAME, clear)(STACK_NAME* stack)                                              \
+static void _C_PUBLIC_MEMBER(STACK_NAME, clear)(STACK_NAME* target)                                             \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != stack, "Stack is NULL");                                                           \
-    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, clear)(&stack->vec);                                             \
+    _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
+    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, clear)(&target->vec);                                            \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Returns the number of elements in the stack.                                                          \
- * @param stack Pointer to the stack.                                                                           \
+ * @param target Pointer to the stack.                                                                          \
  * @return The number of elements.                                                                              \
  */                                                                                                             \
-static size_t _C_PUBLIC_MEMBER(STACK_NAME, size)(STACK_NAME* stack)                                             \
+static size_t _C_PUBLIC_MEMBER(STACK_NAME, size)(STACK_NAME* target)                                            \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != stack, "Stack is NULL");                                                           \
-    return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, size)(&stack->vec);                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
+    return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, size)(&target->vec);                                      \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Checks if the stack is empty.                                                                         \
- * @param stack Pointer to the stack.                                                                           \
+ * @param target Pointer to the stack.                                                                          \
  * @return `true` if empty, `false` otherwise.                                                                  \
  */                                                                                                             \
-static bool _C_PUBLIC_MEMBER(STACK_NAME, empty)(STACK_NAME* stack)                                              \
+static bool _C_PUBLIC_MEMBER(STACK_NAME, empty)(STACK_NAME* target)                                             \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != stack, "Stack is NULL");                                                           \
-    return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, empty)(&stack->vec);                                      \
+    _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
+    return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, empty)(&target->vec);                                     \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Inserts a new element into the stack.                                                                 \
- * @param stack Pointer to the stack.                                                                           \
+ * @param target Pointer to the stack.                                                                          \
  * @param item Pointer to the element to insert.                                                                \
  */                                                                                                             \
-static void _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* stack, const TYPE* item)                           \
+static void _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* target, const TYPE* item)                          \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != stack, "Stack is NULL");                                                           \
-    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, push_back)(&stack->vec, item);                                   \
+    _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
+    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, push_back)(&target->vec, item);                                  \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Removes the top element (last inserted) from the stack.                                               \
- * @param stack Pointer to the stack.                                                                           \
+ * @param target Pointer to the stack.                                                                          \
  */                                                                                                             \
-static void _C_PUBLIC_MEMBER(STACK_NAME, pop)(STACK_NAME* stack)                                                \
+static void _C_PUBLIC_MEMBER(STACK_NAME, pop)(STACK_NAME* target)                                               \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != stack, "Stack is NULL");                                                           \
-    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, pop_back)(&stack->vec);                                          \
+    _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
+    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, pop_back)(&target->vec);                                         \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
  * @brief Returns a pointer to the top element (last inserted) of the stack.                                    \
- * @param stack Pointer to the stack.                                                                           \
+ * @param target Pointer to the stack.                                                                          \
  * @return Pointer to the top element.                                                                          \
  */                                                                                                             \
-static TYPE* _C_PUBLIC_MEMBER(STACK_NAME, peek)(STACK_NAME* stack)                                              \
+static TYPE* _C_PUBLIC_MEMBER(STACK_NAME, peek)(STACK_NAME* target)                                             \
 {                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != stack, "Stack is NULL");                                                           \
-    return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, element_back)(&stack->vec);                               \
+    _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
+    return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, element_back)(&target->vec);                              \
 }                                                                                                               \
 
 
