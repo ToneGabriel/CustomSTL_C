@@ -43,14 +43,14 @@ int main()
 
     myuint_t val;
 
-    val = 1;
-    UIntPQ_insert(&myUIntPQInstance, &val);
+    val = 3;
+    UIntPQ_insert_copy(&myUIntPQInstance, &val);
 
-    val = 0;
-    UIntPQ_insert(&myUIntPQInstance, &val);
+    val = 1;
+    UIntPQ_insert_copy(&myUIntPQInstance, &val);
 
     val = 2;
-    UIntPQ_insert(&myUIntPQInstance, &val);
+    UIntPQ_insert_copy(&myUIntPQInstance, &val);
 
     while (!UIntPQ_empty(&myUIntPQInstance))
     {
@@ -64,9 +64,9 @@ int main()
 }
 
 // Prints:
-// Value: 0
 // Value: 1
 // Value: 2
+// Value: 3
 
 ```
 
@@ -146,38 +146,31 @@ DEFINE_GENERIC_VECTOR(MyStructVector, MyStruct)
 int main()
 {
     MyStructVector vec = MyStructVector_create();
+    MyStruct s = MyStruct_create();
 
-    MyStruct s1 = MyStruct_create();
-    s1.a = 1;
+    s.a = 1;
+    MyStructVector_push_back_copy(&vec, &s);
 
-    MyStruct s2 = MyStruct_create();
-    s2.a = 2;
+    s.a = 2;
+    MyStructVector_push_back_copy(&vec, &s);
 
-    MyStruct s3 = MyStruct_create();
-    s3.a = 3;
+    s.a = 3;
+    MyStructVector_push_back_copy(&vec, &s);
 
-    MyStructVector_push_back(&vec, &s1);
-    MyStructVector_push_back(&vec, &s2);
-    MyStructVector_push_back(&vec, &s3);
-
-    while (!MyStructVector_empty(&vec))
-    {
-        printf("Value: %d\n", MyStructVector_element_back(&vec)->a);
-        MyStructVector_pop_back(&vec);
-    }
+    size_t size = MyStructVector_size(&vec);
+    for (size_t i = 0; i < size; ++i)
+        printf("Value: %d\n", MyStructVector_element_at(&vec, i)->a);
 
     MyStructVector_destroy(&vec);
-    MyStruct_destroy(&s1);
-    MyStruct_destroy(&s2);
-    MyStruct_destroy(&s3);
+    MyStruct_destroy(&s);
 
     return 0;
 }
 
 // Prints:
-// Value: 3
-// Value: 2
 // Value: 1
+// Value: 2
+// Value: 3
 
 ```
 
