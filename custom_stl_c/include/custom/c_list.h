@@ -184,7 +184,11 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_NAME)                             
     _C_CUSTOM_ASSERT(NULL != left, "List left is NULL");                                                                                                    \
     _C_CUSTOM_ASSERT(NULL != right, "List right is NULL");                                                                                                  \
     if (left->size != right->size) return false;                                                                                                            \
-    return true; /*TODO: implement*/                                                                                                                        \
+    NODE_NAME* currentLeft = left->head->next;                                                                                                              \
+    NODE_NAME* currentRight = right->head->next;                                                                                                            \
+    for (/* Empty */; currentLeft != left->head; currentLeft = currentLeft->next, currentRight = currentRight->next)                                        \
+        if (!_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)(&currentLeft->value, &currentRight->value)) return false;                                            \
+    return true;                                                                                                                                            \
 }                                                                                                                                                           \
                                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(LIST_NAME, clear)(LIST_NAME* target)                                                                                           \

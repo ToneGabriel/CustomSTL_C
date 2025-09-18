@@ -352,7 +352,9 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME* target, const 
         target->last = target->first + oldSize;                                                                         \
         target->final = target->first + newCapacity;                                                                    \
     }                                                                                                                   \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(target->last++, item);                                                      \
+    *target->last = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                        \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(target->last, item);                                                        \
+    ++target->last;                                                                                                     \
 }                                                                                                                       \
                                                                                                                         \
 /**                                                                                                                     \

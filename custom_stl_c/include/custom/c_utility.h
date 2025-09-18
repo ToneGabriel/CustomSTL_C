@@ -112,7 +112,7 @@ static void _C_PUBLIC_MEMBER(HEAP_ADJUST_NAME, heapify_down)(TYPE* arr, size_t a
 static void _C_PUBLIC_MEMBER(HEAP_ADJUST_NAME, heapify_up)(TYPE* arr, size_t arr_size, size_t idx)              \
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != arr, "Heap array is NULL");                                                        \
-    _C_CUSTOM_ASSERT(idx < arr_size, "Heap index is greater than array size");                                  \
+    _C_CUSTOM_ASSERT(idx <= arr_size, "Heap index is greater than array size");                                 \
     while (idx > 0 && TYPE_REF_COMPARE_FUNC(&arr[idx], &arr[(idx - 1) / 2]))                                    \
     {                                                                                                           \
         _C_PUBLIC_MEMBER(HEAP_ADJUST_SWAP_HELPER_NAME, do_swap)(&arr[idx], &arr[(idx - 1) / 2]);                \
@@ -129,7 +129,7 @@ static void _C_PUBLIC_MEMBER(HEAP_ADJUST_NAME, heapify_up)(TYPE* arr, size_t arr
 static void _C_PUBLIC_MEMBER(HEAP_ADJUST_NAME, heapify_down)(TYPE* arr, size_t arr_size, size_t idx)            \
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != arr, "Heap array is NULL");                                                        \
-    _C_CUSTOM_ASSERT(idx < arr_size, "Heap index is greater than array size");                                  \
+    _C_CUSTOM_ASSERT(idx <= arr_size, "Heap index is greater than array size");                                 \
     size_t smallest, left, right;                                                                               \
     while (idx < arr_size)                                                                                      \
     {                                                                                                           \

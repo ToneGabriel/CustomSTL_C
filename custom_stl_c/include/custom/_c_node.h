@@ -22,6 +22,7 @@ static void                 _C_IDENTIFIER_BIND(SINGLE_NODE_NAME, destroy_ptr)(SI
 static SINGLE_NODE_NAME* _C_IDENTIFIER_BIND(SINGLE_NODE_NAME, create_ptr)()                                             \
 {                                                                                                                       \
     SINGLE_NODE_NAME* new_node = (SINGLE_NODE_NAME*)malloc(sizeof(SINGLE_NODE_NAME));                                   \
+    new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                      \
     new_node->next = NULL;                                                                                              \
     return new_node;                                                                                                    \
 }                                                                                                                       \
@@ -54,6 +55,7 @@ static void                 _C_IDENTIFIER_BIND(DOUBLE_NODE_NAME, destroy_ptr)(DO
 static DOUBLE_NODE_NAME* _C_IDENTIFIER_BIND(DOUBLE_NODE_NAME, create_ptr)()                                             \
 {                                                                                                                       \
     DOUBLE_NODE_NAME* new_node = (DOUBLE_NODE_NAME*)malloc(sizeof(DOUBLE_NODE_NAME));                                   \
+    new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                      \
     new_node->next = new_node->prev = NULL;                                                                             \
     return new_node;                                                                                                    \
 }                                                                                                                       \
