@@ -34,10 +34,9 @@ void test_default_create()
 
 void test_copy()
 {
-    myuint_t val = 0;
-    ListUINT_push_back(&g_customListUINTInstance, &val);
-    ListUINT_push_back(&g_customListUINTInstance, &val);
-    ListUINT_push_back(&g_customListUINTInstance, &val);
+    ListUINT_push_back(&g_customListUINTInstance);
+    ListUINT_push_back(&g_customListUINTInstance);
+    ListUINT_push_back(&g_customListUINTInstance);
 
     ListUINT other = ListUINT_create();
     TEST_ASSERT_FALSE_MESSAGE(ListUINT_equals(&other, &g_customListUINTInstance), "Other list should NOT be equal to original");
@@ -50,10 +49,9 @@ void test_copy()
 
 void test_move()
 {
-    myuint_t val = 0;
-    ListUINT_push_back(&g_customListUINTInstance, &val);
-    ListUINT_push_back(&g_customListUINTInstance, &val);
-    ListUINT_push_back(&g_customListUINTInstance, &val);
+    ListUINT_push_back(&g_customListUINTInstance);
+    ListUINT_push_back(&g_customListUINTInstance);
+    ListUINT_push_back(&g_customListUINTInstance);
 
     ListUINT original_copy = ListUINT_create();
     ListUINT_copy(&original_copy, &g_customListUINTInstance);

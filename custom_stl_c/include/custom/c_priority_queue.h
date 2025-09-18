@@ -42,7 +42,9 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PQ_NAME);                              
 static void     _C_PUBLIC_MEMBER(PQ_NAME, clear)(PQ_NAME* target);                                                                          \
 static size_t   _C_PUBLIC_MEMBER(PQ_NAME, size)(PQ_NAME* target);                                                                           \
 static bool     _C_PUBLIC_MEMBER(PQ_NAME, empty)(PQ_NAME* target);                                                                          \
-static void     _C_PUBLIC_MEMBER(PQ_NAME, insert)(PQ_NAME* target, const TYPE* item);                                                       \
+static void     _C_PUBLIC_MEMBER(PQ_NAME, insert)(PQ_NAME* target);                                                                         \
+static void     _C_PUBLIC_MEMBER(PQ_NAME, insert_copy)(PQ_NAME* target, const TYPE* item);                                                  \
+static void     _C_PUBLIC_MEMBER(PQ_NAME, insert_move)(PQ_NAME* target, TYPE* item);                                                        \
 static void     _C_PUBLIC_MEMBER(PQ_NAME, pop)(PQ_NAME* target);                                                                            \
 static TYPE*    _C_PUBLIC_MEMBER(PQ_NAME, peek)(PQ_NAME* target);                                                                           \
                                                                                                                                             \
@@ -137,15 +139,46 @@ static bool _C_PUBLIC_MEMBER(PQ_NAME, empty)(PQ_NAME* target)                   
 }                                                                                                                                           \
                                                                                                                                             \
 /**                                                                                                                                         \
+ * @brief Inserts a new default element into the priority queue.                                                                            \
+ * Performs a heapify-up after insertion to maintain heap order.                                                                            \
+ * @param target Pointer to the priority queue.                                                                                             \
+ */                                                                                                                                         \
+static void _C_PUBLIC_MEMBER(PQ_NAME, insert)(PQ_NAME* target)                                                                              \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
+    _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, push_back)(&target->vec);                                                                       \
+    _C_PUBLIC_MEMBER(PQ_HEAPIFY_HELPER_NAME, heapify_up)(                                                                                   \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, data)(&target->vec),                                                                        \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec),                                                                        \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec) - 1);                                                                   \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
  * @brief Inserts a new element into the priority queue.                                                                                    \
  * Performs a heapify-up after insertion to maintain heap order.                                                                            \
  * @param target Pointer to the priority queue.                                                                                             \
- * @param item Pointer to the element to insert.                                                                                            \
+ * @param item Pointer to the element to copy insert.                                                                                       \
  */                                                                                                                                         \
-static void _C_PUBLIC_MEMBER(PQ_NAME, insert)(PQ_NAME* target, const TYPE* item)                                                            \
+static void _C_PUBLIC_MEMBER(PQ_NAME, insert_copy)(PQ_NAME* target, const TYPE* item)                                                       \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
-    _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, push_back)(&target->vec, item);                                                                 \
+    _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, push_back_copy)(&target->vec, item);                                                            \
+    _C_PUBLIC_MEMBER(PQ_HEAPIFY_HELPER_NAME, heapify_up)(                                                                                   \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, data)(&target->vec),                                                                        \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec),                                                                        \
+        _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec) - 1);                                                                   \
+}                                                                                                                                           \
+                                                                                                                                            \
+/**                                                                                                                                         \
+ * @brief Inserts a new element into the priority queue.                                                                                    \
+ * Performs a heapify-up after insertion to maintain heap order.                                                                            \
+ * @param target Pointer to the priority queue.                                                                                             \
+ * @param item Pointer to the element to move insert.                                                                                       \
+ */                                                                                                                                         \
+static void _C_PUBLIC_MEMBER(PQ_NAME, insert_move)(PQ_NAME* target, TYPE* item)                                                             \
+{                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
+    _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, push_back_move)(&target->vec, item);                                                            \
     _C_PUBLIC_MEMBER(PQ_HEAPIFY_HELPER_NAME, heapify_up)(                                                                                   \
         _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, data)(&target->vec),                                                                        \
         _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec),                                                                        \
@@ -196,7 +229,7 @@ static TYPE* _C_PUBLIC_MEMBER(PQ_NAME, peek)(PQ_NAME* target)                   
  * - A `PRIVATE_Vector` container for internal storage
  * 
  * - The priority queue API (   `_create`, `_destroy`, `_clear`, `_copy`, `_move`, `_size`, `_empty`,
- *                              `_insert`, `_pop`, `_peek`, `_equals`
+ *                              `_insert`, `_insert_copy`, `_insert_move`, `_pop`, `_peek`, `_equals`
  *                          )
  *
  * @param PRIORITY_QUEUE_NAME_PUBLIC_PREFIX   Public prefix (e.g. `MyPQ` → `MyPQ_create`)

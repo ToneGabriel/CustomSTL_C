@@ -35,10 +35,9 @@ void test_default_create()
 
 void test_copy()
 {
-    myuint_t val = 0;
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
 
     VectorUINT other = VectorUINT_create();
     TEST_ASSERT_FALSE_MESSAGE(VectorUINT_equals(&other, &g_customVectorUINTInstance), "Other vector should NOT be equal to original");
@@ -51,10 +50,9 @@ void test_copy()
 
 void test_move()
 {
-    myuint_t val = 0;
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
 
     VectorUINT original_copy = VectorUINT_create();
     VectorUINT_copy(&original_copy, &g_customVectorUINTInstance);
@@ -72,10 +70,9 @@ void test_move()
 
 void test_clear()
 {
-    myuint_t val = 0;
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
     TEST_ASSERT_FALSE_MESSAGE(VectorUINT_empty(&g_customVectorUINTInstance), "Vector should NOT be empty");
 
     VectorUINT_clear(&g_customVectorUINTInstance);
@@ -84,37 +81,34 @@ void test_clear()
 
 void test_push_back_without_realloc()
 {
-    myuint_t val = 0;
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
     TEST_ASSERT_EQUAL_MESSAGE(GENERIC_VECTOR_DEFAULT_CAPACITY, VectorUINT_capacity(&g_customVectorUINTInstance), "Vector capacity should NOT increase");
 }
 
 void test_push_back_with_realloc()
 {
-    myuint_t val = 0;
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);  // add 1 more
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
+    VectorUINT_push_back(&g_customVectorUINTInstance);  // add 1 more
     TEST_ASSERT_TRUE_MESSAGE(GENERIC_VECTOR_DEFAULT_CAPACITY < VectorUINT_capacity(&g_customVectorUINTInstance), "Vector capacity should increase");
 }
 
 void test_pop_back()
 {
-    myuint_t val = 0;
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val);
+    VectorUINT_push_back(&g_customVectorUINTInstance);
     TEST_ASSERT_EQUAL_MESSAGE(1, VectorUINT_size(&g_customVectorUINTInstance), "Vector size should increase after push_back");
 
     VectorUINT_pop_back(&g_customVectorUINTInstance);
@@ -126,9 +120,9 @@ void test_element_check()
     myuint_t val1 = 1;
     myuint_t val2 = 2;
     myuint_t val3 = 3;
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val1);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val2);
-    VectorUINT_push_back(&g_customVectorUINTInstance, &val3);
+    VectorUINT_push_back_copy(&g_customVectorUINTInstance, &val1);
+    VectorUINT_push_back_copy(&g_customVectorUINTInstance, &val2);
+    VectorUINT_push_back_copy(&g_customVectorUINTInstance, &val3);
 
     TEST_ASSERT_TRUE_MESSAGE(val1 == *VectorUINT_element_front(&g_customVectorUINTInstance), "Vector front element should be equal to the first push_back");
     TEST_ASSERT_TRUE_MESSAGE(val2 == *VectorUINT_element_at(&g_customVectorUINTInstance, 1), "Vector element at index 1 should be equal to the second push_back");

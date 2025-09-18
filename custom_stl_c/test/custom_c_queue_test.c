@@ -34,10 +34,9 @@ void test_default_create()
 
 void test_copy()
 {
-    myuint_t val = 0;
-    QueueUINT_insert(&g_customQueueUINTInstance, &val);
-    QueueUINT_insert(&g_customQueueUINTInstance, &val);
-    QueueUINT_insert(&g_customQueueUINTInstance, &val);
+    QueueUINT_insert(&g_customQueueUINTInstance);
+    QueueUINT_insert(&g_customQueueUINTInstance);
+    QueueUINT_insert(&g_customQueueUINTInstance);
 
     QueueUINT other = QueueUINT_create();
     TEST_ASSERT_FALSE_MESSAGE(QueueUINT_equals(&other, &g_customQueueUINTInstance), "Other queue should NOT be equal to original");
@@ -50,10 +49,9 @@ void test_copy()
 
 void test_move()
 {
-    myuint_t val = 0;
-    QueueUINT_insert(&g_customQueueUINTInstance, &val);
-    QueueUINT_insert(&g_customQueueUINTInstance, &val);
-    QueueUINT_insert(&g_customQueueUINTInstance, &val);
+    QueueUINT_insert(&g_customQueueUINTInstance);
+    QueueUINT_insert(&g_customQueueUINTInstance);
+    QueueUINT_insert(&g_customQueueUINTInstance);
 
     QueueUINT original_copy = QueueUINT_create();
     QueueUINT_copy(&original_copy, &g_customQueueUINTInstance);

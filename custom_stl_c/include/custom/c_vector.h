@@ -174,13 +174,17 @@ static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, data)(const VECTOR_NAM
 static size_t               _C_PUBLIC_MEMBER(VECTOR_NAME, size)(const VECTOR_NAME* target);                             \
 static size_t               _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(const VECTOR_NAME* target);                         \
 static bool                 _C_PUBLIC_MEMBER(VECTOR_NAME, empty)(const VECTOR_NAME* target);                            \
-static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME* target, const TYPE* item);            \
+static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME* target);                              \
+static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_copy)(VECTOR_NAME* target, const TYPE* item);       \
+static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_move)(VECTOR_NAME* target, TYPE* item);             \
 static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, pop_back)(VECTOR_NAME* target);                               \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_front)(VECTOR_NAME* target);                          \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_back)(VECTOR_NAME* target);                           \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* target, size_t index);               \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, begin)(VECTOR_NAME* target);                                  \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, end)(VECTOR_NAME* target);                                    \
+                                                                                                                        \
+static void                 _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(VECTOR_NAME* target);                       \
                                                                                                                         \
 /**                                                                                                                     \
  * @brief Creates a vector struct and allocates dynamic array with default capacity.                                    \
@@ -335,25 +339,45 @@ static bool _C_PUBLIC_MEMBER(VECTOR_NAME, empty)(const VECTOR_NAME* target)     
 }                                                                                                                       \
                                                                                                                         \
 /**                                                                                                                     \
- * @brief Adds an element to the end of the vector.                                                                     \
+ * @brief Adds a default element to the end of the vector.                                                              \
  * @param target Pointer to vector.                                                                                     \
- * @param item Pointer to item to push.                                                                                 \
  */                                                                                                                     \
-static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME* target, const TYPE* item)                             \
+static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME* target)                                               \
 {                                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                 \
     if (NULL == target->first) return;                                                                                  \
-    if (target->last >= target->final)                                                                                  \
-    {                                                                                                                   \
-        size_t oldSize = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(target);                                                   \
-        size_t oldCapacity = _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(target);                                           \
-        size_t newCapacity = oldCapacity + oldCapacity / 2 + 1;                                                         \
-        target->first = (TYPE*)realloc(target->first, sizeof(TYPE) * newCapacity);                                      \
-        target->last = target->first + oldSize;                                                                         \
-        target->final = target->first + newCapacity;                                                                    \
-    }                                                                                                                   \
+    _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(target);                                                            \
     *target->last = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                        \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(target->last, item);                                                        \
+    ++target->last;                                                                                                     \
+}                                                                                                                       \
+                                                                                                                        \
+/**                                                                                                                     \
+ * @brief Adds an element to the end of the vector.                                                                     \
+ * @param target Pointer to vector.                                                                                     \
+ * @param item Pointer to item to copy push.                                                                            \
+ */                                                                                                                     \
+static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_copy)(VECTOR_NAME* target, const TYPE* item)                        \
+{                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                 \
+    if (NULL == target->first) return;                                                                                  \
+    _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(target);                                                            \
+    *target->last = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                        \
+    if (NULL != item) _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(target->last, item);                                      \
+    ++target->last;                                                                                                     \
+}                                                                                                                       \
+                                                                                                                        \
+/**                                                                                                                     \
+ * @brief Adds an element to the end of the vector.                                                                     \
+ * @param target Pointer to vector.                                                                                     \
+ * @param item Pointer to item to move push.                                                                            \
+ */                                                                                                                     \
+static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_move)(VECTOR_NAME* target, TYPE* item)                              \
+{                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                 \
+    if (NULL == target->first) return;                                                                                  \
+    _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(target);                                                            \
+    *target->last = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                        \
+    if (NULL != item) _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(target->last, item);                                      \
     ++target->last;                                                                                                     \
 }                                                                                                                       \
                                                                                                                         \
@@ -430,7 +454,19 @@ static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, end)(VECTOR_NAME* targ
     iter.vec = target;                                                                                                  \
     return iter;                                                                                                        \
 }                                                                                                                       \
-
+                                                                                                                        \
+static void _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(VECTOR_NAME* target)                                        \
+{                                                                                                                       \
+    if (target->last >= target->final)                                                                                  \
+    {                                                                                                                   \
+        size_t oldSize = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(target);                                                   \
+        size_t oldCapacity = _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(target);                                           \
+        size_t newCapacity = oldCapacity + oldCapacity / 2 + 1;                                                         \
+        target->first = (TYPE*)realloc(target->first, sizeof(TYPE) * newCapacity);                                      \
+        target->last = target->first + oldSize;                                                                         \
+        target->final = target->first + newCapacity;                                                                    \
+    }                                                                                                                   \
+}                                                                                                                       \
 
 /**
  * @brief Public macro to define a generic vector for a given type with all required dependencies.
@@ -438,7 +474,7 @@ static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, end)(VECTOR_NAME* targ
  * This macro instantiates:
  * 
  * - The vector API (   `_create`, `_create_capacity`, `_destroy`, `_clear`, `_copy`, `_move`, `_data`, `_size`, `_capacity`, `_empty`,
- *                      `_push_back`, `_pop_back`, `_element_front`, `_element_back`, `_element_at`, `_equals`,
+ *                      `_push_back`, `_push_back_copy`, `_push_back_move`, `_pop_back`, `_element_front`, `_element_back`, `_element_at`, `_equals`,
  *                      `_begin`, `_end`
  *                  )
  * 

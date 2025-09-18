@@ -39,7 +39,9 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(QUEUE_NAME);                           
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, clear)(QUEUE_NAME* target);                                    \
 static size_t       _C_PUBLIC_MEMBER(QUEUE_NAME, size)(QUEUE_NAME* target);                                     \
 static bool         _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(QUEUE_NAME* target);                                    \
-static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert)(QUEUE_NAME* target, const TYPE* item);                 \
+static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert)(QUEUE_NAME* target);                                   \
+static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert_copy)(QUEUE_NAME* target, const TYPE* item);            \
+static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert_move)(QUEUE_NAME* target, TYPE* item);                  \
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, pop)(QUEUE_NAME* target);                                      \
 static TYPE*        _C_PUBLIC_MEMBER(QUEUE_NAME, peek)(QUEUE_NAME* target);                                     \
                                                                                                                 \
@@ -134,14 +136,35 @@ static bool _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(QUEUE_NAME* target)             
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
- * @brief Inserts a new element into the queue.                                                                 \
+ * @brief Inserts a new default element into the queue.                                                         \
  * @param target Pointer to the queue.                                                                          \
- * @param item Pointer to the element to insert.                                                                \
  */                                                                                                             \
-static void _C_PUBLIC_MEMBER(QUEUE_NAME, insert)(QUEUE_NAME* target, const TYPE* item)                          \
+static void _C_PUBLIC_MEMBER(QUEUE_NAME, insert)(QUEUE_NAME* target)                                            \
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
-    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, push_back)(&target->list, item);                                   \
+    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, push_back)(&target->list);                                         \
+}                                                                                                               \
+                                                                                                                \
+/**                                                                                                             \
+ * @brief Inserts a new element into the queue.                                                                 \
+ * @param target Pointer to the queue.                                                                          \
+ * @param item Pointer to the element to copy insert.                                                           \
+ */                                                                                                             \
+static void _C_PUBLIC_MEMBER(QUEUE_NAME, insert_copy)(QUEUE_NAME* target, const TYPE* item)                     \
+{                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
+    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, push_back_copy)(&target->list, item);                              \
+}                                                                                                               \
+                                                                                                                \
+/**                                                                                                             \
+ * @brief Inserts a new element into the queue.                                                                 \
+ * @param target Pointer to the queue.                                                                          \
+ * @param item Pointer to the element to move insert.                                                           \
+ */                                                                                                             \
+static void _C_PUBLIC_MEMBER(QUEUE_NAME, insert_move)(QUEUE_NAME* target, TYPE* item)                           \
+{                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
+    _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, push_back_move)(&target->list, item);                              \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
@@ -175,7 +198,7 @@ static TYPE* _C_PUBLIC_MEMBER(QUEUE_NAME, peek)(QUEUE_NAME* target)             
  * - A `PRIVATE_List` container for internal storage
  * 
  * - The queue API (`_create`, `_destroy`, `_clear`, `_copy`, `_move`, `_size`, `_empty`,
- *                  `_insert`, `_pop`, `_peek`, `_equals`
+ *                  `_insert`, `_insert_copy`, `_insert_move`, `_pop`, `_peek`, `_equals`
  *                  )
  *
  * @param STACK_NAME_PUBLIC_PREFIX      Public prefix (e.g. `MyQueue` → `MyQueue_create`)

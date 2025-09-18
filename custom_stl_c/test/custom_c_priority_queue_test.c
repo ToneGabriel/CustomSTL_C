@@ -34,10 +34,9 @@ void test_default_create()
 
 void test_copy()
 {
-    myuint_t val = 0;
-    UIntPQ_insert(&g_customUIntPQInstance, &val);
-    UIntPQ_insert(&g_customUIntPQInstance, &val);
-    UIntPQ_insert(&g_customUIntPQInstance, &val);
+    UIntPQ_insert(&g_customUIntPQInstance);
+    UIntPQ_insert(&g_customUIntPQInstance);
+    UIntPQ_insert(&g_customUIntPQInstance);
 
     UIntPQ other = UIntPQ_create();
     TEST_ASSERT_FALSE_MESSAGE(UIntPQ_equals(&other, &g_customUIntPQInstance), "Other PQ should NOT be equal to original");
@@ -50,10 +49,9 @@ void test_copy()
 
 void test_move()
 {
-    myuint_t val = 0;
-    UIntPQ_insert(&g_customUIntPQInstance, &val);
-    UIntPQ_insert(&g_customUIntPQInstance, &val);
-    UIntPQ_insert(&g_customUIntPQInstance, &val);
+    UIntPQ_insert(&g_customUIntPQInstance);
+    UIntPQ_insert(&g_customUIntPQInstance);
+    UIntPQ_insert(&g_customUIntPQInstance);
 
     UIntPQ original_copy = UIntPQ_create();
     UIntPQ_copy(&original_copy, &g_customUIntPQInstance);

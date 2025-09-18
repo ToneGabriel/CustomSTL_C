@@ -34,10 +34,9 @@ void test_default_create()
 
 void test_copy()
 {
-    myuint_t val = 0;
-    StackUINT_insert(&g_customStackUINTInstance, &val);
-    StackUINT_insert(&g_customStackUINTInstance, &val);
-    StackUINT_insert(&g_customStackUINTInstance, &val);
+    StackUINT_insert(&g_customStackUINTInstance);
+    StackUINT_insert(&g_customStackUINTInstance);
+    StackUINT_insert(&g_customStackUINTInstance);
 
     StackUINT other = StackUINT_create();
     TEST_ASSERT_FALSE_MESSAGE(StackUINT_equals(&other, &g_customStackUINTInstance), "Other stack should NOT be equal to original");
@@ -50,10 +49,9 @@ void test_copy()
 
 void test_move()
 {
-    myuint_t val = 0;
-    StackUINT_insert(&g_customStackUINTInstance, &val);
-    StackUINT_insert(&g_customStackUINTInstance, &val);
-    StackUINT_insert(&g_customStackUINTInstance, &val);
+    StackUINT_insert(&g_customStackUINTInstance);
+    StackUINT_insert(&g_customStackUINTInstance);
+    StackUINT_insert(&g_customStackUINTInstance);
 
     StackUINT original_copy = StackUINT_create();
     StackUINT_copy(&original_copy, &g_customStackUINTInstance);

@@ -39,7 +39,9 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(STACK_NAME);                           
 static void         _C_PUBLIC_MEMBER(STACK_NAME, clear)(STACK_NAME* target);                                    \
 static size_t       _C_PUBLIC_MEMBER(STACK_NAME, size)(STACK_NAME* target);                                     \
 static bool         _C_PUBLIC_MEMBER(STACK_NAME, empty)(STACK_NAME* target);                                    \
-static void         _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* target, const TYPE* item);                 \
+static void         _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* target);                                   \
+static void         _C_PUBLIC_MEMBER(STACK_NAME, insert_copy)(STACK_NAME* target, const TYPE* item);            \
+static void         _C_PUBLIC_MEMBER(STACK_NAME, insert_move)(STACK_NAME* target, TYPE* item);                  \
 static void         _C_PUBLIC_MEMBER(STACK_NAME, pop)(STACK_NAME* target);                                      \
 static TYPE*        _C_PUBLIC_MEMBER(STACK_NAME, peek)(STACK_NAME* target);                                     \
                                                                                                                 \
@@ -134,14 +136,35 @@ static bool _C_PUBLIC_MEMBER(STACK_NAME, empty)(STACK_NAME* target)             
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
- * @brief Inserts a new element into the stack.                                                                 \
+ * @brief Inserts a new default element into the stack.                                                         \
  * @param target Pointer to the stack.                                                                          \
- * @param item Pointer to the element to insert.                                                                \
  */                                                                                                             \
-static void _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* target, const TYPE* item)                          \
+static void _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* target)                                            \
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
-    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, push_back)(&target->vec, item);                                  \
+    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, push_back)(&target->vec);                                        \
+}                                                                                                               \
+                                                                                                                \
+/**                                                                                                             \
+ * @brief Inserts a new element into the stack.                                                                 \
+ * @param target Pointer to the stack.                                                                          \
+ * @param item Pointer to the element to copy insert.                                                           \
+ */                                                                                                             \
+static void _C_PUBLIC_MEMBER(STACK_NAME, insert_copy)(STACK_NAME* target, const TYPE* item)                     \
+{                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
+    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, push_back_copy)(&target->vec, item);                             \
+}                                                                                                               \
+                                                                                                                \
+/**                                                                                                             \
+ * @brief Inserts a new element into the stack.                                                                 \
+ * @param target Pointer to the stack.                                                                          \
+ * @param item Pointer to the element to move insert.                                                           \
+ */                                                                                                             \
+static void _C_PUBLIC_MEMBER(STACK_NAME, insert_move)(STACK_NAME* target, TYPE* item)                           \
+{                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
+    _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, push_back_move)(&target->vec, item);                             \
 }                                                                                                               \
                                                                                                                 \
 /**                                                                                                             \
@@ -175,7 +198,7 @@ static TYPE* _C_PUBLIC_MEMBER(STACK_NAME, peek)(STACK_NAME* target)             
  * - A `PRIVATE_Vector` container for internal storage
  * 
  * - The stack API (`_create`, `_initialize`, `_destroy`, `_clear`, `_copy`, `_move`, `_size`, `_empty`,
- *                  `_insert`, `_pop`, `_peek`, `_equals`
+ *                  `_insert`, `_insert_copy`, `_insert_move`, `_pop`, `_peek`, `_equals`
  *                  )
  *
  * @param STACK_NAME_PUBLIC_PREFIX      Public prefix (e.g. `MyStack` → `MyStack_create`)
