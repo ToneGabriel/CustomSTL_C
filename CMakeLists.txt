@@ -11,5 +11,5 @@ include(cmake/unity.cmake)
 # Add utils
 include(cmake/internal_utils.cmake)
 
-# Configure C and C++ STL
+# Configure C STL
 add_subdirectory(custom_stl_c)
