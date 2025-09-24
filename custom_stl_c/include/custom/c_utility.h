@@ -5,13 +5,51 @@
 #include "custom/_c_stlcore.h"
 
 
+// Hash
+// =====================================================================================================================
+
+
+#ifdef _WIN64
+#   define _FNV_OFFSET_BASIS   14695981039346656037ULL
+#   define _FNV_PRIME          1099511628211ULL
+#else
+#   define _FNV_OFFSET_BASIS   2166136261U
+#   define _FNV_PRIME          16777619U
+#endif // _WIN64
+
+
+// accumulate range [first, first + count) into partial FNV-1a hash val
+static size_t _fnv1a_append_bytes(  size_t val,
+                                    const unsigned char* first,
+                                    const size_t count)
+{
+    for (size_t i = 0; i < count; ++i)
+    {
+        val ^= (size_t)(first[i]);
+        val *= _FNV_PRIME;
+    }
+
+    return val;
+}
+
+
+#define HASH_VALUE_REPRESENTATION(key_ptr)          _fnv1a_append_bytes(_FNV_OFFSET_BASIS, (const unsigned char*)(key_ptr), sizeof(*key_ptr))
+#define HASH_ARRAY_REPRESENTATION(key_ptr, count)   _fnv1a_append_bytes(_FNV_OFFSET_BASIS, (const unsigned char*)(key_ptr), count * sizeof(*key_ptr))
+
+
+// =====================================================================================================================
+
+
 #define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)      static TYPE _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)()
 #define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)     static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(TYPE* target)
 #define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)        static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(TYPE* dest, const TYPE* source)
 #define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)        static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(TYPE* dest, TYPE* source)
 #define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)      static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)(const TYPE* left, const TYPE* right)
+
 #define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)        static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)(const TYPE* left, const TYPE* right)
 #define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)     static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)(const TYPE* left, const TYPE* right)
+
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(TYPE)        static size_t _C_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(TYPE)(const TYPE* key)
 
 
 #define DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(TYPE, ALIAS)                                                             \
@@ -50,6 +88,11 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(ALIAS)                                   
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(ALIAS)                                                                    \
 {                                                                                                                   \
     return *left > *right;                                                                                          \
+}                                                                                                                   \
+                                                                                                                    \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(ALIAS)                                                                       \
+{                                                                                                                   \
+    return HASH_VALUE_REPRESENTATION(key);                                                                          \
 }                                                                                                                   \
 
 

@@ -89,4 +89,8 @@ _C_IDENTIFIER_BIND_IMPL_SELECTOR_HELPER(        \
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)          _C_PUBLIC_MEMBER(TYPE, greater)
 
 
+// Hash member identifier
+#define _C_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(TYPE)             _C_PUBLIC_MEMBER(TYPE, hash)
+
+
 #endif  // _C_STLCORE_H
