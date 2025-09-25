@@ -87,6 +87,7 @@ static TYPE* _C_PUBLIC_MEMBER(HASH_TABLE_ITERATOR_NAME, deref)(HASH_TABLE_ITERAT
     HASH_TABLE_VECTOR_NAME,                                                                                                         \
     HASH_TABLE_ITERATOR_NAME,                                                                                                       \
     KEY_TYPE,                                                                                                                       \
+    MAP_TYPE,                                                                                                                       \
     VAL_TYPE                                                                                                                        \
 )                                                                                                                                   \
                                                                                                                                     \
@@ -187,13 +188,14 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABL
 #define _DEFINE_GENERIC_HASH_TABLE(                                                                                                 \
     HASH_TABLE_NAME_PUBLIC_PREFIX,                                                                                                  \
     KEY_TYPE,                                                                                                                       \
+    MAP_TYPE,                                                                                                                       \
     VAL_TYPE                                                                                                                        \
 )                                                                                                                                   \
                                                                                                                                     \
 DEFINE_GENERIC_PAIR(                                                                                                                \
     _C_PUBLIC_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, KeyValuePair),                                                                  \
     KEY_TYPE,                                                                                                                       \
-    VAL_TYPE                                                                                                                        \
+    MAP_TYPE                                                                                                                        \
 )                                                                                                                                   \
                                                                                                                                     \
 DEFINE_GENERIC_LIST(                                                                                                                \
@@ -229,6 +231,7 @@ _DEFINE_GENERIC_HASH_TABLE_IMPL(                                                
     _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, BucketVector),                                                                 \
     _C_PUBLIC_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, Iterator),                                                                      \
     KEY_TYPE,                                                                                                                       \
+    MAP_TYPE,                                                                                                                       \
     VAL_TYPE                                                                                                                        \
 )                                                                                                                                   \
 
