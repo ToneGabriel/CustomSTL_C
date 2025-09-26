@@ -88,10 +88,15 @@ static KEY_TYPE* _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME)(VAL_TYP
 static MAP_TYPE* _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME)(VAL_TYPE* value)       \
 
 
+#define _HASH_TABLE_MAX_LOAD_FACTOR 0.75F
+
+
 #define _DEFINE_GENERIC_HASH_TABLE_IMPL(                                                                                            \
     HASH_TABLE_NAME,                                                                                                                \
-    HASH_TABLE_LIST_NAME,                                                                                                           \
-    HASH_TABLE_VECTOR_NAME,                                                                                                         \
+    HASH_TABLE_LIST_VAL_TYPE_NAME,                                                                                                  \
+    HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME,                                                                                \
+    HASH_TABLE_VECTOR_COUNT_TYPE,                                                                                                   \
+    HASH_TABLE_VECTOR_NODE_PTR_TYPE,                                                                                                \
     HASH_TABLE_ITERATOR_NAME,                                                                                                       \
     KEY_TYPE,                                                                                                                       \
     MAP_TYPE,                                                                                                                       \
@@ -100,8 +105,8 @@ static MAP_TYPE* _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME)(VAL_TYP
                                                                                                                                     \
 typedef struct                                                                                                                      \
 {                                                                                                                                   \
-    HASH_TABLE_LIST_NAME elems;                                                                                                     \
-    HASH_TABLE_VECTOR_NAME buckets;                                                                                                 \
+    HASH_TABLE_LIST_VAL_TYPE_NAME elems;                                                                                            \
+    HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME buckets;                                                                        \
 } HASH_TABLE_NAME;                                                                                                                  \
                                                                                                                                     \
 _DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME, KEY_TYPE, VAL_TYPE);    /* Defined later by umap and uset */        \
@@ -120,33 +125,34 @@ static size_t                       _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket_siz
 static size_t                       _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket)(HASH_TABLE_NAME* target, const KEY_TYPE* key);        \
 static bool                         _C_PUBLIC_MEMBER(HASH_TABLE_NAME, empty)(HASH_TABLE_NAME* target);                              \
 static float                        _C_PUBLIC_MEMBER(HASH_TABLE_NAME, load_factor)(HASH_TABLE_NAME* target);                        \
+static float                        _C_PUBLIC_MEMBER(HASH_TABLE_NAME, max_load_factor)(HASH_TABLE_NAME* target);                    \
 static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, begin)(HASH_TABLE_NAME* target);                              \
 static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABLE_NAME* target);                                \
                                                                                                                                     \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_NAME)                                                                           \
 {                                                                                                                                   \
     return (HASH_TABLE_NAME){                                                                                                       \
-        .elems = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_LIST_NAME)(),                                                       \
-        .buckets = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_VECTOR_NAME)()                                                    \
+        .elems = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_LIST_VAL_TYPE_NAME)(),                                              \
+        .buckets = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME)()                           \
     };                                                                                                                              \
 }                                                                                                                                   \
                                                                                                                                     \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(HASH_TABLE_NAME)                                                                          \
 {                                                                                                                                   \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(HASH_TABLE_LIST_NAME)(&target->elems);                                                     \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(HASH_TABLE_VECTOR_NAME)(&target->buckets);                                                 \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(HASH_TABLE_LIST_VAL_TYPE_NAME)(&target->elems);                                            \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME)(&target->buckets);                        \
 }                                                                                                                                   \
                                                                                                                                     \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(HASH_TABLE_NAME)                                                                             \
 {                                                                                                                                   \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(HASH_TABLE_LIST_NAME)(&dest->elems, &source->elems);                                          \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(HASH_TABLE_VECTOR_NAME)(&dest->buckets, &source->buckets);                                    \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(HASH_TABLE_LIST_VAL_TYPE_NAME)(&dest->elems, &source->elems);                                 \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME)(&dest->buckets, &source->buckets);           \
 }                                                                                                                                   \
                                                                                                                                     \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(HASH_TABLE_NAME)                                                                             \
 {                                                                                                                                   \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(HASH_TABLE_LIST_NAME)(&dest->elems, &source->elems);                                          \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(HASH_TABLE_VECTOR_NAME)(&dest->buckets, &source->buckets);                                    \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(HASH_TABLE_LIST_VAL_TYPE_NAME)(&dest->elems, &source->elems);                                 \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME)(&dest->buckets, &source->buckets);           \
 }                                                                                                                                   \
                                                                                                                                     \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_NAME)                                                                           \
@@ -156,38 +162,59 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_NAME)                       
                                                                                                                                     \
 static void _C_PUBLIC_MEMBER(HASH_TABLE_NAME, clear)(HASH_TABLE_NAME* target)                                                       \
 {                                                                                                                                   \
-    _C_PUBLIC_MEMBER(HASH_TABLE_LIST_NAME, clear)(&target->elems);                                                                  \
-    size_t vec_size = _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_NAME, size)(&target->buckets);                                             \
+    _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, clear)(&target->elems);                                                         \
+    size_t vec_size = _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME, size)(&target->buckets);                    \
     for (size_t i = 0; i < vec_size; ++i)                                                                                           \
     {                                                                                                                               \
-        _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_NAME, element_at)(&target->buckets, i)->first = 0;                                       \
-        _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_NAME, element_at)(&target->buckets, i)->second = NULL;                                   \
+        _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME, element_at)(&target->buckets, i)->first = 0;              \
+        _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME, element_at)(&target->buckets, i)->second = NULL;          \
     }                                                                                                                               \
 }                                                                                                                                   \
                                                                                                                                     \
 static size_t _C_PUBLIC_MEMBER(HASH_TABLE_NAME, size)(HASH_TABLE_NAME* target)                                                      \
 {                                                                                                                                   \
-    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_NAME, size)(&target->elems);                                                            \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, size)(&target->elems);                                                   \
 }                                                                                                                                   \
                                                                                                                                     \
 static size_t _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket_count)(HASH_TABLE_NAME* target)                                              \
 {                                                                                                                                   \
-    return _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_NAME, size)(&target->buckets);                                                        \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME, size)(&target->buckets);                               \
+}                                                                                                                                   \
+                                                                                                                                    \
+static size_t _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket_size)(HASH_TABLE_NAME* target, size_t index)                                 \
+{                                                                                                                                   \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_COUNT_TYPE_NODE_PTR_TYPE_NAME, element_at)(&target->buckets, index)->first;           \
+}                                                                                                                                   \
+                                                                                                                                    \
+static size_t _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket)(HASH_TABLE_NAME* target, const KEY_TYPE* key)                               \
+{                                                                                                                                   \
+    return _C_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(KEY_TYPE)(key) % _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket_count)(target);              \
 }                                                                                                                                   \
                                                                                                                                     \
 static bool _C_PUBLIC_MEMBER(HASH_TABLE_NAME, empty)(HASH_TABLE_NAME* target)                                                       \
 {                                                                                                                                   \
-    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_NAME, empty)(&target->elems);                                                           \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, empty)(&target->elems);                                                  \
+}                                                                                                                                   \
+                                                                                                                                    \
+static float _C_PUBLIC_MEMBER(HASH_TABLE_NAME, load_factor)(HASH_TABLE_NAME* target)                                                \
+{                                                                                                                                   \
+    return  (float)(_C_PUBLIC_MEMBER(HASH_TABLE_NAME, size)(target)) /                                                              \
+            (float)(_C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket_count)(target));                                                       \
+}                                                                                                                                   \
+                                                                                                                                    \
+static float _C_PUBLIC_MEMBER(HASH_TABLE_NAME, max_load_factor)(HASH_TABLE_NAME* target)                                            \
+{                                                                                                                                   \
+    return _HASH_TABLE_MAX_LOAD_FACTOR;                                                                                             \
 }                                                                                                                                   \
                                                                                                                                     \
 static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, begin)(HASH_TABLE_NAME* target)                                   \
 {                                                                                                                                   \
-    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_NAME, begin)(&target->elems);                                                           \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, begin)(&target->elems);                                                  \
 }                                                                                                                                   \
                                                                                                                                     \
 static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABLE_NAME* target)                                     \
 {                                                                                                                                   \
-    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_NAME, end)(&target->elems);                                                             \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, end)(&target->elems);                                                    \
 }                                                                                                                                   \
                                                                                                                                     \
 
@@ -203,41 +230,43 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABL
 )                                                                                                                                   \
                                                                                                                                     \
 DEFINE_GENERIC_LIST(                                                                                                                \
-    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, IterList),                                                                     \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, ValueList),                                                                    \
     VAL_TYPE                                                                                                                        \
 )                                                                                                                                   \
                                                                                                                                     \
 DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(                                                                                                 \
-    _C_PRIVATE_MEMBER(_C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, IterList), DoubleNode)*, /* generated from IterList */       \
-    _C_PRIVATE_MEMBER(_C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, IterList), DoubleNode_ptr)                                   \
+    _C_PRIVATE_MEMBER(_C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, ValueList), DoubleNode)*, /* generated from ValueList */     \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, bucket_node_ptr_t)                                                             \
 )                                                                                                                                   \
                                                                                                                                     \
 DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(                                                                                                 \
     size_t,                                                                                                                         \
-    size_t                                                                                                                          \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, bucket_count_t)                                                                \
 )                                                                                                                                   \
                                                                                                                                     \
 DEFINE_GENERIC_PAIR(                                                                                                                \
-    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, CountNodePair),                                                                \
-    size_t,                                                                                                                         \
-    _C_PRIVATE_MEMBER(_C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, IterList), DoubleNode_ptr)  /* same as above */              \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, CountNodePtrPair),                                                             \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, bucket_count_t),  /* same as above */                                          \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, bucket_node_ptr_t)  /* same as above */                                        \
 )                                                                                                                                   \
                                                                                                                                     \
 DEFINE_GENERIC_VECTOR(                                                                                                              \
     _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, BucketVector),                                                                 \
-    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, CountNodePair)                                                                 \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, CountNodePtrPair)                                                              \
 )                                                                                                                                   \
                                                                                                                                     \
 _DEFINE_GENERIC_HASH_TABLE_ITERATOR(                                                                                                \
     _C_PUBLIC_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, Iterator),                                                                      \
-    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, IterList_Iterator),    /* generated from IterList */                           \
+    _C_PUBLIC_MEMBER(_C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, ValueList), Iterator),    /* generated from ValueList */      \
     VAL_TYPE                                                                                                                        \
 )                                                                                                                                   \
                                                                                                                                     \
 _DEFINE_GENERIC_HASH_TABLE_IMPL(                                                                                                    \
     HASH_TABLE_NAME_PUBLIC_PREFIX,                                                                                                  \
-    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, IterList),                                                                     \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, ValueList),                                                                    \
     _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, BucketVector),                                                                 \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, bucket_count_t),                                                               \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, bucket_node_ptr_t),                                                            \
     _C_PUBLIC_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, Iterator),                                                                      \
     KEY_TYPE,                                                                                                                       \
     MAP_TYPE,                                                                                                                       \

@@ -17,12 +17,12 @@ _DEFINE_GENERIC_HASH_TABLE(                                                     
     KEY_TYPE                                                                                    \
 )                                                                                               \
                                                                                                 \
-_DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(UMAP_NAME_PUBLIC_PREFIX, KEY_TYPE, KEY_TYPE)     \
+_DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(USET_NAME_PUBLIC_PREFIX, KEY_TYPE, KEY_TYPE)     \
 {                                                                                               \
     return value;                                                                               \
 }                                                                                               \
                                                                                                 \
-_DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(UMAP_NAME_PUBLIC_PREFIX, KEY_TYPE, KEY_TYPE)     \
+_DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(USET_NAME_PUBLIC_PREFIX, KEY_TYPE, KEY_TYPE)     \
 {                                                                                               \
     return value;                                                                               \
 }                                                                                               \
