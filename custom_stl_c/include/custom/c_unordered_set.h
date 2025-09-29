@@ -19,11 +19,13 @@ _DEFINE_GENERIC_HASH_TABLE(                                                     
                                                                                                 \
 _DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(USET_NAME_PUBLIC_PREFIX, KEY_TYPE, KEY_TYPE)     \
 {                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != value, "Value is NULL");                                           \
     return value;                                                                               \
 }                                                                                               \
                                                                                                 \
 _DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(USET_NAME_PUBLIC_PREFIX, KEY_TYPE, KEY_TYPE)     \
 {                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != value, "Value is NULL");                                           \
     return value;                                                                               \
 }                                                                                               \
 

@@ -117,7 +117,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(ALIAS)                                   
                                                                                         \
 static void _C_PUBLIC_MEMBER(SWAP_FUNC_NAME_PREFIX, do_swap)(TYPE* left, TYPE* right)   \
 {                                                                                       \
-    TYPE temp;                                                                          \
+    TYPE temp = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                            \
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(&temp, left);                               \
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(left, right);                               \
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(right, &temp);                              \
@@ -179,10 +179,8 @@ static void _C_PUBLIC_MEMBER(HEAP_ADJUST_NAME, heapify_down)(TYPE* arr, size_t a
         smallest = idx;                                                                                         \
         left = 2 * idx + 1;                                                                                     \
         right = 2 * idx + 2;                                                                                    \
-        if (left < arr_size && TYPE_REF_COMPARE_FUNC(&arr[left], &arr[smallest]))                               \
-            smallest = left;                                                                                    \
-        if (right < arr_size && TYPE_REF_COMPARE_FUNC(&arr[right], &arr[smallest]))                             \
-            smallest = right;                                                                                   \
+        if (left < arr_size && TYPE_REF_COMPARE_FUNC(&arr[left], &arr[smallest])) smallest = left;              \
+        if (right < arr_size && TYPE_REF_COMPARE_FUNC(&arr[right], &arr[smallest])) smallest = right;           \
         if (smallest == idx) return;                                                                            \
         _C_PUBLIC_MEMBER(HEAP_ADJUST_SWAP_HELPER_NAME, do_swap)(&arr[idx], &arr[smallest]);                     \
         idx = smallest;                                                                                         \
