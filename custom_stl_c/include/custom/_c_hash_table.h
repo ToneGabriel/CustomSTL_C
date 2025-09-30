@@ -134,6 +134,7 @@ static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, begin)(HAS
 static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABLE_NAME* target);                                                                                    \
 static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(HASH_TABLE_NAME* target, KEY_TYPE* key);                                                                    \
 static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(HASH_TABLE_NAME* target, VAL_TYPE* item);                                                                \
+static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace_at)(HASH_TABLE_NAME* target, KEY_TYPE* key, MAP_TYPE* item);                                              \
 static MAP_TYPE*                    _C_PUBLIC_MEMBER(HASH_TABLE_NAME, element_at)(HASH_TABLE_NAME* target, KEY_TYPE* key);                                                              \
                                                                                                                                                                                         \
 static HASH_TABLE_LIST_VAL_TYPE_NODE_NAME*  _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(HASH_TABLE_NAME* target, KEY_TYPE* key);                                                    \
@@ -293,6 +294,14 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(HASH_
         it.list = &target->_elems;                                                                                                                                                      \
     }                                                                                                                                                                                   \
     return it;                                                                                                                                                                          \
+}                                                                                                                                                                                       \
+                                                                                                                                                                                        \
+static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace_at)(HASH_TABLE_NAME* target, KEY_TYPE* key, MAP_TYPE* item)                                                   \
+{                                                                                                                                                                                       \
+    VAL_TYPE val = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VAL_TYPE)();                                                                                                                     \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(KEY_TYPE)(_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME)(&val), key);                                                                    \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(MAP_TYPE)(_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME)(&val), item);                                                                   \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(target, &val);                                                                                                                    \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
 static MAP_TYPE* _C_PUBLIC_MEMBER(HASH_TABLE_NAME, element_at)(HASH_TABLE_NAME* target, KEY_TYPE* key)                                                                                  \
