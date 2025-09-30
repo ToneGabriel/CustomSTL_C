@@ -30,13 +30,13 @@ void test_default_create()
 {
     TEST_ASSERT_TRUE_MESSAGE(USet_empty(&g_customUSetInstance), "USet should be empty");
     TEST_ASSERT_EQUAL_MESSAGE(0, USet_size(&g_customUSetInstance), "Initial size should be 0");
+    TEST_ASSERT_EQUAL_MESSAGE(_HASH_TABLE_DEFAULT_NOBUCKETS, USet_bucket_count(&g_customUSetInstance), "Initial bucket count should be _HASH_TABLE_DEFAULT_NOBUCKETS");
 }
 
 void test_copy()
 {
-    // USet_push_back(&g_customUSetInstance);
-    // USet_push_back(&g_customUSetInstance);
-    // USet_push_back(&g_customUSetInstance);
+    myuint_t val = 5;
+    (void)USet_emplace(&g_customUSetInstance, &val);
 
     USet other = USet_create();
     TEST_ASSERT_FALSE_MESSAGE(USet_equals(&other, &g_customUSetInstance), "Other uset should NOT be equal to original");
@@ -49,9 +49,8 @@ void test_copy()
 
 void test_move()
 {
-    // USet_push_back(&g_customUSetInstance);
-    // USet_push_back(&g_customUSetInstance);
-    // USet_push_back(&g_customUSetInstance);
+    myuint_t val = 5;
+    (void)USet_emplace(&g_customUSetInstance, &val);
 
     USet original_copy = USet_create();
     USet_copy(&original_copy, &g_customUSetInstance);

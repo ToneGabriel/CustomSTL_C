@@ -99,6 +99,36 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(ALIAS)                                   
 // =====================================================================================================================
 
 
+#define DEFINE_GENERIC_RANGE_UTILS(                                                                                 \
+    RANGE_UTILS_NAME_PREFIX,                                                                                        \
+    TYPE                                                                                                            \
+)                                                                                                                   \
+                                                                                                                    \
+static void _C_PUBLIC_MEMBER(RANGE_UTILS_NAME_PREFIX, destroy_range)(TYPE* ptr, size_t len)                         \
+{                                                                                                                   \
+    for (size_t i = 0; i < len; ++i)                                                                                \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(ptr + i);                                                        \
+}                                                                                                                   \
+                                                                                                                    \
+static void _C_PUBLIC_MEMBER(RANGE_UTILS_NAME_PREFIX, create_range)(TYPE* ptr, size_t len)                          \
+{                                                                                                                   \
+    for (size_t i = 0; i < len; ++i)                                                                                \
+        *(ptr + i) = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                   \
+}                                                                                                                   \
+                                                                                                                    \
+static void _C_PUBLIC_MEMBER(RANGE_UTILS_NAME_PREFIX, create_range_copy)(TYPE* ptr, size_t len, const TYPE* item)   \
+{                                                                                                                   \
+    for (size_t i = 0; i < len; ++i)                                                                                \
+    {                                                                                                               \
+        *(ptr + i) = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                   \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(ptr + i, item);                                                     \
+    }                                                                                                               \
+}                                                                                                                   \
+
+
+// =====================================================================================================================
+
+
 /**
  * @def DEFINE_GENERIC_SWAP_FUNCTION
  * @brief Defines a generic swap function for a given type.

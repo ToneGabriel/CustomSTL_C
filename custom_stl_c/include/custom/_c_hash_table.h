@@ -2,6 +2,8 @@
 #define _C_HASH_TABLE_H
 
 #include <math.h>           // for ceilf
+#include <stdio.h>
+
 #include "custom/c_list.h"
 #include "custom/c_vector.h"
 #include "custom/c_pair.h"
@@ -144,7 +146,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_NAME)                       
         ._elems = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_LIST_VAL_TYPE_NAME)(),                                                                                                 \
         ._buckets = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME)()                                                                                   \
     };                                                                                                                                                                                  \
-    _C_PUBLIC_MEMBER(HASH_TABLE_NAME, rehash)(&ret, _HASH_TABLE_DEFAULT_NOBUCKETS);                                                                                                     \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME, force_rehash)(&ret, _HASH_TABLE_DEFAULT_NOBUCKETS);                                                                                              \
     return ret;                                                                                                                                                                         \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
@@ -252,25 +254,25 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABL
                                                                                                                                                                                         \
 static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(HASH_TABLE_NAME* target, KEY_TYPE* key)                                                                         \
 {                                                                                                                                                                                       \
-    HASH_TABLE_ITERATOR_NAME it_right = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_ITERATOR_NAME)();                                                                                \
-    it_right.node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key);                                                                                                       \
-    it_right.list = &target->_elems;                                                                                                                                                    \
-    return it_right;                                                                                                                                                                    \
+    HASH_TABLE_ITERATOR_NAME it = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_ITERATOR_NAME)();                                                                                      \
+    it.node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key);                                                                                                             \
+    it.list = &target->_elems;                                                                                                                                                          \
+    return it;                                                                                                                                                                          \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
 static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(HASH_TABLE_NAME* target, VAL_TYPE* item)                                                                     \
 {                                                                                                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Hash Table is NULL");                                                                                                                             \
     KEY_TYPE* new_key = _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME)(item);                                                                                                  \
-    HASH_TABLE_ITERATOR_NAME it_right = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(target, new_key);                                                                                       \
-    HASH_TABLE_ITERATOR_NAME it_right_end = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(target);                                                                                             \
-    if (!_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_ITERATOR_NAME)(&it_right, &it_right_end))                                                                                       \
+    HASH_TABLE_ITERATOR_NAME it = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(target, new_key);                                                                                             \
+    HASH_TABLE_ITERATOR_NAME it_end = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(target);                                                                                                   \
+    if (!_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_ITERATOR_NAME)(&it, &it_end))                                                                                                   \
     {                                                                                                                                                                                   \
         /* found - do nothing and return iterator to found item */                                                                                                                      \
     }                                                                                                                                                                                   \
     else                                                                                                                                                                                \
     {                                                                                                                                                                                   \
-        /* not found - create it_right */                                                                                                                                               \
+        /* not found - create it */                                                                                                                                                     \
         HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* new_node = _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NODE_NAME, create_ptr)();                                                              \
         new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VAL_TYPE)();                                                                                                              \
         _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(VAL_TYPE)(&new_node->value, item);                                                                                                            \
@@ -278,10 +280,10 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(HASH_
         _C_PRIVATE_MEMBER(HASH_TABLE_NAME, rehash_if_overload)(target);                                                                                                                 \
         _C_PRIVATE_MEMBER(HASH_TABLE_NAME, map_and_link_node)(target, _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket)(target, new_key), new_node);                                            \
         /* update return iterator */                                                                                                                                                    \
-        it_right.node = new_node;                                                                                                                                                       \
-        it_right.list = &target->_elems;                                                                                                                                                \
+        it.node = new_node;                                                                                                                                                             \
+        it.list = &target->_elems;                                                                                                                                                      \
     }                                                                                                                                                                                   \
-    return it_right;                                                                                                                                                                    \
+    return it;                                                                                                                                                                          \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
 static HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(HASH_TABLE_NAME* target, KEY_TYPE* key)                                                      \
@@ -306,7 +308,7 @@ static HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* _C_PRIVATE_MEMBER(HASH_TABLE_NAME, fi
                                                                                                                                                                                         \
 static void _C_PRIVATE_MEMBER(HASH_TABLE_NAME, map_and_link_node)(HASH_TABLE_NAME* target, size_t index, HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* node)                                      \
 {                                                                                                                                                                                       \
-    if (_C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->first)                                                                      \
+    if (0 == _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->first)                                                                 \
     {                                                                                                                                                                                   \
         /* link last */                                                                                                                                                                 \
         _C_PRIVATE_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, link_node_before)(                                                                                                             \
@@ -328,8 +330,7 @@ static void _C_PRIVATE_MEMBER(HASH_TABLE_NAME, map_and_link_node)(HASH_TABLE_NAM
                                                                                                                                                                                         \
 static void _C_PRIVATE_MEMBER(HASH_TABLE_NAME, force_rehash)(HASH_TABLE_NAME* target, size_t nbuckets)                                                                                  \
 {                                                                                                                                                                                       \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME)(&target->_buckets);                                                                                \
-    target->_buckets = _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, create_capacity)(nbuckets); /* TODO - apply realloc in vector (implement first) */                  \
+    _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, realloc)(&target->_buckets, nbuckets);                                                                                 \
     HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* current_node = target->_elems.head->next;                                                                                                       \
     HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* head_node = target->_elems.head;                                                                                                                \
     while (current_node != head_node)                                                                                                                                                   \
@@ -360,7 +361,7 @@ static void _C_PRIVATE_MEMBER(HASH_TABLE_NAME, force_rehash)(HASH_TABLE_NAME* ta
 static void _C_PRIVATE_MEMBER(HASH_TABLE_NAME, rehash_if_overload)(HASH_TABLE_NAME* target)                                                                                             \
 {                                                                                                                                                                                       \
     if ((float)(_C_PUBLIC_MEMBER(HASH_TABLE_NAME, size)(target) + 1) /                                                                                                                  \
-        (float)(_C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket_count)(target) + 1) > _C_PUBLIC_MEMBER(HASH_TABLE_NAME, max_load_factor)(target))                                              \
+        (float)(_C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket_count)(target)) > _C_PUBLIC_MEMBER(HASH_TABLE_NAME, max_load_factor)(target))                                                  \
         _C_PRIVATE_MEMBER(HASH_TABLE_NAME, force_rehash)(target, 2 * _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket_count)(target));                                                          \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
