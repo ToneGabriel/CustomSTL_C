@@ -26,6 +26,9 @@ void tearDown()
 
 // Tests ==========================
 
+// VAL_TYPE val = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VAL_TYPE)();
+// _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(KEY_TYPE)(_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME)(&val), key);
+// _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(target, &val);
 
 void test_default_create()
 {
@@ -35,9 +38,9 @@ void test_default_create()
 
 void test_copy()
 {
-    // UMap_push_back(&g_customUMapInstance);
-    // UMap_push_back(&g_customUMapInstance);
-    // UMap_push_back(&g_customUMapInstance);
+    myuint_t key = 5;
+    myint_t val = 1;
+    *UMap_element_at(&g_customUMapInstance, &key) = val;
 
     UMap other = UMap_create();
     TEST_ASSERT_FALSE_MESSAGE(UMap_equals(&other, &g_customUMapInstance), "Other umap should NOT be equal to original");
@@ -50,9 +53,9 @@ void test_copy()
 
 void test_move()
 {
-    // UMap_push_back(&g_customUMapInstance);
-    // UMap_push_back(&g_customUMapInstance);
-    // UMap_push_back(&g_customUMapInstance);
+    myuint_t key = 5;
+    myint_t val = 1;
+    *UMap_element_at(&g_customUMapInstance, &key) = val;
 
     UMap original_copy = UMap_create();
     UMap_copy(&original_copy, &g_customUMapInstance);

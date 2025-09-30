@@ -129,10 +129,12 @@ static bool                         _C_PUBLIC_MEMBER(HASH_TABLE_NAME, empty)(HAS
 static float                        _C_PUBLIC_MEMBER(HASH_TABLE_NAME, load_factor)(HASH_TABLE_NAME* target);                                                                            \
 static float                        _C_PUBLIC_MEMBER(HASH_TABLE_NAME, max_load_factor)(HASH_TABLE_NAME* target);                                                                        \
 static void                         _C_PUBLIC_MEMBER(HASH_TABLE_NAME, rehash)(HASH_TABLE_NAME* target, size_t nobuckets);                                                               \
+static bool                         _C_PUBLIC_MEMBER(HASH_TABLE_NAME, contains)(HASH_TABLE_NAME* target, KEY_TYPE* key);                                                                \
 static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, begin)(HASH_TABLE_NAME* target);                                                                                  \
 static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABLE_NAME* target);                                                                                    \
 static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(HASH_TABLE_NAME* target, KEY_TYPE* key);                                                                    \
 static HASH_TABLE_ITERATOR_NAME     _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(HASH_TABLE_NAME* target, VAL_TYPE* item);                                                                \
+static MAP_TYPE*                    _C_PUBLIC_MEMBER(HASH_TABLE_NAME, element_at)(HASH_TABLE_NAME* target, KEY_TYPE* key);                                                              \
                                                                                                                                                                                         \
 static HASH_TABLE_LIST_VAL_TYPE_NODE_NAME*  _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(HASH_TABLE_NAME* target, KEY_TYPE* key);                                                    \
 static void                                 _C_PRIVATE_MEMBER(HASH_TABLE_NAME, map_and_link_node)(HASH_TABLE_NAME* target, size_t index, HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* node);     \
@@ -242,6 +244,13 @@ static void _C_PUBLIC_MEMBER(HASH_TABLE_NAME, rehash)(HASH_TABLE_NAME* target, s
         _C_PRIVATE_MEMBER(HASH_TABLE_NAME, force_rehash)(target, new_bucket_count);                                                                                                     \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
+static bool _C_PUBLIC_MEMBER(HASH_TABLE_NAME, contains)(HASH_TABLE_NAME* target, KEY_TYPE* key)                                                                                         \
+{                                                                                                                                                                                       \
+    HASH_TABLE_ITERATOR_NAME it_found = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(target, key);                                                                                           \
+    HASH_TABLE_ITERATOR_NAME it_end = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(target);                                                                                                   \
+    return !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_ITERATOR_NAME)(&it_found, &it_end);                                                                                          \
+}                                                                                                                                                                                       \
+                                                                                                                                                                                        \
 static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, begin)(HASH_TABLE_NAME* target)                                                                                       \
 {                                                                                                                                                                                       \
     return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, begin)(&target->_elems);                                                                                                     \
@@ -284,6 +293,14 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(HASH_
         it.list = &target->_elems;                                                                                                                                                      \
     }                                                                                                                                                                                   \
     return it;                                                                                                                                                                          \
+}                                                                                                                                                                                       \
+                                                                                                                                                                                        \
+static MAP_TYPE* _C_PUBLIC_MEMBER(HASH_TABLE_NAME, element_at)(HASH_TABLE_NAME* target, KEY_TYPE* key)                                                                                  \
+{                                                                                                                                                                                       \
+    HASH_TABLE_ITERATOR_NAME it_found = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(target, key);                                                                                           \
+    HASH_TABLE_ITERATOR_NAME it_end = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(target);                                                                                                   \
+    if (_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_ITERATOR_NAME)(&it_found, &it_end)) return NULL;                                                                                 \
+    return _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME)(_C_PUBLIC_MEMBER(HASH_TABLE_ITERATOR_NAME, deref)(&it_found));                                                       \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
 static HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(HASH_TABLE_NAME* target, KEY_TYPE* key)                                                      \
