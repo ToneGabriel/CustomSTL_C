@@ -40,8 +40,8 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(PQ_NAME);                                
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PQ_NAME);                                                                                          \
                                                                                                                                             \
 static void     _C_PUBLIC_MEMBER(PQ_NAME, clear)(PQ_NAME* target);                                                                          \
-static size_t   _C_PUBLIC_MEMBER(PQ_NAME, size)(PQ_NAME* target);                                                                           \
-static bool     _C_PUBLIC_MEMBER(PQ_NAME, empty)(PQ_NAME* target);                                                                          \
+static size_t   _C_PUBLIC_MEMBER(PQ_NAME, size)(const PQ_NAME* target);                                                                     \
+static bool     _C_PUBLIC_MEMBER(PQ_NAME, empty)(const PQ_NAME* target);                                                                    \
 static void     _C_PUBLIC_MEMBER(PQ_NAME, insert)(PQ_NAME* target);                                                                         \
 static void     _C_PUBLIC_MEMBER(PQ_NAME, insert_copy)(PQ_NAME* target, const TYPE* item);                                                  \
 static void     _C_PUBLIC_MEMBER(PQ_NAME, insert_move)(PQ_NAME* target, TYPE* item);                                                        \
@@ -121,7 +121,7 @@ static void _C_PUBLIC_MEMBER(PQ_NAME, clear)(PQ_NAME* target)                   
  * @param target Pointer to the priority queue.                                                                                             \
  * @return The number of elements.                                                                                                          \
  */                                                                                                                                         \
-static size_t _C_PUBLIC_MEMBER(PQ_NAME, size)(PQ_NAME* target)                                                                              \
+static size_t _C_PUBLIC_MEMBER(PQ_NAME, size)(const PQ_NAME* target)                                                                        \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
     return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, size)(&target->vec);                                                                     \
@@ -132,7 +132,7 @@ static size_t _C_PUBLIC_MEMBER(PQ_NAME, size)(PQ_NAME* target)                  
  * @param target Pointer to the priority queue.                                                                                             \
  * @return `true` if empty, `false` otherwise.                                                                                              \
  */                                                                                                                                         \
-static bool _C_PUBLIC_MEMBER(PQ_NAME, empty)(PQ_NAME* target)                                                                               \
+static bool _C_PUBLIC_MEMBER(PQ_NAME, empty)(const PQ_NAME* target)                                                                         \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                             \
     return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, empty)(&target->vec);                                                                    \

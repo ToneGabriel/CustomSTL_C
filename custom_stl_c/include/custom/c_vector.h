@@ -171,7 +171,8 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_NAME);                          
                                                                                                                                                 \
 static VECTOR_NAME          _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(size_t capacity);                                                    \
 static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, clear)(VECTOR_NAME* target);                                                          \
-static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, data)(const VECTOR_NAME* target);                                                     \
+static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, data)(VECTOR_NAME* target);                                                           \
+static const TYPE*          _C_PUBLIC_MEMBER(VECTOR_NAME, data_const)(const VECTOR_NAME* target);                                               \
 static size_t               _C_PUBLIC_MEMBER(VECTOR_NAME, size)(const VECTOR_NAME* target);                                                     \
 static size_t               _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(const VECTOR_NAME* target);                                                 \
 static bool                 _C_PUBLIC_MEMBER(VECTOR_NAME, empty)(const VECTOR_NAME* target);                                                    \
@@ -184,10 +185,11 @@ static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, pop_back)(VECTOR_NAME*
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_front)(VECTOR_NAME* target);                                                  \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_back)(VECTOR_NAME* target);                                                   \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* target, size_t index);                                       \
+static const TYPE*          _C_PUBLIC_MEMBER(VECTOR_NAME, element_at_const)(const VECTOR_NAME* target, size_t index);                           \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, begin)(VECTOR_NAME* target);                                                          \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, end)(VECTOR_NAME* target);                                                            \
                                                                                                                                                 \
-static void                 _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(VECTOR_NAME* target);                                               \
+static void     _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(VECTOR_NAME* target);                                                           \
                                                                                                                                                 \
 /**                                                                                                                                             \
  * @brief Creates a vector struct and allocates dynamic array with default capacity.                                                            \
@@ -300,7 +302,13 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, clear)(VECTOR_NAME* target)           
  * @param target Pointer to vector.                                                                                                             \
  * @return Pointer to the data array.                                                                                                           \
  */                                                                                                                                             \
-static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, data)(const VECTOR_NAME* target)                                                                     \
+static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, data)(VECTOR_NAME* target)                                                                           \
+{                                                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
+    return target->first;                                                                                                                       \
+}                                                                                                                                               \
+                                                                                                                                                \
+static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, data_const)(const VECTOR_NAME* target)                                                         \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
     return target->first;                                                                                                                       \
@@ -442,6 +450,13 @@ static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_back)(VECTOR_NAME* target)   
  * @return Pointer to the element at index.                                                                                                     \
  */                                                                                                                                             \
 static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* target, size_t index)                                                       \
+{                                                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
+    if (target->first + index >= target->last) return NULL;                                                                                     \
+    return target->first + index;                                                                                                               \
+}                                                                                                                                               \
+                                                                                                                                                \
+static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_at_const)(const VECTOR_NAME* target, size_t index)                                     \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
     if (target->first + index >= target->last) return NULL;                                                                                     \

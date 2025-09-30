@@ -121,7 +121,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_NAME);                              
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_NAME);                                                                                                        \
                                                                                                                                                             \
 static void                 _C_PUBLIC_MEMBER(LIST_NAME, clear)(LIST_NAME* target);                                                                          \
-static size_t               _C_PUBLIC_MEMBER(LIST_NAME, size)(LIST_NAME* target);                                                                           \
+static size_t               _C_PUBLIC_MEMBER(LIST_NAME, size)(const LIST_NAME* target);                                                                     \
 static bool                 _C_PUBLIC_MEMBER(LIST_NAME, empty)(const LIST_NAME* target);                                                                    \
 static void                 _C_PUBLIC_MEMBER(LIST_NAME, push_back)(LIST_NAME* target);                                                                      \
 static void                 _C_PUBLIC_MEMBER(LIST_NAME, push_back_copy)(LIST_NAME* target, const TYPE* item);                                               \
@@ -202,7 +202,7 @@ static void _C_PUBLIC_MEMBER(LIST_NAME, clear)(LIST_NAME* target)               
         _C_PUBLIC_MEMBER(LIST_NAME, pop_back)(target);                                                                                                      \
 }                                                                                                                                                           \
                                                                                                                                                             \
-static size_t _C_PUBLIC_MEMBER(LIST_NAME, size)(LIST_NAME* target)                                                                                          \
+static size_t _C_PUBLIC_MEMBER(LIST_NAME, size)(const LIST_NAME* target)                                                                                    \
 {                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                       \
     return target->size;                                                                                                                                    \

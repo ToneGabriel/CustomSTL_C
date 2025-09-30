@@ -37,8 +37,8 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(QUEUE_NAME);                             
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(QUEUE_NAME);                                                           \
                                                                                                                 \
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, clear)(QUEUE_NAME* target);                                    \
-static size_t       _C_PUBLIC_MEMBER(QUEUE_NAME, size)(QUEUE_NAME* target);                                     \
-static bool         _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(QUEUE_NAME* target);                                    \
+static size_t       _C_PUBLIC_MEMBER(QUEUE_NAME, size)(const QUEUE_NAME* target);                               \
+static bool         _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(const QUEUE_NAME* target);                              \
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert)(QUEUE_NAME* target);                                   \
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert_copy)(QUEUE_NAME* target, const TYPE* item);            \
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert_move)(QUEUE_NAME* target, TYPE* item);                  \
@@ -118,7 +118,7 @@ static void _C_PUBLIC_MEMBER(QUEUE_NAME, clear)(QUEUE_NAME* target)             
  * @param target Pointer to the queue.                                                                          \
  * @return The number of elements.                                                                              \
  */                                                                                                             \
-static size_t _C_PUBLIC_MEMBER(QUEUE_NAME, size)(QUEUE_NAME* target)                                            \
+static size_t _C_PUBLIC_MEMBER(QUEUE_NAME, size)(const QUEUE_NAME* target)                                      \
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
     return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, size)(&target->list);                                       \
@@ -129,7 +129,7 @@ static size_t _C_PUBLIC_MEMBER(QUEUE_NAME, size)(QUEUE_NAME* target)            
  * @param target Pointer to the queue.                                                                          \
  * @return `true` if empty, `false` otherwise.                                                                  \
  */                                                                                                             \
-static bool _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(QUEUE_NAME* target)                                             \
+static bool _C_PUBLIC_MEMBER(QUEUE_NAME, empty)(const QUEUE_NAME* target)                                       \
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                          \
     return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, empty)(&target->list);                                      \
