@@ -297,7 +297,7 @@ static HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* _C_PRIVATE_MEMBER(HASH_TABLE_NAME, fi
                                                 &target->_buckets,                                                                                                                      \
                                                 _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket)(target, key))->second;                                                                        \
     while ( remaining_nodes &&                                                                                                                                                          \
-            _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(KEY_TYPE)(_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME)(&current_node->value), key))                                          \
+            !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(KEY_TYPE)(_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME)(&current_node->value), key))                                         \
     {                                                                                                                                                                                   \
         current_node = current_node->next;                                                                                                                                              \
         --remaining_nodes;                                                                                                                                                              \
