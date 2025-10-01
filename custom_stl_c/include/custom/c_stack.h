@@ -37,8 +37,8 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(STACK_NAME);                             
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(STACK_NAME);                                                           \
                                                                                                                 \
 static void         _C_PUBLIC_MEMBER(STACK_NAME, clear)(STACK_NAME* target);                                    \
-static size_t       _C_PUBLIC_MEMBER(STACK_NAME, size)(STACK_NAME* target);                                     \
-static bool         _C_PUBLIC_MEMBER(STACK_NAME, empty)(STACK_NAME* target);                                    \
+static size_t       _C_PUBLIC_MEMBER(STACK_NAME, size)(const STACK_NAME* target);                               \
+static bool         _C_PUBLIC_MEMBER(STACK_NAME, empty)(const STACK_NAME* target);                              \
 static void         _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* target);                                   \
 static void         _C_PUBLIC_MEMBER(STACK_NAME, insert_copy)(STACK_NAME* target, const TYPE* item);            \
 static void         _C_PUBLIC_MEMBER(STACK_NAME, insert_move)(STACK_NAME* target, TYPE* item);                  \
@@ -118,7 +118,7 @@ static void _C_PUBLIC_MEMBER(STACK_NAME, clear)(STACK_NAME* target)             
  * @param target Pointer to the stack.                                                                          \
  * @return The number of elements.                                                                              \
  */                                                                                                             \
-static size_t _C_PUBLIC_MEMBER(STACK_NAME, size)(STACK_NAME* target)                                            \
+static size_t _C_PUBLIC_MEMBER(STACK_NAME, size)(const STACK_NAME* target)                                      \
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
     return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, size)(&target->vec);                                      \
@@ -129,7 +129,7 @@ static size_t _C_PUBLIC_MEMBER(STACK_NAME, size)(STACK_NAME* target)            
  * @param target Pointer to the stack.                                                                          \
  * @return `true` if empty, `false` otherwise.                                                                  \
  */                                                                                                             \
-static bool _C_PUBLIC_MEMBER(STACK_NAME, empty)(STACK_NAME* target)                                             \
+static bool _C_PUBLIC_MEMBER(STACK_NAME, empty)(const STACK_NAME* target)                                       \
 {                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                          \
     return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, empty)(&target->vec);                                     \

@@ -79,6 +79,14 @@ void test_clear()
     TEST_ASSERT_TRUE_MESSAGE(VectorUINT_empty(&g_customVectorUINTInstance), "Vector should be empty");
 }
 
+void test_realloc_default()
+{
+    VectorUINT_realloc(&g_customVectorUINTInstance, 10);
+    TEST_ASSERT_EQUAL_MESSAGE(10, VectorUINT_size(&g_customVectorUINTInstance), "Vector size should be 10");
+    TEST_ASSERT_EQUAL_MESSAGE(10, VectorUINT_capacity(&g_customVectorUINTInstance), "Vector capacity should be 10");
+    TEST_ASSERT_TRUE_MESSAGE((myuint_t){0} == *VectorUINT_element_back(&g_customVectorUINTInstance), "Vector back element should be equal to default value");
+}
+
 void test_push_back_without_realloc()
 {
     VectorUINT_push_back(&g_customVectorUINTInstance);
@@ -139,6 +147,7 @@ int main()
     RUN_TEST(test_copy);
     RUN_TEST(test_move);
     RUN_TEST(test_clear);
+    RUN_TEST(test_realloc_default);
     RUN_TEST(test_push_back_without_realloc);
     RUN_TEST(test_push_back_with_realloc);
     RUN_TEST(test_pop_back);
