@@ -40,15 +40,15 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(VECTOR_ITERATOR_NAME);                   
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(VECTOR_ITERATOR_NAME);                                                                               \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_ITERATOR_NAME);                                                                             \
                                                                                                                                             \
-static void                     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_increment)(VECTOR_ITERATOR_NAME* iter);                          \
-static VECTOR_ITERATOR_NAME     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, post_increment)(VECTOR_ITERATOR_NAME* iter);                         \
-static void                     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, increment_by)(VECTOR_ITERATOR_NAME* iter, ptrdiff_t diff);           \
-static VECTOR_ITERATOR_NAME     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, increment)(VECTOR_ITERATOR_NAME* iter, ptrdiff_t diff);              \
-static void                     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_decrement)(VECTOR_ITERATOR_NAME* iter);                          \
-static VECTOR_ITERATOR_NAME     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, post_decrement)(VECTOR_ITERATOR_NAME* iter);                         \
-static void                     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decrement_by)(VECTOR_ITERATOR_NAME* iter, ptrdiff_t diff);           \
-static VECTOR_ITERATOR_NAME     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decrement)(VECTOR_ITERATOR_NAME* iter, ptrdiff_t diff);              \
-static TYPE*                    _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, deref)(VECTOR_ITERATOR_NAME* iter);                                  \
+static void                     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_increment)(VECTOR_ITERATOR_NAME* target);                        \
+static VECTOR_ITERATOR_NAME     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, post_increment)(VECTOR_ITERATOR_NAME* target);                       \
+static void                     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, increment_by)(VECTOR_ITERATOR_NAME* target, ptrdiff_t diff);         \
+static VECTOR_ITERATOR_NAME     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, increment)(VECTOR_ITERATOR_NAME* target, ptrdiff_t diff);            \
+static void                     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_decrement)(VECTOR_ITERATOR_NAME* target);                        \
+static VECTOR_ITERATOR_NAME     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, post_decrement)(VECTOR_ITERATOR_NAME* target);                       \
+static void                     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decrement_by)(VECTOR_ITERATOR_NAME* target, ptrdiff_t diff);         \
+static VECTOR_ITERATOR_NAME     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decrement)(VECTOR_ITERATOR_NAME* target, ptrdiff_t diff);            \
+static TYPE*                    _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, deref)(VECTOR_ITERATOR_NAME* target);                                \
                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_ITERATOR_NAME)                                                                              \
 {                                                                                                                                           \
@@ -60,83 +60,95 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_ITERATOR_NAME)                  
                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_ITERATOR_NAME)                                                                             \
 {                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                            \
     target->ptr = NULL;                                                                                                                     \
     target->vec = NULL;                                                                                                                     \
 }                                                                                                                                           \
                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(VECTOR_ITERATOR_NAME)                                                                                \
 {                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != dest, "Vector Iterator dest is NULL");                                                                         \
+    _C_CUSTOM_ASSERT(NULL != source, "Vector Iterator source is NULL");                                                                     \
     dest->ptr = source->ptr;                                                                                                                \
     dest->vec = source->vec;                                                                                                                \
 }                                                                                                                                           \
                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(VECTOR_ITERATOR_NAME)                                                                                \
 {                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != dest, "Vector Iterator dest is NULL");                                                                         \
+    _C_CUSTOM_ASSERT(NULL != source, "Vector Iterator source is NULL");                                                                     \
     dest->ptr = source->ptr;                                                                                                                \
     dest->vec = source->vec;                                                                                                                \
 }                                                                                                                                           \
                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_ITERATOR_NAME)                                                                              \
 {                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != left, "Vector Iterator left is NULL");                                                                         \
+    _C_CUSTOM_ASSERT(NULL != right, "Vector Iterator right is NULL");                                                                       \
     return left->ptr == right->ptr;                                                                                                         \
 }                                                                                                                                           \
                                                                                                                                             \
-static void _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_increment)(VECTOR_ITERATOR_NAME* iter)                                               \
+static void _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_increment)(VECTOR_ITERATOR_NAME* target)                                             \
 {                                                                                                                                           \
-    _C_CUSTOM_ASSERT(iter->ptr < iter->vec->last, "Cannot increment end iterator.");                                                        \
-    ++iter->ptr;                                                                                                                            \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                            \
+    _C_CUSTOM_ASSERT(target->ptr < target->vec->last, "Cannot increment end iterator.");                                                    \
+    ++target->ptr;                                                                                                                          \
 }                                                                                                                                           \
                                                                                                                                             \
-static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, post_increment)(VECTOR_ITERATOR_NAME* iter)                              \
+static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, post_increment)(VECTOR_ITERATOR_NAME* target)                            \
 {                                                                                                                                           \
-    VECTOR_ITERATOR_NAME temp = *iter;                                                                                                      \
-    _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_increment)(iter);                                                                            \
+    VECTOR_ITERATOR_NAME temp = *target;                                                                                                    \
+    _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_increment)(target);                                                                          \
     return temp;                                                                                                                            \
 }                                                                                                                                           \
                                                                                                                                             \
-static void _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, increment_by)(VECTOR_ITERATOR_NAME* iter, ptrdiff_t diff)                                \
+static void _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, increment_by)(VECTOR_ITERATOR_NAME* target, ptrdiff_t diff)                              \
 {                                                                                                                                           \
-    _C_CUSTOM_ASSERT(iter->ptr + diff < iter->vec->last, "Cannot increment end iterator.");                                                 \
-    iter->ptr += diff;                                                                                                                      \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                            \
+    _C_CUSTOM_ASSERT(target->ptr + diff < target->vec->last, "Cannot increment end iterator.");                                             \
+    target->ptr += diff;                                                                                                                    \
 }                                                                                                                                           \
                                                                                                                                             \
-static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, increment)(VECTOR_ITERATOR_NAME* iter, ptrdiff_t diff)                   \
+static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, increment)(VECTOR_ITERATOR_NAME* target, ptrdiff_t diff)                 \
 {                                                                                                                                           \
-    VECTOR_ITERATOR_NAME temp = *iter;                                                                                                      \
+    VECTOR_ITERATOR_NAME temp = *target;                                                                                                    \
     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, increment_by)(&temp, diff);                                                                      \
     return temp;                                                                                                                            \
 }                                                                                                                                           \
                                                                                                                                             \
-static void _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_decrement)(VECTOR_ITERATOR_NAME* iter)                                               \
+static void _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_decrement)(VECTOR_ITERATOR_NAME* target)                                             \
 {                                                                                                                                           \
-    _C_CUSTOM_ASSERT(iter->ptr > iter->vec->first, "Cannot decrement begin iterator.");                                                     \
-    --iter->ptr;                                                                                                                            \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                            \
+    _C_CUSTOM_ASSERT(target->ptr > target->vec->first, "Cannot decrement begin iterator.");                                                 \
+    --target->ptr;                                                                                                                          \
 }                                                                                                                                           \
                                                                                                                                             \
-static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, post_decrement)(VECTOR_ITERATOR_NAME* iter)                              \
+static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, post_decrement)(VECTOR_ITERATOR_NAME* target)                            \
 {                                                                                                                                           \
-    VECTOR_ITERATOR_NAME temp = *iter;                                                                                                      \
-    _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_decrement)(iter);                                                                            \
+    VECTOR_ITERATOR_NAME temp = *target;                                                                                                    \
+    _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_decrement)(target);                                                                          \
     return temp;                                                                                                                            \
 }                                                                                                                                           \
                                                                                                                                             \
-static void _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decrement_by)(VECTOR_ITERATOR_NAME* iter, ptrdiff_t diff)                                \
+static void _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decrement_by)(VECTOR_ITERATOR_NAME* target, ptrdiff_t diff)                              \
 {                                                                                                                                           \
-    _C_CUSTOM_ASSERT(iter->ptr + diff > iter->vec->first, "Cannot decrement begin iterator.");                                              \
-    iter->ptr -= diff;                                                                                                                      \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                            \
+    _C_CUSTOM_ASSERT(target->ptr + diff > target->vec->first, "Cannot decrement begin iterator.");                                          \
+    target->ptr -= diff;                                                                                                                    \
 }                                                                                                                                           \
                                                                                                                                             \
-static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decrement)(VECTOR_ITERATOR_NAME* iter, ptrdiff_t diff)                   \
+static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decrement)(VECTOR_ITERATOR_NAME* target, ptrdiff_t diff)                 \
 {                                                                                                                                           \
-    VECTOR_ITERATOR_NAME temp = *iter;                                                                                                      \
+    VECTOR_ITERATOR_NAME temp = *target;                                                                                                    \
     _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decrement_by)(&temp, diff);                                                                      \
     return temp;                                                                                                                            \
 }                                                                                                                                           \
                                                                                                                                             \
-static TYPE* _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, deref)(VECTOR_ITERATOR_NAME* iter)                                                      \
+static TYPE* _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, deref)(VECTOR_ITERATOR_NAME* target)                                                    \
 {                                                                                                                                           \
-    _C_CUSTOM_ASSERT(iter->ptr < iter->vec->last, "Cannot dereference end iterator.");                                                      \
-    return iter->ptr;                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                            \
+    _C_CUSTOM_ASSERT(target->ptr < target->vec->last, "Cannot dereference end iterator.");                                                  \
+    return target->ptr;                                                                                                                     \
 }                                                                                                                                           \
 
 
