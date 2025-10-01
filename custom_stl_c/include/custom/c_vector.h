@@ -260,17 +260,7 @@ static TYPE* _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, dereference)(VECTOR_ITERATOR
 /// @brief Default capacity used in vector _create function
 #define GENERIC_VECTOR_DEFAULT_CAPACITY 8
 
-/**
- * @def _DEFINE_GENERIC_VECTOR_IMPL
- * @brief Internal macro that defines the complete implementation of a vector.
- *
- * This macro generates a full implementation of a dynamic array.
- * The generated vector operates on elements of type `TYPE`.
- *
- * @param VECTOR_NAME               Public-facing name prefix for struct and functions
- * @param VECTOR_ITERATOR_NAME      Public-facing name prefix for iterator struct and functions
- * @param TYPE                      Type of elements to be stored in the vector.
- */
+
 #define _DEFINE_GENERIC_VECTOR_IMPL(                                                                                                                    \
     VECTOR_NAME,                                                                                                                                        \
     VECTOR_CONST_ITERATOR_NAME,                                                                                                                         \
@@ -562,18 +552,9 @@ static void _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(VECTOR_NAME* target)
 // ======================================================================================================================================================
 
 /**
- * @brief Public macro to define a generic vector for a given type with all required dependencies.
- *
- * This macro instantiates:
- * 
- * - The vector API (   `_create`, `_create_capacity`, `_destroy`, `_clear`, `_copy`, `_move`, `_data`, `_size`, `_capacity`, `_empty`,
- *                      `_realloc`, `_realloc_copy`,
- *                      `_push_back`, `_push_back_copy`, `_push_back_move`, `_pop_back`, `_element_front`, `_element_back`, `_element_at`, `_equals`,
- *                      `_begin`, `_end`
- *                  )
- * 
+ * @brief Public macro to define a generic vector and iterators for a given type with all required dependencies.
  * @param VECTOR_NAME_PUBLIC_PREFIX     The public name prefix for generated vector (e.g., `MyVec` -> `MyVec_create`, etc.).
- * @param TYPE                          Type stored in the vector.
+ * @param TYPE                          Typedef stored in the vector.
  */
 #define DEFINE_GENERIC_VECTOR(                                                                  \
     VECTOR_NAME_PUBLIC_PREFIX,                                                                  \
