@@ -40,17 +40,8 @@ static size_t _fnv1a_append_bytes(  size_t val,
 // =====================================================================================================================
 
 
-#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)      static TYPE _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)()
-#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)     static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(TYPE* target)
-#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)        static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(TYPE* dest, const TYPE* source)
-#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)        static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(TYPE* dest, TYPE* source)
-#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)      static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)(const TYPE* left, const TYPE* right)
-#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)        static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)(const TYPE* left, const TYPE* right)
-#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)     static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)(const TYPE* left, const TYPE* right)
-#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(TYPE)        static size_t _C_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(TYPE)(const TYPE* key)
-
-
 #define DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(TYPE, ALIAS)                                                             \
+                                                                                                                    \
 typedef TYPE ALIAS;                                                                                                 \
                                                                                                                     \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(ALIAS)                                                                     \
@@ -132,13 +123,7 @@ static void _C_PUBLIC_MEMBER(RANGE_UTILS_NAME_PREFIX, create_range_copy)(TYPE* c
 
 
 /**
- * @def DEFINE_GENERIC_SWAP_FUNCTION
  * @brief Defines a generic swap function for a given type.
- *
- * This macro instantiates:
- * 
- * - The swap API (`_do_swap`)
- * 
  * @param SWAP_FUNC_NAME_PREFIX Prefix for the generated swap function name.
  * @param TYPE The data type of elements to be swapped.
  */
@@ -159,15 +144,6 @@ static void _C_PUBLIC_MEMBER(SWAP_FUNC_NAME_PREFIX, do_swap)(TYPE* left, TYPE* r
 // =====================================================================================================================
 
 
-/**
- * @def _DEFINE_GENERIC_HEAPIFY_FUNCTIONS_IMPL
- * @brief Internal macro to define heapify up and down operations for generic types.
- *
- * @param HEAP_ADJUST_NAME Name prefix for heapify functions.
- * @param HEAP_ADJUST_SWAP_HELPER_NAME Swap helper prefix used inside heapify.
- * @param TYPE The data type stored in the heap.
- * @param TYPE_REF_COMPARE_FUNC A comparison function taking two pointers to TYPE.
- */
 #define _DEFINE_GENERIC_HEAPIFY_FUNCTIONS_IMPL(                                                                 \
     HEAP_ADJUST_NAME,                                                                                           \
     HEAP_ADJUST_SWAP_HELPER_NAME,                                                                               \
@@ -221,15 +197,7 @@ static void _C_PUBLIC_MEMBER(HEAP_ADJUST_NAME, heapify_down)(TYPE* const arr, si
 
 
 /**
- * @def DEFINE_GENERIC_HEAPIFY_FUNCTIONS
  * @brief Public macro to define heapify operations for a type with all required dependencies.
- *
- * This macro instantiates:
- * 
- * - A `PRIVATE_Swap` helper for heap operations
- * 
- * - The heapify API (`_heapify_up`, `_heapify_down`)
- * 
  * @param HEAP_ADJUST_NAME_PUBLIC_PREFIX Public name prefix for heapify functions.
  * @param TYPE The data type in the heap.
  * @param TYPE_REF_COMPARE_FUNC A comparison function used for heap ordering.
