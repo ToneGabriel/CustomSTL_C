@@ -171,8 +171,6 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_NAME);                          
                                                                                                                                                 \
 static VECTOR_NAME          _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(size_t capacity);                                                    \
 static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, clear)(VECTOR_NAME* target);                                                          \
-static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, data)(VECTOR_NAME* target);                                                           \
-static const TYPE*          _C_PUBLIC_MEMBER(VECTOR_NAME, data_const)(const VECTOR_NAME* target);                                               \
 static size_t               _C_PUBLIC_MEMBER(VECTOR_NAME, size)(const VECTOR_NAME* target);                                                     \
 static size_t               _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(const VECTOR_NAME* target);                                                 \
 static bool                 _C_PUBLIC_MEMBER(VECTOR_NAME, empty)(const VECTOR_NAME* target);                                                    \
@@ -182,8 +180,12 @@ static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME
 static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_copy)(VECTOR_NAME* target, const TYPE* item);                               \
 static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_move)(VECTOR_NAME* target, TYPE* item);                                     \
 static void                 _C_PUBLIC_MEMBER(VECTOR_NAME, pop_back)(VECTOR_NAME* target);                                                       \
+static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, data)(VECTOR_NAME* target);                                                           \
+static const TYPE*          _C_PUBLIC_MEMBER(VECTOR_NAME, data_const)(const VECTOR_NAME* target);                                               \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_front)(VECTOR_NAME* target);                                                  \
+static const TYPE*          _C_PUBLIC_MEMBER(VECTOR_NAME, element_front_const)(VECTOR_NAME* target);                                            \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_back)(VECTOR_NAME* target);                                                   \
+static const TYPE*          _C_PUBLIC_MEMBER(VECTOR_NAME, element_back_const)(VECTOR_NAME* target);                                             \
 static TYPE*                _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* target, size_t index);                                       \
 static const TYPE*          _C_PUBLIC_MEMBER(VECTOR_NAME, element_at_const)(const VECTOR_NAME* target, size_t index);                           \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, begin)(VECTOR_NAME* target);                                                          \
@@ -191,19 +193,11 @@ static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, end)(VECTOR_NAME* targ
                                                                                                                                                 \
 static void     _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(VECTOR_NAME* target);                                                           \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Creates a vector struct and allocates dynamic array with default capacity.                                                            \
- * @return A new instance of VECTOR_NAME.                                                                                                       \
- */                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_NAME)                                                                                           \
 {                                                                                                                                               \
     return _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(GENERIC_VECTOR_DEFAULT_CAPACITY);                                                     \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Destroys a vector and releases allocated memory.                                                                                      \
- * @param target Pointer to the vector.                                                                                                         \
- */                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)                                                                                          \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
@@ -213,11 +207,6 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)                          
     target->first = target->last = target->final = NULL;                                                                                        \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Copies contents of one vector to another.                                                                                             \
- * @param dest Destination vector pointer.                                                                                                      \
- * @param source Source vector pointer.                                                                                                         \
- */                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(VECTOR_NAME)                                                                                             \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != dest, "Vector dest is NULL");                                                                                      \
@@ -233,11 +222,6 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(VECTOR_NAME)                             
     dest->last = dest->first + newSize;                                                                                                         \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Moves contents from one vector to another.                                                                                            \
- * @param dest Destination vector pointer.                                                                                                      \
- * @param source Source vector pointer.                                                                                                         \
- */                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(VECTOR_NAME)                                                                                             \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != dest, "Vector dest is NULL");                                                                                      \
@@ -249,12 +233,6 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(VECTOR_NAME)                             
     source->first = source->last = source->final = NULL;                                                                                        \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Checks whether two vectors are equal by comparing each element.                                                                       \
- * @param left Left-hand side pointer to a vector.                                                                                              \
- * @param right Right-hand side pointer to a vector.                                                                                            \
- * @return `true` if equal, `false` otherwise.                                                                                                  \
- */                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_NAME)                                                                                           \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != left, "Vector left is NULL");                                                                                      \
@@ -267,11 +245,6 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_NAME)                           
     return true;                                                                                                                                \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Creates a vector struct and allocates dynamic array.                                                                                  \
- * @param capacity Initial capacity of the vector.                                                                                              \
- * @return A new instance of VECTOR_NAME.                                                                                                       \
- */                                                                                                                                             \
 static VECTOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(size_t capacity)                                                              \
 {                                                                                                                                               \
     size_t newCapacity = capacity > GENERIC_VECTOR_DEFAULT_CAPACITY ? capacity : GENERIC_VECTOR_DEFAULT_CAPACITY;                               \
@@ -283,10 +256,6 @@ static VECTOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(size_t capacit
     };                                                                                                                                          \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Clears the vector contents but retains capacity.                                                                                      \
- * @param target Pointer to the vector.                                                                                                         \
- */                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, clear)(VECTOR_NAME* target)                                                                           \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
@@ -297,11 +266,6 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, clear)(VECTOR_NAME* target)           
     target->last = target->first;                                                                                                               \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Returns the internal data array.                                                                                                      \
- * @param target Pointer to vector.                                                                                                             \
- * @return Pointer to the data array.                                                                                                           \
- */                                                                                                                                             \
 static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, data)(VECTOR_NAME* target)                                                                           \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
@@ -314,33 +278,18 @@ static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, data_const)(const VECTOR_NAME* 
     return target->first;                                                                                                                       \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Returns the number of elements in the vector.                                                                                         \
- * @param target Pointer to vector.                                                                                                             \
- * @return Number of elements.                                                                                                                  \
- */                                                                                                                                             \
 static size_t _C_PUBLIC_MEMBER(VECTOR_NAME, size)(const VECTOR_NAME* target)                                                                    \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
     return target->last - target->first;                                                                                                        \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Returns the current capacity of the vector.                                                                                           \
- * @param target Pointer to vector.                                                                                                             \
- * @return Current capacity.                                                                                                                    \
- */                                                                                                                                             \
 static size_t _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(const VECTOR_NAME* target)                                                                \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
     return target->final - target->first;                                                                                                       \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Checks if the vector is empty.                                                                                                        \
- * @param target Pointer to vector.                                                                                                             \
- * @return `true` if empty, `false` otherwise.                                                                                                  \
- */                                                                                                                                             \
 static bool _C_PUBLIC_MEMBER(VECTOR_NAME, empty)(const VECTOR_NAME* target)                                                                     \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
@@ -365,10 +314,6 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, realloc_copy)(VECTOR_NAME* target, siz
     _C_PUBLIC_MEMBER(VECTOR_RANGE_UTILS_NAME, create_range_copy)(target->first, capacity, item);                                                \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Adds a default element to the end of the vector.                                                                                      \
- * @param target Pointer to vector.                                                                                                             \
- */                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME* target)                                                                       \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
@@ -378,11 +323,6 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME* target)       
     ++target->last;                                                                                                                             \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Adds an element to the end of the vector.                                                                                             \
- * @param target Pointer to vector.                                                                                                             \
- * @param item Pointer to item to copy push.                                                                                                    \
- */                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_copy)(VECTOR_NAME* target, const TYPE* item)                                                \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
@@ -393,11 +333,6 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_copy)(VECTOR_NAME* target, c
     ++target->last;                                                                                                                             \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Adds an element to the end of the vector.                                                                                             \
- * @param target Pointer to vector.                                                                                                             \
- * @param item Pointer to item to move push.                                                                                                    \
- */                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_move)(VECTOR_NAME* target, TYPE* item)                                                      \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
@@ -408,10 +343,6 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_move)(VECTOR_NAME* target, T
     ++target->last;                                                                                                                             \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Removes the last element from the vector.                                                                                             \
- * @param target Pointer to vector.                                                                                                             \
- */                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, pop_back)(VECTOR_NAME* target)                                                                        \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
@@ -419,55 +350,48 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, pop_back)(VECTOR_NAME* target)        
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(--target->last);                                                                                 \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Returns a pointer to the first element.                                                                                               \
- * @param target Pointer to vector.                                                                                                             \
- * @return Pointer to the first element.                                                                                                        \
- */                                                                                                                                             \
 static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_front)(VECTOR_NAME* target)                                                                  \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
-    if (target->first == target->last) return NULL;                                                                                             \
+    _C_CUSTOM_ASSERT(target->first < target->last, "Vector element out of range");                                                              \
     return target->first;                                                                                                                       \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Returns a pointer to the last element.                                                                                                \
- * @param target Pointer to vector.                                                                                                             \
- * @return Pointer to the last element.                                                                                                         \
- */                                                                                                                                             \
+static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_front_const)(VECTOR_NAME* target)                                                      \
+{                                                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
+    _C_CUSTOM_ASSERT(target->first < target->last, "Vector element out of range");                                                              \
+    return target->first;                                                                                                                       \
+}                                                                                                                                               \
+                                                                                                                                                \
 static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_back)(VECTOR_NAME* target)                                                                   \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
-    if (target->first == target->last) return NULL;                                                                                             \
+    _C_CUSTOM_ASSERT(target->first < target->last, "Vector element out of range");                                                              \
     return target->last - 1;                                                                                                                    \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Returns a pointer to the element at index.                                                                                            \
- * @param target Pointer to vector.                                                                                                             \
- * @param index Position of the element to get.                                                                                                 \
- * @return Pointer to the element at index.                                                                                                     \
- */                                                                                                                                             \
+static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_back_const)(VECTOR_NAME* target)                                                       \
+{                                                                                                                                               \
+    _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
+    _C_CUSTOM_ASSERT(target->first < target->last, "Vector element out of range");                                                              \
+    return target->last - 1;                                                                                                                    \
+}                                                                                                                                               \
+                                                                                                                                                \
 static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* target, size_t index)                                                       \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
-    if (target->first + index >= target->last) return NULL;                                                                                     \
+    _C_CUSTOM_ASSERT(target->first + index < target->last, "Vector element out of range");                                                      \
     return target->first + index;                                                                                                               \
 }                                                                                                                                               \
                                                                                                                                                 \
 static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_at_const)(const VECTOR_NAME* target, size_t index)                                     \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                         \
-    if (target->first + index >= target->last) return NULL;                                                                                     \
+    _C_CUSTOM_ASSERT(target->first + index < target->last, "Vector element out of range");                                                      \
     return target->first + index;                                                                                                               \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Returns an iterator to the first element in vector.                                                                                   \
- * @param target Pointer to vector.                                                                                                             \
- * @return A new instance of VECTOR_ITERATOR_NAME.                                                                                              \
- */                                                                                                                                             \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, begin)(VECTOR_NAME* target)                                                           \
 {                                                                                                                                               \
     VECTOR_ITERATOR_NAME iter = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_ITERATOR_NAME)();                                                    \
@@ -476,11 +400,6 @@ static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, begin)(VECTOR_NAME* ta
     return iter;                                                                                                                                \
 }                                                                                                                                               \
                                                                                                                                                 \
-/**                                                                                                                                             \
- * @brief Returns an iterator to the last + 1 element in vector.                                                                                \
- * @param target Pointer to vector.                                                                                                             \
- * @return A new instance of VECTOR_ITERATOR_NAME.                                                                                              \
- */                                                                                                                                             \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, end)(VECTOR_NAME* target)                                                             \
 {                                                                                                                                               \
     VECTOR_ITERATOR_NAME iter = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_ITERATOR_NAME)();                                                    \
