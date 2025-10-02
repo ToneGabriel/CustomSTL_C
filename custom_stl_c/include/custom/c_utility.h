@@ -5,6 +5,7 @@
 #include "custom/_c_stlcore.h"
 
 
+// =====================================================================================================================
 // Hash
 // =====================================================================================================================
 
@@ -83,6 +84,33 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(ALIAS)                                   
 {                                                                                                                   \
     return HASH_VALUE_REPRESENTATION(key);                                                                          \
 }                                                                                                                   \
+
+
+// =====================================================================================================================
+// for each
+// =====================================================================================================================
+
+
+#define C_FOR_EACH(ContainerName, ContainerType, ContainerObjectName, ContainerTypeObjectName)                                                                                                          \
+for (   _C_PUBLIC_MEMBER(ContainerName, Iterator) _local_it = _C_PUBLIC_MEMBER(ContainerName, begin)(&ContainerObjectName), _local_end = _C_PUBLIC_MEMBER(ContainerName, end)(&ContainerObjectName);    \
+        !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(_C_PUBLIC_MEMBER(ContainerName, Iterator))(&_local_it, &_local_end);                                                                                       \
+        _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerName, Iterator), pre_increment)(&_local_it)                                                                                                          \
+)                                                                                                                                                                                                       \
+for (   ContainerType* ContainerTypeObjectName = _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerName, Iterator), dereference)(&_local_it);                                                                  \
+        ContainerTypeObjectName != NULL;                                                                                                                                                                \
+        ContainerTypeObjectName = NULL                                                                                                                                                                  \
+)                                                                                                                                                                                                       \
+
+
+#define C_FOR_EACH_CONST(ContainerName, ContainerType, ContainerObjectName, ContainerTypeObjectName)                                                                                                                    \
+for (   _C_PUBLIC_MEMBER(ContainerName, ConstIterator) _local_it = _C_PUBLIC_MEMBER(ContainerName, begin_const)(&ContainerObjectName), _local_end = _C_PUBLIC_MEMBER(ContainerName, end_const)(&ContainerObjectName);   \
+        !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(_C_PUBLIC_MEMBER(ContainerName, ConstIterator))(&_local_it, &_local_end);                                                                                                  \
+        _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerName, ConstIterator), pre_increment)(&_local_it)                                                                                                                     \
+)                                                                                                                                                                                                                       \
+for (   const ContainerType* ContainerTypeObjectName = _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerName, ConstIterator), dereference)(&_local_it);                                                                       \
+        ContainerTypeObjectName != NULL;                                                                                                                                                                                \
+        ContainerTypeObjectName = NULL                                                                                                                                                                                  \
+)                                                                                                                                                                                                                       \
 
 
 // =====================================================================================================================
