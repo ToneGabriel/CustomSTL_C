@@ -62,23 +62,23 @@ create_executable(
     test/custom_c_pair_test.c
 )
 
-# # ====================================================================================
-# set(CUSTOM_STL_C_UMAP_TEST_EXECUTABLE "Custom_STL_C_UMAP_Test")
-# create_executable(
-#     ${CUSTOM_STL_C_UMAP_TEST_EXECUTABLE}
-#     ""
-#     "${CUSTOM_STL_C_LIBRARY};unity"
-#     test/custom_c_unordered_map_test.c
-# )
+# ====================================================================================
+set(CUSTOM_STL_C_UMAP_TEST_EXECUTABLE "Custom_STL_C_UMAP_Test")
+create_executable(
+    ${CUSTOM_STL_C_UMAP_TEST_EXECUTABLE}
+    ""
+    "${CUSTOM_STL_C_LIBRARY};unity"
+    test/custom_c_unordered_map_test.c
+)
 
-# # ====================================================================================
-# set(CUSTOM_STL_C_USET_TEST_EXECUTABLE "Custom_STL_C_USET_Test")
-# create_executable(
-#     ${CUSTOM_STL_C_USET_TEST_EXECUTABLE}
-#     ""
-#     "${CUSTOM_STL_C_LIBRARY};unity"
-#     test/custom_c_unordered_set_test.c
-# )
+# ====================================================================================
+set(CUSTOM_STL_C_USET_TEST_EXECUTABLE "Custom_STL_C_USET_Test")
+create_executable(
+    ${CUSTOM_STL_C_USET_TEST_EXECUTABLE}
+    ""
+    "${CUSTOM_STL_C_LIBRARY};unity"
+    test/custom_c_unordered_set_test.c
+)
 
 # ====================================================================================
 create_ctest_suite(
@@ -88,6 +88,6 @@ create_ctest_suite(
     ${CUSTOM_STL_C_QUEUE_TEST_EXECUTABLE}
     ${CUSTOM_STL_C_STACK_TEST_EXECUTABLE}
     ${CUSTOM_STL_C_PAIR_TEST_EXECUTABLE}
-    # ${CUSTOM_STL_C_UMAP_TEST_EXECUTABLE}
-    # ${CUSTOM_STL_C_USET_TEST_EXECUTABLE}
+    ${CUSTOM_STL_C_UMAP_TEST_EXECUTABLE}
+    ${CUSTOM_STL_C_USET_TEST_EXECUTABLE}
 )
