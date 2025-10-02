@@ -75,7 +75,6 @@ _C_IDENTIFIER_BIND_IMPL_SELECTOR_HELPER(        \
 #define _C_PUBLIC_MEMBER(ContextName, MemberName)           _C_IDENTIFIER_BIND(ContextName, MemberName)
 #define _C_PRIVATE_MEMBER(ContextName, MemberName)          _C_IDENTIFIER_BIND(ContextName, PRIVATE, MemberName)
 
-
 // Mandatory member identifiers
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)           _C_PUBLIC_MEMBER(TYPE, create)
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)          _C_PUBLIC_MEMBER(TYPE, destroy)
@@ -83,14 +82,25 @@ _C_IDENTIFIER_BIND_IMPL_SELECTOR_HELPER(        \
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)             _C_PUBLIC_MEMBER(TYPE, move)
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)           _C_PUBLIC_MEMBER(TYPE, equals)
 
-
 // Optional member identifiers
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)             _C_PUBLIC_MEMBER(TYPE, less)
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)          _C_PUBLIC_MEMBER(TYPE, greater)
 
-
 // Hash member identifier
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(TYPE)             _C_PUBLIC_MEMBER(TYPE, hash)
+
+
+// =====================================================================================================================
+
+
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)      static TYPE _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)()
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)     static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(TYPE* target)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)        static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(TYPE* dest, const TYPE* source)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)        static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(TYPE* dest, TYPE* source)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)      static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)(const TYPE* left, const TYPE* right)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)        static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)(const TYPE* left, const TYPE* right)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)     static bool _C_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)(const TYPE* left, const TYPE* right)
+#define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(TYPE)        static size_t _C_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(TYPE)(const TYPE* key)
 
 
 #endif  // _C_STLCORE_H

@@ -6,6 +6,10 @@
 #include "custom/c_utility.h"
 
 
+// ======================================================================================================================================================
+// List Data
+// ======================================================================================================================================================
+
 #define _DEFINE_GENERIC_LIST_DATA(      \
     LIST_NAME,                          \
     NODE_NAME                           \
@@ -18,97 +22,185 @@ typedef struct                          \
 } LIST_NAME;                            \
 
 
-#define _DEFINE_GENERIC_LIST_ITERATOR(                                                                                              \
-    LIST_ITERATOR_NAME,                                                                                                             \
-    LIST_NAME,                                                                                                                      \
-    NODE_NAME,                                                                                                                      \
-    TYPE                                                                                                                            \
-)                                                                                                                                   \
-                                                                                                                                    \
-typedef struct                                                                                                                      \
-{                                                                                                                                   \
-    NODE_NAME* node;                                                                                                                \
-    LIST_NAME* list;                                                                                                                \
-} LIST_ITERATOR_NAME;                                                                                                               \
-                                                                                                                                    \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_ITERATOR_NAME);                                                                       \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_ITERATOR_NAME);                                                                      \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(LIST_ITERATOR_NAME);                                                                         \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_ITERATOR_NAME);                                                                         \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_ITERATOR_NAME);                                                                       \
-                                                                                                                                    \
-static void                 _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, pre_increment)(LIST_ITERATOR_NAME* iter);                          \
-static LIST_ITERATOR_NAME   _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, post_increment)(LIST_ITERATOR_NAME* iter);                         \
-static void                 _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, pre_decrement)(LIST_ITERATOR_NAME* iter);                          \
-static LIST_ITERATOR_NAME   _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, post_decrement)(LIST_ITERATOR_NAME* iter);                         \
-static TYPE*                _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, deref)(LIST_ITERATOR_NAME* iter);                                  \
-                                                                                                                                    \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_ITERATOR_NAME)                                                                        \
-{                                                                                                                                   \
-    return (LIST_ITERATOR_NAME){                                                                                                    \
-        .node = NULL,                                                                                                               \
-        .list = NULL                                                                                                                \
-    };                                                                                                                              \
-}                                                                                                                                   \
-                                                                                                                                    \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_ITERATOR_NAME)                                                                       \
-{                                                                                                                                   \
-    target->node = NULL;                                                                                                            \
-    target->list = NULL;                                                                                                            \
-}                                                                                                                                   \
-                                                                                                                                    \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(LIST_ITERATOR_NAME)                                                                          \
-{                                                                                                                                   \
-    dest->node = source->node;                                                                                                      \
-    dest->list = source->list;                                                                                                      \
-}                                                                                                                                   \
-                                                                                                                                    \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_ITERATOR_NAME)                                                                          \
-{                                                                                                                                   \
-    dest->node = source->node;                                                                                                      \
-    dest->list = source->list;                                                                                                      \
-}                                                                                                                                   \
-                                                                                                                                    \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_ITERATOR_NAME)                                                                        \
-{                                                                                                                                   \
-    return left->node == right->node;                                                                                               \
-}                                                                                                                                   \
-                                                                                                                                    \
-static void _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, pre_increment)(LIST_ITERATOR_NAME* iter)                                           \
-{                                                                                                                                   \
-    _C_CUSTOM_ASSERT(iter->node != iter->list->head, "Cannot increment end iterator.");                                             \
-    iter->node = iter->node->next;                                                                                                  \
-}                                                                                                                                   \
-                                                                                                                                    \
-static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, post_increment)(LIST_ITERATOR_NAME* iter)                            \
-{                                                                                                                                   \
-    LIST_ITERATOR_NAME temp = *iter;                                                                                                \
-    _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, pre_increment)(iter);                                                                      \
-    return temp;                                                                                                                    \
-}                                                                                                                                   \
-                                                                                                                                    \
-static void _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, pre_decrement)(LIST_ITERATOR_NAME* iter)                                           \
-{                                                                                                                                   \
-    _C_CUSTOM_ASSERT(iter->node != iter->list->head->next, "Cannot decrement begin iterator.");                                     \
-    iter->node = iter->node->prev;                                                                                                  \
-}                                                                                                                                   \
-                                                                                                                                    \
-static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, post_decrement)(LIST_ITERATOR_NAME* iter)                            \
-{                                                                                                                                   \
-    LIST_ITERATOR_NAME temp = *iter;                                                                                                \
-    _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, pre_decrement)(iter);                                                                      \
-    return temp;                                                                                                                    \
-}                                                                                                                                   \
-                                                                                                                                    \
-static TYPE* _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, deref)(LIST_ITERATOR_NAME* iter)                                                  \
-{                                                                                                                                   \
-    _C_CUSTOM_ASSERT(iter->node != iter->list->head, "Cannot dereference end iterator.");                                           \
-    return &iter->node->value;                                                                                                      \
-}                                                                                                                                   \
+// ======================================================================================================================================================
+// List Const and Normal Iterator
+// ======================================================================================================================================================
 
+#define _DEFINE_GENERIC_LIST_ITERATORS(                                                                                                 \
+    LIST_CONST_ITERATOR_NAME,                                                                                                           \
+    LIST_ITERATOR_NAME,                                                                                                                 \
+    LIST_NAME,                                                                                                                          \
+    NODE_NAME,                                                                                                                          \
+    TYPE                                                                                                                                \
+)                                                                                                                                       \
+                                                                                                                                        \
+typedef struct                                                                                                                          \
+{                                                                                                                                       \
+    NODE_NAME* node;                                                                                                                    \
+    const LIST_NAME* list;                                                                                                              \
+} LIST_CONST_ITERATOR_NAME, LIST_ITERATOR_NAME;                                                                                         \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_CONST_ITERATOR_NAME);                                                                     \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_ITERATOR_NAME);                                                                           \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_CONST_ITERATOR_NAME);                                                                    \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_ITERATOR_NAME);                                                                          \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(LIST_CONST_ITERATOR_NAME);                                                                       \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(LIST_ITERATOR_NAME);                                                                             \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_CONST_ITERATOR_NAME);                                                                       \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_ITERATOR_NAME);                                                                             \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_CONST_ITERATOR_NAME);                                                                     \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_ITERATOR_NAME);                                                                           \
+                                                                                                                                        \
+static void                         _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, pre_increment)(LIST_CONST_ITERATOR_NAME* target);        \
+static void                         _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, pre_increment)(LIST_ITERATOR_NAME* target);                    \
+                                                                                                                                        \
+static LIST_CONST_ITERATOR_NAME     _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, post_increment)(LIST_CONST_ITERATOR_NAME* target);       \
+static LIST_ITERATOR_NAME           _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, post_increment)(LIST_ITERATOR_NAME* target);                   \
+                                                                                                                                        \
+static void                         _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, pre_decrement)(LIST_CONST_ITERATOR_NAME* target);        \
+static void                         _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, pre_decrement)(LIST_ITERATOR_NAME* target);                    \
+                                                                                                                                        \
+static LIST_CONST_ITERATOR_NAME     _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, post_decrement)(LIST_CONST_ITERATOR_NAME* target);       \
+static LIST_ITERATOR_NAME           _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, post_decrement)(LIST_ITERATOR_NAME* target);                   \
+                                                                                                                                        \
+static const TYPE*                  _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, dereference)(LIST_CONST_ITERATOR_NAME* target);          \
+static TYPE*                        _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, dereference)(LIST_ITERATOR_NAME* target);                      \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_CONST_ITERATOR_NAME)                                                                      \
+{                                                                                                                                       \
+    return (LIST_CONST_ITERATOR_NAME){                                                                                                  \
+        .node = NULL,                                                                                                                   \
+        .list = NULL                                                                                                                    \
+    };                                                                                                                                  \
+}                                                                                                                                       \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_ITERATOR_NAME)                                                                            \
+{                                                                                                                                       \
+    return _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_CONST_ITERATOR_NAME)();                                                             \
+}                                                                                                                                       \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_CONST_ITERATOR_NAME)                                                                     \
+{                                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "List Iterator is NULL");                                                                          \
+    target->node = NULL;                                                                                                                \
+    target->list = NULL;                                                                                                                \
+}                                                                                                                                       \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_ITERATOR_NAME)                                                                           \
+{                                                                                                                                       \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_CONST_ITERATOR_NAME)(target);                                                             \
+}                                                                                                                                       \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(LIST_CONST_ITERATOR_NAME)                                                                        \
+{                                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != dest, "List Iterator dest is NULL");                                                                       \
+    _C_CUSTOM_ASSERT(NULL != source, "List Iterator source is NULL");                                                                   \
+    dest->node = source->node;                                                                                                          \
+    dest->list = source->list;                                                                                                          \
+}                                                                                                                                       \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(LIST_ITERATOR_NAME)                                                                              \
+{                                                                                                                                       \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(LIST_CONST_ITERATOR_NAME)(dest, source);                                                          \
+}                                                                                                                                       \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_CONST_ITERATOR_NAME)                                                                        \
+{                                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != dest, "List Iterator dest is NULL");                                                                       \
+    _C_CUSTOM_ASSERT(NULL != source, "List Iterator source is NULL");                                                                   \
+    dest->node = source->node;                                                                                                          \
+    dest->list = source->list;                                                                                                          \
+}                                                                                                                                       \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_ITERATOR_NAME)                                                                              \
+{                                                                                                                                       \
+    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_CONST_ITERATOR_NAME)(dest, source);                                                          \
+}                                                                                                                                       \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_CONST_ITERATOR_NAME)                                                                      \
+{                                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != left, "List Iterator left is NULL");                                                                       \
+    _C_CUSTOM_ASSERT(NULL != right, "List Iterator right is NULL");                                                                     \
+    return left->node == right->node;                                                                                                   \
+}                                                                                                                                       \
+                                                                                                                                        \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_ITERATOR_NAME)                                                                            \
+{                                                                                                                                       \
+    return _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_CONST_ITERATOR_NAME)(left, right);                                                  \
+}                                                                                                                                       \
+                                                                                                                                        \
+static void _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, pre_increment)(LIST_CONST_ITERATOR_NAME* target)                                 \
+{                                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "List Iterator is NULL");                                                                          \
+    _C_CUSTOM_ASSERT(target->node != target->list->head, "Cannot increment end iterator.");                                             \
+    target->node = target->node->next;                                                                                                  \
+}                                                                                                                                       \
+                                                                                                                                        \
+static void _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, pre_increment)(LIST_ITERATOR_NAME* target)                                             \
+{                                                                                                                                       \
+    _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, pre_increment)(target);                                                                  \
+}                                                                                                                                       \
+                                                                                                                                        \
+static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, post_increment)(LIST_CONST_ITERATOR_NAME* target)            \
+{                                                                                                                                       \
+    LIST_CONST_ITERATOR_NAME temp = *target;                                                                                            \
+    _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, pre_increment)(target);                                                                  \
+    return temp;                                                                                                                        \
+}                                                                                                                                       \
+                                                                                                                                        \
+static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, post_increment)(LIST_ITERATOR_NAME* target)                              \
+{                                                                                                                                       \
+    return _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, post_increment)(target);                                                          \
+}                                                                                                                                       \
+                                                                                                                                        \
+static void _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, pre_decrement)(LIST_CONST_ITERATOR_NAME* target)                                 \
+{                                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "List Iterator is NULL");                                                                          \
+    _C_CUSTOM_ASSERT(target->node != target->list->head->next, "Cannot decrement begin iterator.");                                     \
+    target->node = target->node->prev;                                                                                                  \
+}                                                                                                                                       \
+                                                                                                                                        \
+static void _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, pre_decrement)(LIST_ITERATOR_NAME* target)                                             \
+{                                                                                                                                       \
+    _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, pre_decrement)(target);                                                                  \
+}                                                                                                                                       \
+                                                                                                                                        \
+static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, post_decrement)(LIST_CONST_ITERATOR_NAME* target)            \
+{                                                                                                                                       \
+    LIST_CONST_ITERATOR_NAME temp = *target;                                                                                            \
+    _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, pre_decrement)(target);                                                                  \
+    return temp;                                                                                                                        \
+}                                                                                                                                       \
+                                                                                                                                        \
+static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, post_decrement)(LIST_ITERATOR_NAME* target)                              \
+{                                                                                                                                       \
+    return _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, post_decrement)(target);                                                          \
+}                                                                                                                                       \
+                                                                                                                                        \
+static const TYPE* _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, dereference)(LIST_CONST_ITERATOR_NAME* target)                            \
+{                                                                                                                                       \
+    _C_CUSTOM_ASSERT(NULL != target, "List Iterator is NULL");                                                                          \
+    _C_CUSTOM_ASSERT(target->node != target->list->head, "Cannot dereference end iterator.");                                           \
+    return &target->node->value;                                                                                                        \
+}                                                                                                                                       \
+                                                                                                                                        \
+static TYPE* _C_PUBLIC_MEMBER(LIST_ITERATOR_NAME, dereference)(LIST_ITERATOR_NAME* target)                                              \
+{                                                                                                                                       \
+    return (TYPE*)(_C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, dereference)(target));                                                    \
+}                                                                                                                                       \
+
+
+// ======================================================================================================================================================
+// List Implementation
+// ======================================================================================================================================================
 
 #define _DEFINE_GENERIC_LIST_IMPL(                                                                                                                          \
     LIST_NAME,                                                                                                                                              \
+    LIST_CONST_ITERATOR_NAME,                                                                                                                               \
     LIST_ITERATOR_NAME,                                                                                                                                     \
     NODE_NAME,                                                                                                                                              \
     TYPE                                                                                                                                                    \
@@ -120,24 +212,28 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(LIST_NAME);                              
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_NAME);                                                                                                          \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_NAME);                                                                                                        \
                                                                                                                                                             \
-static void                 _C_PUBLIC_MEMBER(LIST_NAME, clear)(LIST_NAME* target);                                                                          \
-static size_t               _C_PUBLIC_MEMBER(LIST_NAME, size)(const LIST_NAME* target);                                                                     \
-static bool                 _C_PUBLIC_MEMBER(LIST_NAME, empty)(const LIST_NAME* target);                                                                    \
-static void                 _C_PUBLIC_MEMBER(LIST_NAME, push_back)(LIST_NAME* target);                                                                      \
-static void                 _C_PUBLIC_MEMBER(LIST_NAME, push_back_copy)(LIST_NAME* target, const TYPE* item);                                               \
-static void                 _C_PUBLIC_MEMBER(LIST_NAME, push_back_move)(LIST_NAME* target, TYPE* item);                                                     \
-static void                 _C_PUBLIC_MEMBER(LIST_NAME, push_front)(LIST_NAME* target);                                                                     \
-static void                 _C_PUBLIC_MEMBER(LIST_NAME, push_front_copy)(LIST_NAME* target, const TYPE* item);                                              \
-static void                 _C_PUBLIC_MEMBER(LIST_NAME, push_front_move)(LIST_NAME* target, TYPE* item);                                                    \
-static void                 _C_PUBLIC_MEMBER(LIST_NAME, pop_back)(LIST_NAME* target);                                                                       \
-static void                 _C_PUBLIC_MEMBER(LIST_NAME, pop_front)(LIST_NAME* target);                                                                      \
-static TYPE*                _C_PUBLIC_MEMBER(LIST_NAME, element_front)(LIST_NAME* target);                                                                  \
-static TYPE*                _C_PUBLIC_MEMBER(LIST_NAME, element_back)(LIST_NAME* target);                                                                   \
-static LIST_ITERATOR_NAME   _C_PUBLIC_MEMBER(LIST_NAME, begin)(LIST_NAME* target);                                                                          \
-static LIST_ITERATOR_NAME   _C_PUBLIC_MEMBER(LIST_NAME, end)(LIST_NAME* target);                                                                            \
+static void                     _C_PUBLIC_MEMBER(LIST_NAME, clear)(LIST_NAME* target);                                                                      \
+static size_t                   _C_PUBLIC_MEMBER(LIST_NAME, size)(const LIST_NAME* target);                                                                 \
+static bool                     _C_PUBLIC_MEMBER(LIST_NAME, empty)(const LIST_NAME* target);                                                                \
+static void                     _C_PUBLIC_MEMBER(LIST_NAME, push_back)(LIST_NAME* target);                                                                  \
+static void                     _C_PUBLIC_MEMBER(LIST_NAME, push_back_copy)(LIST_NAME* target, const TYPE* item);                                           \
+static void                     _C_PUBLIC_MEMBER(LIST_NAME, push_back_move)(LIST_NAME* target, TYPE* item);                                                 \
+static void                     _C_PUBLIC_MEMBER(LIST_NAME, push_front)(LIST_NAME* target);                                                                 \
+static void                     _C_PUBLIC_MEMBER(LIST_NAME, push_front_copy)(LIST_NAME* target, const TYPE* item);                                          \
+static void                     _C_PUBLIC_MEMBER(LIST_NAME, push_front_move)(LIST_NAME* target, TYPE* item);                                                \
+static void                     _C_PUBLIC_MEMBER(LIST_NAME, pop_back)(LIST_NAME* target);                                                                   \
+static void                     _C_PUBLIC_MEMBER(LIST_NAME, pop_front)(LIST_NAME* target);                                                                  \
+static TYPE*                    _C_PUBLIC_MEMBER(LIST_NAME, element_front)(LIST_NAME* target);                                                              \
+static const TYPE*              _C_PUBLIC_MEMBER(LIST_NAME, element_front_const)(const LIST_NAME* target);                                                  \
+static TYPE*                    _C_PUBLIC_MEMBER(LIST_NAME, element_back)(LIST_NAME* target);                                                               \
+static const TYPE*              _C_PUBLIC_MEMBER(LIST_NAME, element_back_const)(const LIST_NAME* target);                                                   \
+static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, begin_const)(const LIST_NAME* target);                                                          \
+static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, end_const)(const LIST_NAME* target);                                                            \
+static LIST_ITERATOR_NAME       _C_PUBLIC_MEMBER(LIST_NAME, begin)(LIST_NAME* target);                                                                      \
+static LIST_ITERATOR_NAME       _C_PUBLIC_MEMBER(LIST_NAME, end)(LIST_NAME* target);                                                                        \
                                                                                                                                                             \
-static void                 _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(LIST_NAME* target, NODE_NAME* before, NODE_NAME* node);                          \
-static void                 _C_PRIVATE_MEMBER(LIST_NAME, unlink_node)(LIST_NAME* target, NODE_NAME* node);                                                  \
+static void                     _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(LIST_NAME* target, NODE_NAME* before, NODE_NAME* node);                      \
+static void                     _C_PRIVATE_MEMBER(LIST_NAME, unlink_node)(LIST_NAME* target, NODE_NAME* node);                                              \
                                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_NAME)                                                                                                         \
 {                                                                                                                                                           \
@@ -293,11 +389,41 @@ static TYPE* _C_PUBLIC_MEMBER(LIST_NAME, element_front)(LIST_NAME* target)      
     return &target->head->next->value;                                                                                                                      \
 }                                                                                                                                                           \
                                                                                                                                                             \
+static const TYPE* _C_PUBLIC_MEMBER(LIST_NAME, element_front_const)(const LIST_NAME* target)                                                                \
+{                                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                       \
+    _C_CUSTOM_ASSERT(target->size != 0, "List is empty");                                                                                                   \
+    return &target->head->next->value;                                                                                                                      \
+}                                                                                                                                                           \
+                                                                                                                                                            \
 static TYPE* _C_PUBLIC_MEMBER(LIST_NAME, element_back)(LIST_NAME* target)                                                                                   \
 {                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                       \
     _C_CUSTOM_ASSERT(target->size != 0, "List is empty");                                                                                                   \
     return &target->head->prev->value;                                                                                                                      \
+}                                                                                                                                                           \
+                                                                                                                                                            \
+static const TYPE* _C_PUBLIC_MEMBER(LIST_NAME, element_back_const)(const LIST_NAME* target)                                                                 \
+{                                                                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                       \
+    _C_CUSTOM_ASSERT(target->size != 0, "List is empty");                                                                                                   \
+    return &target->head->prev->value;                                                                                                                      \
+}                                                                                                                                                           \
+                                                                                                                                                            \
+static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, begin_const)(const LIST_NAME* target)                                                           \
+{                                                                                                                                                           \
+    LIST_CONST_ITERATOR_NAME iter = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_CONST_ITERATOR_NAME)();                                                        \
+    iter.node = target->head->next;                                                                                                                         \
+    iter.list = target;                                                                                                                                     \
+    return iter;                                                                                                                                            \
+}                                                                                                                                                           \
+                                                                                                                                                            \
+static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, end_const)(const LIST_NAME* target)                                                             \
+{                                                                                                                                                           \
+    LIST_CONST_ITERATOR_NAME iter = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_CONST_ITERATOR_NAME)();                                                        \
+    iter.node = target->head;                                                                                                                               \
+    iter.list = target;                                                                                                                                     \
+    return iter;                                                                                                                                            \
 }                                                                                                                                                           \
                                                                                                                                                             \
 static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, begin)(LIST_NAME* target)                                                                             \
@@ -336,6 +462,15 @@ static void _C_PRIVATE_MEMBER(LIST_NAME, unlink_node)(LIST_NAME* target, NODE_NA
 }                                                                                                                                                           \
 
 
+// ======================================================================================================================================================
+// List COMPLETE Definition
+// ======================================================================================================================================================
+
+/**
+ * @brief Public macro to define a generic List and iterators for a given type with all required dependencies.
+ * @param LIST_NAME_PUBLIC_PREFIX       The public name prefix for generated list (e.g., `MyList` -> `MyList_create`, etc.).
+ * @param TYPE                          Typedef stored in the list.
+ */
 #define DEFINE_GENERIC_LIST(                                                                                            \
     LIST_NAME_PUBLIC_PREFIX,                                                                                            \
     TYPE                                                                                                                \
@@ -348,20 +483,22 @@ DEFINE_GENERIC_DOUBLE_NODE(                                                     
                                                                                                                         \
 _DEFINE_GENERIC_LIST_DATA(                                                                                              \
     LIST_NAME_PUBLIC_PREFIX,                                                                                            \
-    _C_PRIVATE_MEMBER(LIST_NAME_PUBLIC_PREFIX, DoubleNode)                                                              \
+    _C_PRIVATE_MEMBER(LIST_NAME_PUBLIC_PREFIX, DoubleNode)      /*same as above*/                                       \
 )                                                                                                                       \
                                                                                                                         \
-_DEFINE_GENERIC_LIST_ITERATOR(                                                                                          \
+_DEFINE_GENERIC_LIST_ITERATORS(                                                                                         \
+    _C_PUBLIC_MEMBER(LIST_NAME_PUBLIC_PREFIX, ConstIterator),                                                           \
     _C_PUBLIC_MEMBER(LIST_NAME_PUBLIC_PREFIX, Iterator),                                                                \
     LIST_NAME_PUBLIC_PREFIX,                                                                                            \
-    _C_PRIVATE_MEMBER(LIST_NAME_PUBLIC_PREFIX, DoubleNode), /*same as above*/                                           \
+    _C_PRIVATE_MEMBER(LIST_NAME_PUBLIC_PREFIX, DoubleNode),     /*same as above*/                                       \
     TYPE                                                                                                                \
 )                                                                                                                       \
                                                                                                                         \
 _DEFINE_GENERIC_LIST_IMPL(                                                                                              \
     LIST_NAME_PUBLIC_PREFIX,                                                                                            \
-    _C_PUBLIC_MEMBER(LIST_NAME_PUBLIC_PREFIX, Iterator), /*same as above*/                                              \
-    _C_PRIVATE_MEMBER(LIST_NAME_PUBLIC_PREFIX, DoubleNode), /*same as above*/                                           \
+    _C_PUBLIC_MEMBER(LIST_NAME_PUBLIC_PREFIX, ConstIterator),   /*same as above*/                                       \
+    _C_PUBLIC_MEMBER(LIST_NAME_PUBLIC_PREFIX, Iterator),        /*same as above*/                                       \
+    _C_PRIVATE_MEMBER(LIST_NAME_PUBLIC_PREFIX, DoubleNode),     /*same as above*/                                       \
     TYPE                                                                                                                \
 )                                                                                                                       \
 

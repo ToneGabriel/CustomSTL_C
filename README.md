@@ -1,6 +1,6 @@
 # CustomSTL_C
 
-**Version: 1.1.0-beta**
+**Version: 1.2.0-beta**
 
 **CustomSTL** is a **C** library project that implements core features of the C++ Standard Template Library (STL).  
 It provides equivalent functionality for common data structures and algorithms, making it easier to learn, compare and explore STL concepts in a pure **C** environment.
