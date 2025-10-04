@@ -12,53 +12,62 @@
 - `@param` `VECTOR_NAME_PUBLIC_PREFIX`  The public name prefix for generated vector. (e.g., `MyVec` -> `MyVec_create`, etc.).
 - `@param` `TYPE`                       Type stored in the vector.
 
+**Notes**
+- For default types and pointers: `TYPE` must be created with `DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS`
+- For custom structs: `TYPE` must have all default function definitions:
+    - `DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE`
+    - `DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY`
+    - `DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY`
+    - `DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE`
+    - `DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS`
+
 <!-- ================================================================================================================== -->
 <!-- END Macros -->
 <!-- ================================================================================================================== -->
-
+---
 
 ## Types
 
-**VECTOR** - Vector data struct. Name provided by user via `VECTOR_NAME_PUBLIC_PREFIX` macro parameter. ALL other types and functions have this prefix.
+**VECTOR** - Vector data struct. Name provided by user via `VECTOR_NAME_PUBLIC_PREFIX` macro parameter. **All other types and functions have this prefix**.
 
-**_ConstIterator** - Struct used to iterate over a vector. `_dereference` function returns a `const` pointer to element.
+**VECTOR_ConstIterator** - Struct used to iterate over a vector. `_dereference` function returns a `const` pointer to element.
 
-**_Iterator** - Struct used to iterate over a vector. `_dereference` function returns a pointer to element.
+**VECTOR_Iterator** - Struct used to iterate over a vector. `_dereference` function returns a pointer to element.
 
 <!-- ================================================================================================================== -->
 <!-- END Types -->
 <!-- ================================================================================================================== -->
-
+---
 
 ## Vector Functions
 
 <details>
 <summary><b>Core Operations</b></summary>
 
-**_create**
+**VECTOR_create**
 - `@brief` Creates a vector struct and allocates dynamic array with default capacity.
 - `@return` A new vector instance.
 
-**_create_capacity**
+**VECTOR_create_capacity**
 - `@brief` Creates a vector struct and allocates dynamic array.
 - `@param` `capacity` Initial capacity of the vector.
 - `@return` A new vector instance.
 
-**_destroy**
+**VECTOR_destroy**
 - `@brief` Destroys a vector and releases allocated memory.
 - `@param` `target` Pointer to the vector.
 
-**_copy**
+**VECTOR_copy**
 - `@brief` Copies contents of one vector to another.
 - `@param` `dest` Destination vector pointer.
 - `@param` `source` Source vector pointer.
 
-**_move**
+**VECTOR_move**
 - `@brief` Moves contents from one vector to another.
 - `@param` `dest` Destination vector pointer.
 - `@param` `source` Source vector pointer.
 
-**_equals**
+**VECTOR_equals**
 - `@brief` Checks whether two vectors are equal by comparing each element.
 - `@param` `left` Left-hand side pointer to a vector.
 - `@param` `right` Right-hand side pointer to a vector.
@@ -72,43 +81,43 @@
 <details>
 <summary><b>Element Access</b></summary>
 
-**_data**
+**VECTOR_data**
 - `@brief` Returns the internal data array.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the data array.
 
-**_data_const**
+**VECTOR_data_const**
 - `@brief` Returns the internal data array.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the data array.
 
-**_element_front**
+**VECTOR_element_front**
 - `@brief` Returns a pointer to the first element.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the first element.
 
-**_element_front_const**
+**VECTOR_element_front_const**
 - `@brief` Returns a pointer to the first element.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the first element.
 
-**_element_back**
+**VECTOR_element_back**
 - `@brief` Returns a pointer to the last element.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the last element.
 
-**_element_back_const**
+**VECTOR_element_back_const**
 - `@brief` Returns a pointer to the last element.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the last element.
 
-**_element_at**
+**VECTOR_element_at**
 - `@brief` Returns a pointer to the element at index.
 - `@param` `target` Pointer to vector.
 - `@param` `index` Position of the element to get.
 - `@return` Pointer to the element at index.
 
-**_element_at_const**
+**VECTOR_element_at_const**
 - `@brief` Returns a pointer to the element at index.
 - `@param` `target` Pointer to vector.
 - `@param` `index` Position of the element to get.
@@ -122,17 +131,17 @@
 <details>
 <summary><b>Capacity</b></summary>
 
-**_size**
+**VECTOR_size**
 - `@brief` Returns the number of elements in the vector.
 - `@param` `target` Pointer to vector.
 - `@return` Number of elements.
 
-**_capacity**
+**VECTOR_capacity**
 - `@brief` Returns the current capacity of the vector.
 - `@param` `target` Pointer to vector.
 - `@return` Current capacity.
 
-**_empty**
+**VECTOR_empty**
 - `@brief` Checks if the vector is empty.
 - `@param` `target` Pointer to vector.
 - `@return` `true` if empty, `false` otherwise.
@@ -145,34 +154,34 @@
 <details>
 <summary><b>Modifiers</b></summary>
 
-**_clear**
+**VECTOR_clear**
 - `@brief` Clears the vector contents but retains capacity.
 - `@param` `target` Pointer to the vector.
 
-**_push_back**
+**VECTOR_push_back**
 - `@brief` Adds a default element to the end of the vector.
 - `@param` `target` Pointer to vector.
 
-**_push_back_copy**
+**VECTOR_push_back_copy**
 - `@brief` Adds an element to the end of the vector.
 - `@param` `target` Pointer to vector.
 - `@param` `item` Pointer to object to copy push.
 
-**_push_back_move**
+**VECTOR_push_back_move**
 - `@brief` Adds an element to the end of the vector.
 - `@param` `target` Pointer to vector.
 - `@param` `item` Pointer to object to move push.
 
-**_pop_back**
+**VECTOR_pop_back**
 - `@brief` Removes the last element from the vector.
 - `@param` `target` Pointer to vector.
 
-**_realloc**
+**VECTOR_realloc**
 - `@brief` Removes all elements, reallocates new capacity and populates it with default elements.
 - `@param` `target` Pointer to vector.
 - `@param` `capacity` New capacity.
 
-**realloc_copy**
+**VECTOR_realloc_copy**
 - `@brief` Removes all elements, reallocates new capacity and populates it with copy constructed elements.
 - `@param` `target` Pointer to vector.
 - `@param` `capacity` New capacity.
@@ -186,22 +195,22 @@
 <details>
 <summary><b>Iterators</b></summary>
 
-**_begin_const**
+**VECTOR_begin_const**
 - `@brief` Returns a const_iterator to the first element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `_ConstIterator`.
 
-**_begin**
+**VECTOR_begin**
 - `@brief` Returns an iterator to the first element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `_Iterator`.
 
-**_end_const**
+**VECTOR_end_const**
 - `@brief` Returns a const_iterator to the last + 1 element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `_ConstIterator`.
 
-**_end**
+**VECTOR_end**
 - `@brief` Returns an iterator to the last + 1 element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `_Iterator`.
@@ -214,31 +223,32 @@
 <!-- ================================================================================================================== -->
 <!-- END Vector Functions -->
 <!-- ================================================================================================================== -->
+---
 
 ## ConstIterator and Iterator Functions
 
 <details>
 <summary><b>Core Operations</b></summary>
 
-**_ConstIterator_create / _Iterator_create**
+**VECTOR_ConstIterator_create / VECTOR_Iterator_create**
 - `@brief` Creates an iterator struct
 - `@return` A new iterator instance.
 
-**_ConstIterator_destroy / _Iterator_destroy**
+**VECTOR_ConstIterator_destroy / VECTOR_Iterator_destroy**
 - `@brief` Destroys an iterator.
 - `@param` `target` Pointer to the iterator.
 
-**_ConstIterator_copy / _Iterator_copy**
+**VECTOR_ConstIterator_copy / VECTOR_Iterator_copy**
 - `@brief` Copies contents of one iterator to another.
 - `@param` `dest` Destination iterator pointer.
 - `@param` `source` Source iterator pointer.
 
-**_ConstIterator_move / _Iterator_move**
+**VECTOR_ConstIterator_move / VECTOR_Iterator_move**
 - `@brief` Moves contents from one iterator to another.
 - `@param` `dest` Destination iterator pointer.
 - `@param` `source` Source iterator pointer.
 
-**_ConstIterator_equals / _Iterator_equals**
+**VECTOR_ConstIterator_equals / VECTOR_Iterator_equals**
 - `@brief` Checks whether two iterators are equal by comparing current position element.
 - `@param` `left` Left-hand side pointer to an iterator.
 - `@param` `right` Right-hand side pointer to an iterator.
@@ -252,7 +262,7 @@
 <details>
 <summary><b>Element Access</b></summary>
 
-**_ConstIterator_dereference / _Iterator_dereference**
+**VECTOR_ConstIterator_dereference / VECTOR_Iterator_dereference**
 - `@brief` Return a pointer to current element.
 - `@param` `target` Pointer to the iterator.
 - `@return` Pointer to element.
@@ -265,41 +275,41 @@
 <details>
 <summary><b>Iteration</b></summary>
 
-**_ConstIterator_pre_increment / _Iterator_pre_increment**
+**VECTOR_ConstIterator_pre_increment / VECTOR_Iterator_pre_increment**
 - `@brief` Increment by 1.
 - `@param` `target` Pointer to the iterator.
 
-**_ConstIterator_post_increment / _Iterator_post_increment**
+**VECTOR_ConstIterator_post_increment / VECTOR_Iterator_post_increment**
 - `@brief` Increment by 1 and return non-incremented iterator.
 - `@param` `target` Pointer to the iterator.
 - `@return` Non-incremented iterator.
 
-**_ConstIterator_increment_by / _Iterator_increment_by**
+**VECTOR_ConstIterator_increment_by / VECTOR_Iterator_increment_by**
 - `@brief` Increment by given number.
 - `@param` `target` Pointer to the iterator.
 - `@param` `diff` Number to apply increment.
 
-**_ConstIterator_increment / _Iterator_increment**
+**VECTOR_ConstIterator_increment / VECTOR_Iterator_increment**
 - `@brief` Increment by given number and return non-incremented iterator.
 - `@param` `target` Pointer to the iterator.
 - `@param` `diff` Number to apply increment.
 - `@return` Non-incremented iterator.
 
-**_ConstIterator_pre_decrement / _Iterator_pre_decrement**
+**VECTOR_ConstIterator_pre_decrement / VECTOR_Iterator_pre_decrement**
 - `@brief` Decrement by 1.
 - `@param` `target` Pointer to the iterator.
 
-**_ConstIterator_post_decrement / _Iterator_post_decrement**
+**VECTOR_ConstIterator_post_decrement / VECTOR_Iterator_post_decrement**
 - `@brief` Decrement by 1 and return non-decremented iterator.
 - `@param` `target` Pointer to the iterator.
 - `@return` Non-decremented iterator.
 
-**_ConstIterator_decrement_by / _Iterator_decrement_by**
+**VECTOR_ConstIterator_decrement_by / VECTOR_Iterator_decrement_by**
 - `@brief` Decrement by given number.
 - `@param` `target` Pointer to the iterator.
 - `@param` `diff` Number to apply decrement.
 
-**_ConstIterator_decrement / _Iterator_decrement**
+**VECTOR_ConstIterator_decrement / VECTOR_Iterator_decrement**
 - `@brief` Decrement by given number and return non-decremented iterator.
 - `@param` `target` Pointer to the iterator.
 - `@param` `diff` Number to apply decrement.
@@ -313,3 +323,108 @@
 <!-- ================================================================================================================== -->
 <!-- END ConstIterator and Iterator Functions -->
 <!-- ================================================================================================================== -->
+---
+
+## Usage
+
+```C
+#include "custom/c_vector.h"
+
+// define custom struct
+typedef struct
+{
+    int a;
+    int* b;
+} MyStruct;
+
+// define custom memory management behavior
+
+// custom create
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(MyStruct)
+{
+    return (MyStruct){
+        .a = 0,
+        .b = NULL
+    };
+}
+
+// custom destroy
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(MyStruct)
+{
+    if (target->b)
+        free(target->b);
+}
+
+// custom copy
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(MyStruct)
+{
+    if (dest == source) return;
+
+    dest->a = source->a;
+
+    if (dest->b)
+        free(dest->b);
+
+    if (source->b)
+    {
+        dest->b = (int*)malloc(sizeof(int));
+        *dest->b = *source->b;
+    }
+    else
+        dest->b = NULL;
+}
+
+// custom move
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(MyStruct)
+{
+    if (dest == source) return;
+
+    *dest = *source;
+    source->a = 0;
+    source->b = NULL;
+}
+
+// custom equals
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(MyStruct)
+{
+    return left->a == right->a && left->b == right->b;
+}
+
+// define the vector for the struct
+DEFINE_GENERIC_VECTOR(MyStructVector, MyStruct)
+
+int main()
+{
+    MyStructVector vec = MyStructVector_create();
+    MyStruct s = MyStruct_create();
+
+    s.a = 1;
+    MyStructVector_push_back_copy(&vec, &s);
+
+    s.a = 2;
+    MyStructVector_push_back_copy(&vec, &s);
+
+    s.a = 3;
+    MyStructVector_push_back_copy(&vec, &s);
+
+    size_t size = MyStructVector_size(&vec);
+    for (size_t i = 0; i < size; ++i)
+        printf("Value: %d\n", MyStructVector_element_at(&vec, i)->a);
+
+    MyStructVector_destroy(&vec);
+    MyStruct_destroy(&s);
+
+    return 0;
+}
+
+// Prints:
+// Value: 1
+// Value: 2
+// Value: 3
+
+```
+
+<!-- ================================================================================================================== -->
+<!-- END Usage -->
+<!-- ================================================================================================================== -->
+---
