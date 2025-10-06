@@ -44,30 +44,30 @@
 <details>
 <summary><b>Core Operations</b></summary>
 
-**VECTOR_create**
+##### VECTOR_create
 - `@brief` Creates a vector struct and allocates dynamic array with default capacity.
 - `@return` A new vector instance.
 
-**VECTOR_create_capacity**
+##### VECTOR_create_capacity
 - `@brief` Creates a vector struct and allocates dynamic array.
 - `@param` `capacity` Initial capacity of the vector.
 - `@return` A new vector instance.
 
-**VECTOR_destroy**
+##### VECTOR_destroy
 - `@brief` Destroys a vector and releases allocated memory.
 - `@param` `target` Pointer to the vector.
 
-**VECTOR_copy**
+##### VECTOR_copy
 - `@brief` Copies contents of one vector to another.
 - `@param` `dest` Destination vector pointer.
 - `@param` `source` Source vector pointer.
 
-**VECTOR_move**
+##### VECTOR_move
 - `@brief` Moves contents from one vector to another. Valid operations after move: `VECTOR_copy` (as dest), `VECTOR_destroy`, `VECTOR_equals`
 - `@param` `dest` Destination vector pointer.
 - `@param` `source` Source vector pointer.
 
-**VECTOR_equals**
+##### VECTOR_equals
 - `@brief` Checks whether two vectors are equal by comparing each element.
 - `@param` `left` Left-hand side pointer to a vector.
 - `@param` `right` Right-hand side pointer to a vector.
@@ -81,43 +81,43 @@
 <details>
 <summary><b>Element Access</b></summary>
 
-**VECTOR_data**
+##### VECTOR_data
 - `@brief` Returns the internal data array.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the data array.
 
-**VECTOR_data_const**
+##### VECTOR_data_const
 - `@brief` Returns the internal data array.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the data array.
 
-**VECTOR_element_front**
+##### VECTOR_element_front
 - `@brief` Returns a pointer to the first element.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the first element.
 
-**VECTOR_element_front_const**
+##### VECTOR_element_front_const
 - `@brief` Returns a pointer to the first element.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the first element.
 
-**VECTOR_element_back**
+##### VECTOR_element_back
 - `@brief` Returns a pointer to the last element.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the last element.
 
-**VECTOR_element_back_const**
+##### VECTOR_element_back_const
 - `@brief` Returns a pointer to the last element.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the last element.
 
-**VECTOR_element_at**
+##### VECTOR_element_at
 - `@brief` Returns a pointer to the element at index.
 - `@param` `target` Pointer to vector.
 - `@param` `index` Position of the element to get.
 - `@return` Pointer to the element at index.
 
-**VECTOR_element_at_const**
+##### VECTOR_element_at_const
 - `@brief` Returns a pointer to the element at index.
 - `@param` `target` Pointer to vector.
 - `@param` `index` Position of the element to get.
@@ -131,17 +131,17 @@
 <details>
 <summary><b>Capacity</b></summary>
 
-**VECTOR_size**
+##### VECTOR_size
 - `@brief` Returns the number of elements in the vector.
 - `@param` `target` Pointer to vector.
 - `@return` Number of elements.
 
-**VECTOR_capacity**
+##### VECTOR_capacity
 - `@brief` Returns the current capacity of the vector.
 - `@param` `target` Pointer to vector.
 - `@return` Current capacity.
 
-**VECTOR_empty**
+##### VECTOR_empty
 - `@brief` Checks if the vector is empty.
 - `@param` `target` Pointer to vector.
 - `@return` `true` if empty, `false` otherwise.
@@ -154,34 +154,34 @@
 <details>
 <summary><b>Modifiers</b></summary>
 
-**VECTOR_clear**
+##### VECTOR_clear
 - `@brief` Clears the vector contents but retains capacity.
 - `@param` `target` Pointer to the vector.
 
-**VECTOR_push_back**
+##### VECTOR_push_back
 - `@brief` Adds a default element to the end of the vector.
 - `@param` `target` Pointer to vector.
 
-**VECTOR_push_back_copy**
+##### VECTOR_push_back_copy
 - `@brief` Adds an element to the end of the vector.
 - `@param` `target` Pointer to vector.
 - `@param` `item` Pointer to object to copy push.
 
-**VECTOR_push_back_move**
+##### VECTOR_push_back_move
 - `@brief` Adds an element to the end of the vector.
 - `@param` `target` Pointer to vector.
 - `@param` `item` Pointer to object to move push.
 
-**VECTOR_pop_back**
+##### VECTOR_pop_back
 - `@brief` Removes the last element from the vector.
 - `@param` `target` Pointer to vector.
 
-**VECTOR_realloc**
+##### VECTOR_realloc
 - `@brief` Removes all elements, reallocates new capacity and populates it with default elements.
 - `@param` `target` Pointer to vector.
 - `@param` `capacity` New capacity.
 
-**VECTOR_realloc_copy**
+##### VECTOR_realloc_copy
 - `@brief` Removes all elements, reallocates new capacity and populates it with copy constructed elements.
 - `@param` `target` Pointer to vector.
 - `@param` `capacity` New capacity.
@@ -195,22 +195,22 @@
 <details>
 <summary><b>Iterators</b></summary>
 
-**VECTOR_begin_const**
+##### VECTOR_begin_const
 - `@brief` Returns a const_iterator to the first element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `VECTOR_ConstIterator`.
 
-**VECTOR_begin**
+##### VECTOR_begin
 - `@brief` Returns an iterator to the first element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `VECTOR_Iterator`.
 
-**VECTOR_end_const**
+##### VECTOR_end_const
 - `@brief` Returns a const_iterator to the last + 1 element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `VECTOR_ConstIterator`.
 
-**VECTOR_end**
+##### VECTOR_end
 - `@brief` Returns an iterator to the last + 1 element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `VECTOR_Iterator`.
@@ -230,25 +230,25 @@
 <details>
 <summary><b>Core Operations</b></summary>
 
-**VECTOR_ConstIterator_create / VECTOR_Iterator_create**
+##### VECTOR_ConstIterator_create / VECTOR_Iterator_create
 - `@brief` Creates an iterator struct
 - `@return` A new iterator instance.
 
-**VECTOR_ConstIterator_destroy / VECTOR_Iterator_destroy**
+##### VECTOR_ConstIterator_destroy / VECTOR_Iterator_destroy
 - `@brief` Destroys an iterator.
 - `@param` `target` Pointer to the iterator.
 
-**VECTOR_ConstIterator_copy / VECTOR_Iterator_copy**
+##### VECTOR_ConstIterator_copy / VECTOR_Iterator_copy
 - `@brief` Copies contents of one iterator to another.
 - `@param` `dest` Destination iterator pointer.
 - `@param` `source` Source iterator pointer.
 
-**VECTOR_ConstIterator_move / VECTOR_Iterator_move**
+##### VECTOR_ConstIterator_move / VECTOR_Iterator_move
 - `@brief` Moves contents from one iterator to another.
 - `@param` `dest` Destination iterator pointer.
 - `@param` `source` Source iterator pointer.
 
-**VECTOR_ConstIterator_equals / VECTOR_Iterator_equals**
+##### VECTOR_ConstIterator_equals / VECTOR_Iterator_equals
 - `@brief` Checks whether two iterators are equal by comparing current position element.
 - `@param` `left` Left-hand side pointer to an iterator.
 - `@param` `right` Right-hand side pointer to an iterator.
@@ -262,7 +262,7 @@
 <details>
 <summary><b>Element Access</b></summary>
 
-**VECTOR_ConstIterator_dereference / VECTOR_Iterator_dereference**
+##### VECTOR_ConstIterator_dereference / VECTOR_Iterator_dereference
 - `@brief` Return a pointer to current element.
 - `@param` `target` Pointer to the iterator.
 - `@return` Pointer to element.
@@ -275,41 +275,41 @@
 <details>
 <summary><b>Iteration</b></summary>
 
-**VECTOR_ConstIterator_pre_increment / VECTOR_Iterator_pre_increment**
+##### VECTOR_ConstIterator_pre_increment / VECTOR_Iterator_pre_increment
 - `@brief` Increment by 1.
 - `@param` `target` Pointer to the iterator.
 
-**VECTOR_ConstIterator_post_increment / VECTOR_Iterator_post_increment**
+##### VECTOR_ConstIterator_post_increment / VECTOR_Iterator_post_increment
 - `@brief` Increment by 1 and return non-incremented iterator.
 - `@param` `target` Pointer to the iterator.
 - `@return` Non-incremented iterator.
 
-**VECTOR_ConstIterator_increment_by / VECTOR_Iterator_increment_by**
+##### VECTOR_ConstIterator_increment_by / VECTOR_Iterator_increment_by
 - `@brief` Increment by given number.
 - `@param` `target` Pointer to the iterator.
 - `@param` `diff` Number to apply increment.
 
-**VECTOR_ConstIterator_increment / VECTOR_Iterator_increment**
+##### VECTOR_ConstIterator_increment / VECTOR_Iterator_increment
 - `@brief` Increment by given number and return non-incremented iterator.
 - `@param` `target` Pointer to the iterator.
 - `@param` `diff` Number to apply increment.
 - `@return` Non-incremented iterator.
 
-**VECTOR_ConstIterator_pre_decrement / VECTOR_Iterator_pre_decrement**
+##### VECTOR_ConstIterator_pre_decrement / VECTOR_Iterator_pre_decrement
 - `@brief` Decrement by 1.
 - `@param` `target` Pointer to the iterator.
 
-**VECTOR_ConstIterator_post_decrement / VECTOR_Iterator_post_decrement**
+##### VECTOR_ConstIterator_post_decrement / VECTOR_Iterator_post_decrement
 - `@brief` Decrement by 1 and return non-decremented iterator.
 - `@param` `target` Pointer to the iterator.
 - `@return` Non-decremented iterator.
 
-**VECTOR_ConstIterator_decrement_by / VECTOR_Iterator_decrement_by**
+##### VECTOR_ConstIterator_decrement_by / VECTOR_Iterator_decrement_by
 - `@brief` Decrement by given number.
 - `@param` `target` Pointer to the iterator.
 - `@param` `diff` Number to apply decrement.
 
-**VECTOR_ConstIterator_decrement / VECTOR_Iterator_decrement**
+##### VECTOR_ConstIterator_decrement / VECTOR_Iterator_decrement
 - `@brief` Decrement by given number and return non-decremented iterator.
 - `@param` `target` Pointer to the iterator.
 - `@param` `diff` Number to apply decrement.
