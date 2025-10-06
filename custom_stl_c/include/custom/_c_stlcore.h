@@ -32,7 +32,9 @@ static inline void __Assert(bool expr, const char* msg, const char* expected, co
 }
 
 
-// =====================================================================================================================
+// ======================================================================================================================================================
+// Name binder
+// ======================================================================================================================================================
 
 
 // Helper macros to bind from 1 to 9 args
@@ -67,31 +69,23 @@ _C_IDENTIFIER_BIND_IMPL_SELECTOR_HELPER(        \
 // Macro to bind 1 to 9 args
 #define _C_IDENTIFIER_BIND(...) _C_IDENTIFIER_BIND_IMPL_SELECTOR(__VA_ARGS__)(__VA_ARGS__)
 
-
-// =====================================================================================================================
-
-
 // Member identifier binders
 #define _C_PUBLIC_MEMBER(ContextName, MemberName)           _C_IDENTIFIER_BIND(ContextName, MemberName)
 #define _C_PRIVATE_MEMBER(ContextName, MemberName)          _C_IDENTIFIER_BIND(ContextName, PRIVATE, MemberName)
 
-// Mandatory member identifiers
+// ======================================================================================================================================================
+// Custom type member identifiers and signatures
+// ======================================================================================================================================================
+
+
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)           _C_PUBLIC_MEMBER(TYPE, create)
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)          _C_PUBLIC_MEMBER(TYPE, destroy)
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)             _C_PUBLIC_MEMBER(TYPE, copy)
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)             _C_PUBLIC_MEMBER(TYPE, move)
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)           _C_PUBLIC_MEMBER(TYPE, equals)
-
-// Optional member identifiers
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_LESS(TYPE)             _C_PUBLIC_MEMBER(TYPE, less)
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_GREATER(TYPE)          _C_PUBLIC_MEMBER(TYPE, greater)
-
-// Hash member identifier
 #define _C_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(TYPE)             _C_PUBLIC_MEMBER(TYPE, hash)
-
-
-// =====================================================================================================================
-
 
 #define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)      static TYPE _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)()
 #define DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)     static void _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(TYPE* target)

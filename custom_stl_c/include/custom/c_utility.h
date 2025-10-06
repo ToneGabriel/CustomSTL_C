@@ -91,26 +91,28 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(ALIAS)                                   
 // =====================================================================================================================
 
 
-#define C_FOR_EACH(ContainerName, ContainerType, ContainerObjectName, ContainerTypeObjectName)                                                                                                          \
-for (   _C_PUBLIC_MEMBER(ContainerName, Iterator) _local_it = _C_PUBLIC_MEMBER(ContainerName, begin)(&ContainerObjectName), _local_end = _C_PUBLIC_MEMBER(ContainerName, end)(&ContainerObjectName);    \
-        !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(_C_PUBLIC_MEMBER(ContainerName, Iterator))(&_local_it, &_local_end);                                                                                       \
-        _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerName, Iterator), pre_increment)(&_local_it)                                                                                                          \
-)                                                                                                                                                                                                       \
-for (   ContainerType* ContainerTypeObjectName = _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerName, Iterator), dereference)(&_local_it);                                                                  \
-        ContainerTypeObjectName != NULL;                                                                                                                                                                \
-        ContainerTypeObjectName = NULL                                                                                                                                                                  \
-)                                                                                                                                                                                                       \
+#define C_FOR_EACH(ContainerType, ElementType, Container, Element)                                                                          \
+for (   _C_PUBLIC_MEMBER(ContainerType, Iterator)                                                                                           \
+        _local_it = _C_PUBLIC_MEMBER(ContainerType, begin)(&Container), _local_end = _C_PUBLIC_MEMBER(ContainerType, end)(&Container);      \
+        !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(_C_PUBLIC_MEMBER(ContainerType, Iterator))(&_local_it, &_local_end);                           \
+        _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerType, Iterator), pre_increment)(&_local_it)                                              \
+)                                                                                                                                           \
+for (   ElementType* Element = _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerType, Iterator), dereference)(&_local_it);                        \
+        Element != NULL;                                                                                                                    \
+        Element = NULL                                                                                                                      \
+)                                                                                                                                           \
 
 
-#define C_FOR_EACH_CONST(ContainerName, ContainerType, ContainerObjectName, ContainerTypeObjectName)                                                                                                                    \
-for (   _C_PUBLIC_MEMBER(ContainerName, ConstIterator) _local_it = _C_PUBLIC_MEMBER(ContainerName, begin_const)(&ContainerObjectName), _local_end = _C_PUBLIC_MEMBER(ContainerName, end_const)(&ContainerObjectName);   \
-        !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(_C_PUBLIC_MEMBER(ContainerName, ConstIterator))(&_local_it, &_local_end);                                                                                                  \
-        _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerName, ConstIterator), pre_increment)(&_local_it)                                                                                                                     \
-)                                                                                                                                                                                                                       \
-for (   const ContainerType* ContainerTypeObjectName = _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerName, ConstIterator), dereference)(&_local_it);                                                                       \
-        ContainerTypeObjectName != NULL;                                                                                                                                                                                \
-        ContainerTypeObjectName = NULL                                                                                                                                                                                  \
-)                                                                                                                                                                                                                       \
+#define C_FOR_EACH_CONST(ContainerType, ElementType, Container, Element)                                                                                \
+for (   _C_PUBLIC_MEMBER(ContainerType, ConstIterator)                                                                                                  \
+        _local_it = _C_PUBLIC_MEMBER(ContainerType, begin_const)(&Container), _local_end = _C_PUBLIC_MEMBER(ContainerType, end_const)(&Container);      \
+        !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(_C_PUBLIC_MEMBER(ContainerType, ConstIterator))(&_local_it, &_local_end);                                  \
+        _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerType, ConstIterator), pre_increment)(&_local_it)                                                     \
+)                                                                                                                                                       \
+for (   const ElementType* Element = _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerType, ConstIterator), dereference)(&_local_it);                         \
+        Element != NULL;                                                                                                                                \
+        Element = NULL                                                                                                                                  \
+)                                                                                                                                                       \
 
 
 // =====================================================================================================================

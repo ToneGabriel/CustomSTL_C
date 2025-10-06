@@ -4,7 +4,7 @@
 ## Macros
 
 **GENERIC_VECTOR_DEFAULT_CAPACITY**
-- `@brief` Default capacity used in vector `_create` function
+- `@brief` Default capacity used in vector create function.
 
 
 **DEFINE_GENERIC_VECTOR**
@@ -30,9 +30,9 @@
 
 **VECTOR** - Vector data struct. Name provided by user via `VECTOR_NAME_PUBLIC_PREFIX` macro parameter. **All other types and functions have this prefix**.
 
-**VECTOR_ConstIterator** - Struct used to iterate over a vector. `_dereference` function returns a `const` pointer to element.
+**VECTOR_ConstIterator** - Struct used to iterate over a vector. Dereference function returns a `const` pointer to element.
 
-**VECTOR_Iterator** - Struct used to iterate over a vector. `_dereference` function returns a pointer to element.
+**VECTOR_Iterator** - Struct used to iterate over a vector. Dereference function returns a pointer to element.
 
 <!-- ================================================================================================================== -->
 <!-- END Types -->
@@ -63,7 +63,7 @@
 - `@param` `source` Source vector pointer.
 
 **VECTOR_move**
-- `@brief` Moves contents from one vector to another.
+- `@brief` Moves contents from one vector to another. Valid operations after move: `VECTOR_copy` (as dest), `VECTOR_destroy`, `VECTOR_equals`
 - `@param` `dest` Destination vector pointer.
 - `@param` `source` Source vector pointer.
 
@@ -198,22 +198,22 @@
 **VECTOR_begin_const**
 - `@brief` Returns a const_iterator to the first element in vector.
 - `@param` `target` Pointer to vector.
-- `@return` A new instance of `_ConstIterator`.
+- `@return` A new instance of `VECTOR_ConstIterator`.
 
 **VECTOR_begin**
 - `@brief` Returns an iterator to the first element in vector.
 - `@param` `target` Pointer to vector.
-- `@return` A new instance of `_Iterator`.
+- `@return` A new instance of `VECTOR_Iterator`.
 
 **VECTOR_end_const**
 - `@brief` Returns a const_iterator to the last + 1 element in vector.
 - `@param` `target` Pointer to vector.
-- `@return` A new instance of `_ConstIterator`.
+- `@return` A new instance of `VECTOR_ConstIterator`.
 
 **VECTOR_end**
 - `@brief` Returns an iterator to the last + 1 element in vector.
 - `@param` `target` Pointer to vector.
-- `@return` A new instance of `_Iterator`.
+- `@return` A new instance of `VECTOR_Iterator`.
 
 </details>
 <!-- ================================================================================================================== -->
