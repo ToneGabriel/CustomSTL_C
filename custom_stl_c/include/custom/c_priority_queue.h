@@ -5,6 +5,10 @@
 #include "custom/c_vector.h"
 
 
+// ======================================================================================================================================================
+// PQ Implementation
+// ======================================================================================================================================================
+
 #define _DEFINE_GENERIC_PRIORITY_QUEUE_IMPL(                                                                                                \
     PQ_NAME,                                                                                                                                \
     PQ_HEAPIFY_HELPER_NAME,                                                                                                                 \
@@ -143,6 +147,10 @@ static const TYPE* _C_PUBLIC_MEMBER(PQ_NAME, peek_const)(const PQ_NAME* target) 
     return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_front_const)(&target->vec);                                                      \
 }                                                                                                                                           \
 
+
+// ======================================================================================================================================================
+// PQ COMPLETE Definition
+// ======================================================================================================================================================
 
 /**
  * @brief Fully defines a priority queue for a given type with all required dependencies.
