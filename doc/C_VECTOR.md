@@ -196,7 +196,7 @@
 <summary><b>Iterators</b></summary>
 
 ##### VECTOR_begin_const
-- `@brief` Returns a const_iterator to the first element in vector.
+- `@brief` Returns an iterator to the first element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `VECTOR_ConstIterator`.
 
@@ -206,12 +206,12 @@
 - `@return` A new instance of `VECTOR_Iterator`.
 
 ##### VECTOR_end_const
-- `@brief` Returns a const_iterator to the last + 1 element in vector.
+- `@brief` Returns an iterator past the last element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `VECTOR_ConstIterator`.
 
 ##### VECTOR_end
-- `@brief` Returns an iterator to the last + 1 element in vector.
+- `@brief` Returns an iterator past the last element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `VECTOR_Iterator`.
 
