@@ -261,13 +261,13 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(HASH_TABLE_NAME)                         
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_NAME)                                                                                                                               \
 {                                                                                                                                                                                       \
     if (_C_PUBLIC_MEMBER(HASH_TABLE_NAME, size)(left) != _C_PUBLIC_MEMBER(HASH_TABLE_NAME, size)(right)) return false;                                                                  \
-    HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* right_current_node = right->_elems.head->next;                                                                                                  \
-    HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* right_head_node = right->_elems.head;                                                                                                           \
+    HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* right_current_node = right->_elems._head->next;                                                                                                 \
+    HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* right_head_node = right->_elems._head;                                                                                                          \
     while (right_current_node != right_head_node)                                                                                                                                       \
     {                                                                                                                                                                                   \
         HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* left_found_node =                                                                                                                           \
             _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(left, _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME)(&right_current_node->value));                                 \
-        if (left_found_node == left->_elems.head ||                                                                                                                                     \
+        if (left_found_node == left->_elems._head ||                                                                                                                                    \
             !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(MAP_TYPE)(                                                                                                                             \
                 _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME)(&left_found_node->value),                                                                                       \
                 _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME)(&right_current_node->value))) return false;                                                                     \
@@ -472,7 +472,7 @@ static HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* _C_PRIVATE_MEMBER(HASH_TABLE_NAME, fi
         current_node = current_node->next;                                                                                                                                              \
         --remaining_nodes;                                                                                                                                                              \
     }                                                                                                                                                                                   \
-    if (0 == remaining_nodes) return target->_elems.head;   /* not found - return list head */                                                                                          \
+    if (0 == remaining_nodes) return target->_elems._head;   /* not found - return list head */                                                                                         \
     return current_node;                                                                                                                                                                \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
@@ -483,7 +483,7 @@ static void _C_PRIVATE_MEMBER(HASH_TABLE_NAME, map_and_link_node)(HASH_TABLE_NAM
         /* link last */                                                                                                                                                                 \
         _C_PRIVATE_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, link_node_before)(                                                                                                             \
                                 &target->_elems,                                                                                                                                        \
-                                target->_elems.head,                                                                                                                                    \
+                                target->_elems._head,                                                                                                                                   \
                                 node);                                                                                                                                                  \
     }                                                                                                                                                                                   \
     else                                                                                                                                                                                \
@@ -501,8 +501,8 @@ static void _C_PRIVATE_MEMBER(HASH_TABLE_NAME, map_and_link_node)(HASH_TABLE_NAM
 static void _C_PRIVATE_MEMBER(HASH_TABLE_NAME, force_rehash)(HASH_TABLE_NAME* target, size_t nbuckets)                                                                                  \
 {                                                                                                                                                                                       \
     _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, realloc)(&target->_buckets, nbuckets);                                                                                 \
-    HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* current_node = target->_elems.head->next;                                                                                                       \
-    HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* head_node = target->_elems.head;                                                                                                                \
+    HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* current_node = target->_elems._head->next;                                                                                                      \
+    HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* head_node = target->_elems._head;                                                                                                               \
     while (current_node != head_node)                                                                                                                                                   \
     {                                                                                                                                                                                   \
         /* remap node */                                                                                                                                                                \
