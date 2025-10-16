@@ -362,16 +362,16 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABL
 static HASH_TABLE_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find_const)(const HASH_TABLE_NAME* target, const KEY_TYPE* key)                                                 \
 {                                                                                                                                                                                       \
     HASH_TABLE_CONST_ITERATOR_NAME it = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_CONST_ITERATOR_NAME)();                                                                          \
-    it.node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key);                                                                                                             \
-    it.list = &target->_elems;                                                                                                                                                          \
+    it._node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key);                                                                                                            \
+    it._list = &target->_elems;                                                                                                                                                         \
     return it;                                                                                                                                                                          \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
 static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(HASH_TABLE_NAME* target, const KEY_TYPE* key)                                                                   \
 {                                                                                                                                                                                       \
     HASH_TABLE_ITERATOR_NAME it = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_ITERATOR_NAME)();                                                                                      \
-    it.node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key);                                                                                                             \
-    it.list = &target->_elems;                                                                                                                                                          \
+    it._node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key);                                                                                                            \
+    it._list = &target->_elems;                                                                                                                                                         \
     return it;                                                                                                                                                                          \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
@@ -395,8 +395,8 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(HASH_
         _C_PRIVATE_MEMBER(HASH_TABLE_NAME, rehash_if_overload)(target);                                                                                                                 \
         _C_PRIVATE_MEMBER(HASH_TABLE_NAME, map_and_link_node)(target, _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket)(target, new_key), new_node);                                            \
         /* update return iterator */                                                                                                                                                    \
-        it.node = new_node;                                                                                                                                                             \
-        it.list = &target->_elems;                                                                                                                                                      \
+        it._node = new_node;                                                                                                                                                            \
+        it._list = &target->_elems;                                                                                                                                                     \
     }                                                                                                                                                                                   \
     return it;                                                                                                                                                                          \
 }                                                                                                                                                                                       \
@@ -407,12 +407,12 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase)(HASH_TA
     HASH_TABLE_ITERATOR_NAME it_end = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(target);                                                                                                   \
     if (_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_ITERATOR_NAME)(&it_found, &it_end)) return it_found;                                                                             \
     size_t index = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket)(target, key);                                                                                                              \
-    if (it_found.node == _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->second)    /* is the starting node in bucket */            \
+    if (it_found._node == _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->second)    /* is the starting node in bucket */           \
     {                                                                                                                                                                                   \
         if (1 == _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->first) /* is the only node in bucket */                            \
             _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->second = NULL;                                                          \
         else                                                                                                                                                                            \
-            _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->second = it_found.node->next;                                           \
+            _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->second = it_found._node->next;                                          \
     }                                                                                                                                                                                   \
     --_C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->first;                                                                        \
     return it_end;  /* TODO - return list erase */                                                                                                                                      \
