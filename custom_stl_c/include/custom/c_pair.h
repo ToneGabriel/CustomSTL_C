@@ -5,6 +5,16 @@
 #include "custom/c_utility.h"
 
 
+// ======================================================================================================================================================
+// Pair COMPLETE Definition
+// ======================================================================================================================================================
+
+/**
+ * @brief Public macro to define a generic pair for given types with all required dependencies.
+ * @param PAIR_NAME     The public name prefix for generated pair (e.g., `MyPair` -> `MyPair_create`, etc.).
+ * @param TYPE_1        Typedef stored in the pair `first` member;
+ * @param TYPE_2        Typedef stored in the pair `second` member.
+ */
 #define DEFINE_GENERIC_PAIR(                                                                                \
     PAIR_NAME,                                                                                              \
     TYPE_1,                                                                                                 \

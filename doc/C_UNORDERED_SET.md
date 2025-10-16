@@ -76,14 +76,14 @@
 <summary><b>Lookup</b></summary>
 
 ##### UNORDERED_SET_element_at
-- `@brief` Returns a pointer to the element at index.
+- `@brief` Returns a pointer to the element at key.
 - `@param` `target` Pointer to uset.
 - `@param` `key` Pointer to key object.
 - `@return` Pointer to the element at key or `NULL` if not found.
 - `@note` Recommended only for `UNORDERED_MAP`
 
 ##### UNORDERED_SET_element_at_const
-- `@brief` Returns a pointer to the element at index.
+- `@brief` Returns a pointer to the element at key.
 - `@param` `target` Pointer to uset.
 - `@param` `key` Pointer to key object.
 - `@return` Pointer to the element at key or `NULL` if not found.
@@ -159,7 +159,7 @@
 <summary><b>Hash Policy</b></summary>
 
 ##### UNORDERED_SET_load_factor
-- `@brief` Returns the average number of elements per bucket, that is, size divided by bucket_count in uset.
+- `@brief` Returns the average number of elements per bucket: `size / bucket_count`.
 - `@param` `target` Pointer to uset.
 - `@return` Average number of elements per bucket.
 
@@ -191,11 +191,11 @@
 - `@param` `item` Pointer to object to emplace.
 - `@return` New instance of `UNORDERED_SET_Iterator`.
 
-##### UNORDERED_SET_emplace_key_set
+##### UNORDERED_SET_emplace_key_map
 - `@brief` Adds an element to the uset and returns an iterator to it. If key already exists, return an iterator to existing element.
 - `@param` `target` Pointer to uset.
 - `@param` `key` Pointer to key object.
-- `@param` `item` Pointer to setped object.
+- `@param` `item` Pointer to mapped object.
 - `@return` New instance of `UNORDERED_SET_Iterator`.
 - `@note` Recommended only for `UNORDERED_MAP`
 
@@ -338,7 +338,7 @@
 ```C
 #include "custom/c_unordered_set.h"
 
-DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(unsigned int, myuint_t)
+DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(unsigned int, myuint_t)  // this also includes hashing
 DEFINE_GENERIC_UNORDERED_SET(USet, myuint_t)
 
 int main()

@@ -30,7 +30,7 @@
 
 **UNORDERED_MAP** - Unordered Map data struct. Name provided by user via `UNORDERED_MAP_NAME_PUBLIC_PREFIX` macro parameter. **All other types and functions have this prefix**.
 
-**UNORDERED_MAP_KeyValuePair** - Element stored in the map. Used in `UNORDERED_MAP_emplace` function.
+**UNORDERED_MAP_KeyValuePair** - Element stored in the map.
 
 **UNORDERED_MAP_ConstIterator** - Struct used to iterate over a umap. Dereference function returns a `const` pointer to key-value element.
 
@@ -79,13 +79,13 @@
 <summary><b>Lookup</b></summary>
 
 ##### UNORDERED_MAP_element_at
-- `@brief` Returns a pointer to the element at index.
+- `@brief` Returns a pointer to the element at key.
 - `@param` `target` Pointer to umap.
 - `@param` `key` Pointer to key object.
 - `@return` Pointer to the element at key or `NULL` if not found.
 
 ##### UNORDERED_MAP_element_at_const
-- `@brief` Returns a pointer to the element at index.
+- `@brief` Returns a pointer to the element at key.
 - `@param` `target` Pointer to umap.
 - `@param` `key` Pointer to key object.
 - `@return` Pointer to the element at key or `NULL` if not found.
@@ -160,7 +160,7 @@
 <summary><b>Hash Policy</b></summary>
 
 ##### UNORDERED_MAP_load_factor
-- `@brief` Returns the average number of elements per bucket, that is, size divided by bucket_count in umap.
+- `@brief` Returns the average number of elements per bucket: `size / bucket_count`.
 - `@param` `target` Pointer to umap.
 - `@return` Average number of elements per bucket.
 
@@ -338,7 +338,7 @@
 ```C
 #include "custom/c_unordered_map.h"
 
-DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(unsigned int, myuint_t)
+DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(unsigned int, myuint_t)  // this also includes hashing
 DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(int, myint_t)
 DEFINE_GENERIC_UNORDERED_MAP(UMap, myuint_t, myint_t)
 
