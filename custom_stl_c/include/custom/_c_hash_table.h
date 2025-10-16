@@ -162,11 +162,8 @@ static VAL_TYPE* _C_PUBLIC_MEMBER(HASH_TABLE_ITERATOR_NAME, dereference)(HASH_TA
 #define _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME)     _C_PRIVATE_MEMBER(HASH_TABLE_NAME, extract_key)
 #define _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME)     _C_PRIVATE_MEMBER(HASH_TABLE_NAME, extract_map)
 
-#define _DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME, KEY_TYPE, VAL_TYPE)             \
-static const KEY_TYPE* _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME)(const VAL_TYPE* value)   \
-
-#define _DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME, MAP_TYPE, VAL_TYPE)             \
-static const MAP_TYPE* _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME)(const VAL_TYPE* value)   \
+#define _DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME, KEY_TYPE, VAL_TYPE)     static const KEY_TYPE* _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_KEY(HASH_TABLE_NAME)(const VAL_TYPE* value)
+#define _DECLARE_HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME, MAP_TYPE, VAL_TYPE)     static const MAP_TYPE* _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME)(const VAL_TYPE* value)
 
 
 #define _HASH_TABLE_MAX_LOAD_FACTOR 0.75F
@@ -360,18 +357,18 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABL
                                                                                                                                                                                         \
 static HASH_TABLE_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cfind)(const HASH_TABLE_NAME* target, const KEY_TYPE* key)                                                      \
 {                                                                                                                                                                                       \
-    HASH_TABLE_CONST_ITERATOR_NAME it = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_CONST_ITERATOR_NAME)();                                                                          \
-    it._node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key);                                                                                                            \
-    it._list = &target->_elems;                                                                                                                                                         \
-    return it;                                                                                                                                                                          \
+    return (HASH_TABLE_CONST_ITERATOR_NAME){                                                                                                                                            \
+        ._node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key),                                                                                                          \
+        ._list = &target->_elems                                                                                                                                                        \
+    };                                                                                                                                                                                  \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
 static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(HASH_TABLE_NAME* target, const KEY_TYPE* key)                                                                   \
 {                                                                                                                                                                                       \
-    HASH_TABLE_ITERATOR_NAME it = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_ITERATOR_NAME)();                                                                                      \
-    it._node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key);                                                                                                            \
-    it._list = &target->_elems;                                                                                                                                                         \
-    return it;                                                                                                                                                                          \
+    return (HASH_TABLE_ITERATOR_NAME){                                                                                                                                                  \
+        ._node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key),                                                                                                          \
+        ._list = &target->_elems                                                                                                                                                        \
+    };                                                                                                                                                                                  \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
 static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(HASH_TABLE_NAME* target, VAL_TYPE* item)                                                                     \
@@ -575,14 +572,14 @@ DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(                                             
 )                                                                                                                                   \
                                                                                                                                     \
 DEFINE_GENERIC_PAIR(                                                                                                                \
-    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, CountNodePtrPair),                                                             \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, Bucket),                                                                       \
     _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, bucket_count_t),  /* same as above */                                          \
     _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, bucket_node_ptr_t)  /* same as above */                                        \
 )                                                                                                                                   \
                                                                                                                                     \
 DEFINE_GENERIC_VECTOR(                                                                                                              \
     _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, BucketVector),                                                                 \
-    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, CountNodePtrPair)                                                              \
+    _C_PRIVATE_MEMBER(HASH_TABLE_NAME_PUBLIC_PREFIX, Bucket)                                                                        \
 )                                                                                                                                   \
                                                                                                                                     \
 _DEFINE_GENERIC_HASH_TABLE_ITERATORS(                                                                                               \

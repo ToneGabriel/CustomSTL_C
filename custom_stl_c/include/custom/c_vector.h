@@ -502,34 +502,34 @@ static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, celement_at)(const VECTOR_NAME*
                                                                                                                                             \
 static VECTOR_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, cbegin)(const VECTOR_NAME* target)                                          \
 {                                                                                                                                           \
-    VECTOR_CONST_ITERATOR_NAME iter = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_CONST_ITERATOR_NAME)();                                    \
-    iter._ptr = target->_first;                                                                                                             \
-    iter._vec = target;                                                                                                                     \
-    return iter;                                                                                                                            \
+    return (VECTOR_CONST_ITERATOR_NAME){                                                                                                    \
+        ._ptr = target->_first,                                                                                                             \
+        ._vec = target                                                                                                                      \
+    };                                                                                                                                      \
 }                                                                                                                                           \
                                                                                                                                             \
 static VECTOR_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, cend)(const VECTOR_NAME* target)                                            \
 {                                                                                                                                           \
-    VECTOR_CONST_ITERATOR_NAME iter = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_CONST_ITERATOR_NAME)();                                    \
-    iter._ptr = target->_last;                                                                                                              \
-    iter._vec = target;                                                                                                                     \
-    return iter;                                                                                                                            \
+    return (VECTOR_CONST_ITERATOR_NAME){                                                                                                    \
+        ._ptr = target->_last,                                                                                                              \
+        ._vec = target                                                                                                                      \
+    };                                                                                                                                      \
 }                                                                                                                                           \
                                                                                                                                             \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, begin)(VECTOR_NAME* target)                                                       \
 {                                                                                                                                           \
-    VECTOR_ITERATOR_NAME iter = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_ITERATOR_NAME)();                                                \
-    iter._ptr = target->_first;                                                                                                             \
-    iter._vec = target;                                                                                                                     \
-    return iter;                                                                                                                            \
+    return (VECTOR_ITERATOR_NAME){                                                                                                          \
+        ._ptr = target->_first,                                                                                                             \
+        ._vec = target                                                                                                                      \
+    };                                                                                                                                      \
 }                                                                                                                                           \
                                                                                                                                             \
 static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, end)(VECTOR_NAME* target)                                                         \
 {                                                                                                                                           \
-    VECTOR_ITERATOR_NAME iter = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_ITERATOR_NAME)();                                                \
-    iter._ptr = target->_last;                                                                                                              \
-    iter._vec = target;                                                                                                                     \
-    return iter;                                                                                                                            \
+    return (VECTOR_ITERATOR_NAME){                                                                                                          \
+        ._ptr = target->_last,                                                                                                              \
+        ._vec = target                                                                                                                      \
+    };                                                                                                                                      \
 }                                                                                                                                           \
                                                                                                                                             \
 static void _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(VECTOR_NAME* target)                                                            \
