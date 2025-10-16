@@ -218,8 +218,7 @@ static HASH_TABLE_CONST_ITERATOR_NAME       _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cf
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(HASH_TABLE_NAME* target, const KEY_TYPE* key);                                                      \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(HASH_TABLE_NAME* target, VAL_TYPE* item);                                                        \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase)(HASH_TABLE_NAME* target, const KEY_TYPE* key);                                                     \
-static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase_iterator_const)(HASH_TABLE_NAME* target, HASH_TABLE_CONST_ITERATOR_NAME* where);                    \
-static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase_iterator)(HASH_TABLE_NAME* target, HASH_TABLE_ITERATOR_NAME* where);                                \
+static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase_at_iterator)(HASH_TABLE_NAME* target, HASH_TABLE_CONST_ITERATOR_NAME* where);                       \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace_key_map)(HASH_TABLE_NAME* target, const KEY_TYPE* key, const MAP_TYPE* item);                     \
 static const MAP_TYPE*                      _C_PUBLIC_MEMBER(HASH_TABLE_NAME, celement_at)(const HASH_TABLE_NAME* target, const KEY_TYPE* key);                                         \
 static MAP_TYPE*                            _C_PUBLIC_MEMBER(HASH_TABLE_NAME, element_at)(HASH_TABLE_NAME* target, const KEY_TYPE* key);                                                \
@@ -405,7 +404,7 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase)(HASH_TA
 {                                                                                                                                                                                       \
     HASH_TABLE_ITERATOR_NAME it_found = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(target, key);                                                                                           \
     HASH_TABLE_ITERATOR_NAME it_end = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(target);                                                                                                   \
-    if (_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_ITERATOR_NAME)(&it_found, &it_end)) return it_found;                                                                             \
+    if (_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_ITERATOR_NAME)(&it_found, &it_end)) return it_end;                                                                               \
     size_t index = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket)(target, key);                                                                                                              \
     if (it_found._node == _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->second)    /* is the starting node in bucket */           \
     {                                                                                                                                                                                   \
@@ -415,10 +414,10 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase)(HASH_TA
             _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->second = it_found._node->next;                                          \
     }                                                                                                                                                                                   \
     --_C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at)(&target->_buckets, index)->first;                                                                        \
-    return it_end;  /* TODO - return list erase */                                                                                                                                      \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, erase_at_iterator)(&target->_elems, &it_found);                                                                              \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
-static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase_iterator_const)(HASH_TABLE_NAME* target, HASH_TABLE_CONST_ITERATOR_NAME* where)                                 \
+static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase_at_iterator)(HASH_TABLE_NAME* target, HASH_TABLE_CONST_ITERATOR_NAME* where)                                    \
 {                                                                                                                                                                                       \
     return _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase)(                                                                                                                                    \
                 target,                                                                                                                                                                 \

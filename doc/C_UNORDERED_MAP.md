@@ -200,19 +200,13 @@
 - `@return` New instance of `UNORDERED_MAP_Iterator`.
 
 ##### UNORDERED_MAP_erase
-- `@brief` Removes the element from the umap with given key and return an iterator to next element (`TODO`: implement). If not found, return `end` iterator.
+- `@brief` Removes the element from the umap with given key and return an iterator to next element. If not found, return `end` iterator.
 - `@param` `target` Pointer to umap.
 - `@param` `key` Pointer to key object.
 - `@return` New instance of `UNORDERED_MAP_Iterator`.
 
-##### UNORDERED_MAP_erase_iterator
-- `@brief` Removes the element from the umap at iterator and return an iterator to next element (`TODO`: implement).
-- `@param` `target` Pointer to umap.
-- `@param` `where` Pointer to iterator object.
-- `@return` New instance of `UNORDERED_MAP_Iterator`.
-
-##### UNORDERED_MAP_erase_iterator_const
-- `@brief` Removes the element from the umap at iterator and return an iterator to next element (`TODO`: implement).
+##### UNORDERED_MAP_erase_at_iterator
+- `@brief` Removes the element from the umap at iterator and return an iterator to next element.
 - `@param` `target` Pointer to umap.
 - `@param` `where` Pointer to iterator object.
 - `@return` New instance of `UNORDERED_MAP_Iterator`.
