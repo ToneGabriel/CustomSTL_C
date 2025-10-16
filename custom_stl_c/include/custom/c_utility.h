@@ -5,6 +5,7 @@
 #include "custom/_c_stlcore.h"
 
 
+// =====================================================================================================================
 // Hash
 // =====================================================================================================================
 
@@ -83,6 +84,37 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_HASH(ALIAS)                                   
 {                                                                                                                   \
     return HASH_VALUE_REPRESENTATION(key);                                                                          \
 }                                                                                                                   \
+
+
+// =====================================================================================================================
+// for each
+// =====================================================================================================================
+
+
+#define C_FOR_EACH(ContainerType, ElementType, Container, Element)                                                                             \
+for (   _C_PUBLIC_MEMBER(ContainerType, Iterator)                                                                                              \
+        _local_it = _C_PUBLIC_MEMBER(ContainerType, begin)(&Container),                                                                        \
+        _local_end = _C_PUBLIC_MEMBER(ContainerType, end)(&Container);                                                  /* END init */         \
+        !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(_C_PUBLIC_MEMBER(ContainerType, Iterator))(&_local_it, &_local_end);       /* END stop cond */    \
+        _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerType, Iterator), pre_increment)(&_local_it)                          /* END post loop */    \
+)                                                                                                                                              \
+for (   ElementType* Element = _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerType, Iterator), dereference)(&_local_it);    /* END init */         \
+        Element != NULL;                                                                                                /* END stop cond */    \
+        Element = NULL                                                                                                  /* END post loop */    \
+)                                                                                                                                              \
+
+
+#define C_FOR_EACH_CONST(ContainerType, ElementType, Container, Element)                                                                                   \
+for (   _C_PUBLIC_MEMBER(ContainerType, ConstIterator)                                                                                                     \
+        _local_it = _C_PUBLIC_MEMBER(ContainerType, begin_const)(&Container),                                                                              \
+        _local_end = _C_PUBLIC_MEMBER(ContainerType, end_const)(&Container);                                                        /* END init */         \
+        !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(_C_PUBLIC_MEMBER(ContainerType, ConstIterator))(&_local_it, &_local_end);              /* END stop cond */    \
+        _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerType, ConstIterator), pre_increment)(&_local_it)                                 /* END post loop */    \
+)                                                                                                                                                          \
+for (   const ElementType* Element = _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerType, ConstIterator), dereference)(&_local_it);     /* END init */         \
+        Element != NULL;                                                                                                            /* END stop cond */    \
+        Element = NULL                                                                                                              /* END post loop */    \
+)                                                                                                                                                          \
 
 
 // =====================================================================================================================

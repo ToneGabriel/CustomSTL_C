@@ -2,7 +2,9 @@
 #include "custom/c_vector.h"
 
 
-// Setup ==========================
+// ======================================================================================================================================================
+// Setup
+// ======================================================================================================================================================
 
 
 DEFINE_DEFAULT_TYPE_PUBLIC_MEMBERS(unsigned int, myuint_t)
@@ -23,7 +25,9 @@ void tearDown()
 }
 
 
-// Tests ==========================
+// ======================================================================================================================================================
+// Tests
+// ======================================================================================================================================================
 
 
 void test_default_create()
@@ -137,7 +141,23 @@ void test_element_check()
     TEST_ASSERT_TRUE_MESSAGE(val3 == *VectorUINT_element_back(&g_customVectorUINTInstance), "Vector back element should be equal to the last push_back");
 }
 
-// RUN ==========================
+void test_element_check_loop()
+{
+    myuint_t vals[] = {1, 2, 3};
+    size_t i;
+    for (i = 0; i < sizeof(vals)/sizeof(vals[0]); ++i)
+        VectorUINT_push_back_copy(&g_customVectorUINTInstance, &vals[i]);
+
+    i = 0;
+    C_FOR_EACH(VectorUINT, myuint_t, g_customVectorUINTInstance, elem)
+        TEST_ASSERT_TRUE_MESSAGE(*elem == vals[i++], "Incorrect vector element");
+}
+
+
+// ======================================================================================================================================================
+// RUN
+// ======================================================================================================================================================
+
 
 int main()
 {
@@ -152,6 +172,7 @@ int main()
     RUN_TEST(test_push_back_with_realloc);
     RUN_TEST(test_pop_back);
     RUN_TEST(test_element_check);
+    RUN_TEST(test_element_check_loop);
 
     return UNITY_END();
 }

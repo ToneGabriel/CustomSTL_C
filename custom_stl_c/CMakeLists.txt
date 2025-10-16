@@ -81,6 +81,15 @@ create_executable(
 )
 
 # ====================================================================================
+# set(CUSTOM_STL_C_STRING_TEST_EXECUTABLE "Custom_STL_C_STRING_Test")
+# create_executable(
+#     ${CUSTOM_STL_C_STRING_TEST_EXECUTABLE}
+#     ""
+#     "${CUSTOM_STL_C_LIBRARY};unity"
+#     test/custom_c_string_test.c
+# )
+
+# ====================================================================================
 create_ctest_suite(
     ${CUSTOM_STL_C_VECTOR_TEST_EXECUTABLE}
     ${CUSTOM_STL_C_LIST_TEST_EXECUTABLE}
@@ -90,4 +99,5 @@ create_ctest_suite(
     ${CUSTOM_STL_C_PAIR_TEST_EXECUTABLE}
     ${CUSTOM_STL_C_UMAP_TEST_EXECUTABLE}
     ${CUSTOM_STL_C_USET_TEST_EXECUTABLE}
+    # ${CUSTOM_STL_C_STRING_TEST_EXECUTABLE}
 )

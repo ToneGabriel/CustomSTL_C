@@ -476,7 +476,7 @@ static void _C_PRIVATE_MEMBER(LIST_NAME, unlink_node)(LIST_NAME* target, NODE_NA
     TYPE                                                                                                                \
 )                                                                                                                       \
                                                                                                                         \
-DEFINE_GENERIC_DOUBLE_NODE(                                                                                             \
+_DEFINE_GENERIC_DOUBLE_NODE(                                                                                            \
     _C_PRIVATE_MEMBER(LIST_NAME_PUBLIC_PREFIX, DoubleNode),                                                             \
     TYPE                                                                                                                \
 )                                                                                                                       \

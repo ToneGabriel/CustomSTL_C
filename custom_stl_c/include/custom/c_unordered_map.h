@@ -5,6 +5,12 @@
 #include "custom/_c_hash_table.h"
 
 
+/**
+ * @brief Define a generic unordered map and iterators for given key and mapped types with all required dependencies.
+ * @param UNORDERED_MAP_NAME_PUBLIC_PREFIX  The public name prefix for generated unordered map (e.g., `MyUMap` -> `MyUMap_create`, etc.).
+ * @param KEY_TYPE                          Typedef for key stored in the unordered map.
+ * @param MAP_TYPE                          Typedef for mapped value stored in the unordered map.
+ */
 #define DEFINE_GENERIC_UNORDERED_MAP(                                                                                                                                   \
     UMAP_NAME_PUBLIC_PREFIX,                                                                                                                                            \
     KEY_TYPE,                                                                                                                                                           \
