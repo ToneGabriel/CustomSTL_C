@@ -106,8 +106,8 @@ for (   ElementType* Element = _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerType, 
 
 #define C_FOR_EACH_CONST(ContainerType, ElementType, Container, Element)                                                                                   \
 for (   _C_PUBLIC_MEMBER(ContainerType, ConstIterator)                                                                                                     \
-        _local_it = _C_PUBLIC_MEMBER(ContainerType, begin_const)(&Container),                                                                              \
-        _local_end = _C_PUBLIC_MEMBER(ContainerType, end_const)(&Container);                                                        /* END init */         \
+        _local_it = _C_PUBLIC_MEMBER(ContainerType, cbegin)(&Container),                                                                                   \
+        _local_end = _C_PUBLIC_MEMBER(ContainerType, cend)(&Container);                                                             /* END init */         \
         !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(_C_PUBLIC_MEMBER(ContainerType, ConstIterator))(&_local_it, &_local_end);              /* END stop cond */    \
         _C_PUBLIC_MEMBER(_C_PUBLIC_MEMBER(ContainerType, ConstIterator), pre_increment)(&_local_it)                                 /* END post loop */    \
 )                                                                                                                                                          \

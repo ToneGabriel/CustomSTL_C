@@ -287,15 +287,15 @@ static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_copy
 static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_move)(VECTOR_NAME* target, TYPE* item);                         \
 static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, pop_back)(VECTOR_NAME* target);                                           \
 static TYPE*                        _C_PUBLIC_MEMBER(VECTOR_NAME, data)(VECTOR_NAME* target);                                               \
-static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, data_const)(const VECTOR_NAME* target);                                   \
+static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, cdata)(const VECTOR_NAME* target);                                        \
 static TYPE*                        _C_PUBLIC_MEMBER(VECTOR_NAME, element_front)(VECTOR_NAME* target);                                      \
-static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, element_front_const)(const VECTOR_NAME* target);                          \
+static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, celement_front)(const VECTOR_NAME* target);                               \
 static TYPE*                        _C_PUBLIC_MEMBER(VECTOR_NAME, element_back)(VECTOR_NAME* target);                                       \
-static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, element_back_const)(const VECTOR_NAME* target);                           \
+static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, celement_back)(const VECTOR_NAME* target);                                \
 static TYPE*                        _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* target, size_t index);                           \
-static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, element_at_const)(const VECTOR_NAME* target, size_t index);               \
-static VECTOR_CONST_ITERATOR_NAME   _C_PUBLIC_MEMBER(VECTOR_NAME, begin_const)(const VECTOR_NAME* target);                                  \
-static VECTOR_CONST_ITERATOR_NAME   _C_PUBLIC_MEMBER(VECTOR_NAME, end_const)(const VECTOR_NAME* target);                                    \
+static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, celement_at)(const VECTOR_NAME* target, size_t index);                    \
+static VECTOR_CONST_ITERATOR_NAME   _C_PUBLIC_MEMBER(VECTOR_NAME, cbegin)(const VECTOR_NAME* target);                                       \
+static VECTOR_CONST_ITERATOR_NAME   _C_PUBLIC_MEMBER(VECTOR_NAME, cend)(const VECTOR_NAME* target);                                         \
 static VECTOR_ITERATOR_NAME         _C_PUBLIC_MEMBER(VECTOR_NAME, begin)(VECTOR_NAME* target);                                              \
 static VECTOR_ITERATOR_NAME         _C_PUBLIC_MEMBER(VECTOR_NAME, end)(VECTOR_NAME* target);                                                \
                                                                                                                                             \
@@ -380,7 +380,7 @@ static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, data)(VECTOR_NAME* target)           
     return target->_first;                                                                                                                  \
 }                                                                                                                                           \
                                                                                                                                             \
-static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, data_const)(const VECTOR_NAME* target)                                                     \
+static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, cdata)(const VECTOR_NAME* target)                                                          \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
     return target->_first;                                                                                                                  \
@@ -465,7 +465,7 @@ static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_front)(VECTOR_NAME* target)  
     return target->_first;                                                                                                                  \
 }                                                                                                                                           \
                                                                                                                                             \
-static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_front_const)(const VECTOR_NAME* target)                                            \
+static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, celement_front)(const VECTOR_NAME* target)                                                 \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
     _C_CUSTOM_ASSERT(target->_first < target->_last, "Vector element out of range");                                                        \
@@ -479,7 +479,7 @@ static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_back)(VECTOR_NAME* target)   
     return target->_last - 1;                                                                                                               \
 }                                                                                                                                           \
                                                                                                                                             \
-static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_back_const)(const VECTOR_NAME* target)                                             \
+static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, celement_back)(const VECTOR_NAME* target)                                                  \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
     _C_CUSTOM_ASSERT(target->_first < target->_last, "Vector element out of range");                                                        \
@@ -493,14 +493,14 @@ static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* target, size
     return target->_first + index;                                                                                                          \
 }                                                                                                                                           \
                                                                                                                                             \
-static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_at_const)(const VECTOR_NAME* target, size_t index)                                 \
+static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, celement_at)(const VECTOR_NAME* target, size_t index)                                      \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
     _C_CUSTOM_ASSERT(target->_first + index < target->_last, "Vector element out of range");                                                \
     return target->_first + index;                                                                                                          \
 }                                                                                                                                           \
                                                                                                                                             \
-static VECTOR_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, begin_const)(const VECTOR_NAME* target)                                     \
+static VECTOR_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, cbegin)(const VECTOR_NAME* target)                                          \
 {                                                                                                                                           \
     VECTOR_CONST_ITERATOR_NAME iter = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_CONST_ITERATOR_NAME)();                                    \
     iter._ptr = target->_first;                                                                                                             \
@@ -508,7 +508,7 @@ static VECTOR_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, begin_const)(con
     return iter;                                                                                                                            \
 }                                                                                                                                           \
                                                                                                                                             \
-static VECTOR_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, end_const)(const VECTOR_NAME* target)                                       \
+static VECTOR_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, cend)(const VECTOR_NAME* target)                                            \
 {                                                                                                                                           \
     VECTOR_CONST_ITERATOR_NAME iter = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_CONST_ITERATOR_NAME)();                                    \
     iter._ptr = target->_last;                                                                                                              \

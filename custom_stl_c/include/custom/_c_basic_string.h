@@ -280,15 +280,15 @@ static bool                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, 
 static void                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, push_back)(BASIC_STRING_NAME* target, CHAR_TYPE chr);                       \
 static void                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, pop_back)(BASIC_STRING_NAME* target);                                       \
 static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, data)(BASIC_STRING_NAME* target);                                           \
-static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, data_const)(const BASIC_STRING_NAME* target);                               \
+static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cdata)(const BASIC_STRING_NAME* target);                                    \
 static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_front)(BASIC_STRING_NAME* target);                                  \
-static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_front_const)(const BASIC_STRING_NAME* target);                      \
+static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_front)(const BASIC_STRING_NAME* target);                           \
 static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_back)(BASIC_STRING_NAME* target);                                   \
-static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_back_const)(const BASIC_STRING_NAME* target);                       \
+static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_back)(const BASIC_STRING_NAME* target);                            \
 static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_at)(BASIC_STRING_NAME* target, size_t index);                       \
-static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_at_const)(const BASIC_STRING_NAME* target, size_t index);           \
-static BASIC_STRING_CONST_ITERATOR_NAME     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, begin_const)(const BASIC_STRING_NAME* target);                              \
-static BASIC_STRING_CONST_ITERATOR_NAME     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, end_const)(const BASIC_STRING_NAME* target);                                \
+static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_at)(const BASIC_STRING_NAME* target, size_t index);                \
+static BASIC_STRING_CONST_ITERATOR_NAME     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cbegin)(const BASIC_STRING_NAME* target);                                   \
+static BASIC_STRING_CONST_ITERATOR_NAME     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cend)(const BASIC_STRING_NAME* target);                                     \
 static BASIC_STRING_ITERATOR_NAME           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, begin)(BASIC_STRING_NAME* target);                                          \
 static BASIC_STRING_ITERATOR_NAME           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, end)(BASIC_STRING_NAME* target);                                            \
                                                                                                                                                             \

@@ -77,7 +77,7 @@
 - `@param` `target` Pointer to pq.
 - `@return` Pointer to the first element.
 
-##### PRIORITY_QUEUE_peek_const
+##### PRIORITY_QUEUE_cpeek
 - `@brief` Returns a pointer to the top element (highest priority) of the queue.
 - `@param` `target` Pointer to pq.
 - `@return` Pointer to the first element.

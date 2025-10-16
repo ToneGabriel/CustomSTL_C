@@ -76,7 +76,7 @@
 - `@param` `target` Pointer to stack.
 - `@return` Pointer to the first element.
 
-##### STACK_peek_const
+##### STACK_cpeek
 - `@brief` Returns a pointer to the top (last inserted) element of the stack.
 - `@param` `target` Pointer to stack.
 - `@return` Pointer to the first element.

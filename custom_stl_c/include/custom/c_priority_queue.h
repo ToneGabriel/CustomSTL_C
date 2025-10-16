@@ -35,7 +35,7 @@ static void         _C_PUBLIC_MEMBER(PQ_NAME, insert_copy)(PQ_NAME* target, cons
 static void         _C_PUBLIC_MEMBER(PQ_NAME, insert_move)(PQ_NAME* target, TYPE* item);                                                        \
 static void         _C_PUBLIC_MEMBER(PQ_NAME, pop)(PQ_NAME* target);                                                                            \
 static TYPE*        _C_PUBLIC_MEMBER(PQ_NAME, peek)(PQ_NAME* target);                                                                           \
-static const TYPE*  _C_PUBLIC_MEMBER(PQ_NAME, peek_const)(const PQ_NAME* target);                                                               \
+static const TYPE*  _C_PUBLIC_MEMBER(PQ_NAME, cpeek)(const PQ_NAME* target);                                                                    \
                                                                                                                                                 \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(PQ_NAME)                                                                                               \
 {                                                                                                                                               \
@@ -141,10 +141,10 @@ static TYPE* _C_PUBLIC_MEMBER(PQ_NAME, peek)(PQ_NAME* target)                   
     return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_front)(&target->_vec);                                                               \
 }                                                                                                                                               \
                                                                                                                                                 \
-static const TYPE* _C_PUBLIC_MEMBER(PQ_NAME, peek_const)(const PQ_NAME* target)                                                                 \
+static const TYPE* _C_PUBLIC_MEMBER(PQ_NAME, cpeek)(const PQ_NAME* target)                                                                      \
 {                                                                                                                                               \
     _C_CUSTOM_ASSERT(NULL != target, "Priority Queue is NULL");                                                                                 \
-    return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, element_front_const)(&target->_vec);                                                         \
+    return _C_PUBLIC_MEMBER(PQ_VECTOR_HELPER_NAME, celement_front)(&target->_vec);                                                              \
 }                                                                                                                                               \
 
 

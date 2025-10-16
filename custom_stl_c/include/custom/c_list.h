@@ -254,11 +254,11 @@ static LIST_ITERATOR_NAME       _C_PUBLIC_MEMBER(LIST_NAME, insert_at_iterator_c
 static LIST_ITERATOR_NAME       _C_PUBLIC_MEMBER(LIST_NAME, insert_at_iterator_move)(LIST_NAME* target, LIST_CONST_ITERATOR_NAME* where, TYPE* item);          \
 static LIST_ITERATOR_NAME       _C_PUBLIC_MEMBER(LIST_NAME, erase_at_iterator)(LIST_NAME* target, LIST_CONST_ITERATOR_NAME* where);                            \
 static TYPE*                    _C_PUBLIC_MEMBER(LIST_NAME, element_front)(LIST_NAME* target);                                                                 \
-static const TYPE*              _C_PUBLIC_MEMBER(LIST_NAME, element_front_const)(const LIST_NAME* target);                                                     \
+static const TYPE*              _C_PUBLIC_MEMBER(LIST_NAME, celement_front)(const LIST_NAME* target);                                                          \
 static TYPE*                    _C_PUBLIC_MEMBER(LIST_NAME, element_back)(LIST_NAME* target);                                                                  \
-static const TYPE*              _C_PUBLIC_MEMBER(LIST_NAME, element_back_const)(const LIST_NAME* target);                                                      \
-static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, begin_const)(const LIST_NAME* target);                                                             \
-static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, end_const)(const LIST_NAME* target);                                                               \
+static const TYPE*              _C_PUBLIC_MEMBER(LIST_NAME, celement_back)(const LIST_NAME* target);                                                           \
+static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, cbegin)(const LIST_NAME* target);                                                                  \
+static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, cend)(const LIST_NAME* target);                                                                    \
 static LIST_ITERATOR_NAME       _C_PUBLIC_MEMBER(LIST_NAME, begin)(LIST_NAME* target);                                                                         \
 static LIST_ITERATOR_NAME       _C_PUBLIC_MEMBER(LIST_NAME, end)(LIST_NAME* target);                                                                           \
                                                                                                                                                                \
@@ -465,7 +465,7 @@ static TYPE* _C_PUBLIC_MEMBER(LIST_NAME, element_front)(LIST_NAME* target)      
     return &target->_head->next->value;                                                                                                                        \
 }                                                                                                                                                              \
                                                                                                                                                                \
-static const TYPE* _C_PUBLIC_MEMBER(LIST_NAME, element_front_const)(const LIST_NAME* target)                                                                   \
+static const TYPE* _C_PUBLIC_MEMBER(LIST_NAME, celement_front)(const LIST_NAME* target)                                                                        \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
     _C_CUSTOM_ASSERT(target->_size != 0, "List is empty");                                                                                                     \
@@ -479,14 +479,14 @@ static TYPE* _C_PUBLIC_MEMBER(LIST_NAME, element_back)(LIST_NAME* target)       
     return &target->_head->prev->value;                                                                                                                        \
 }                                                                                                                                                              \
                                                                                                                                                                \
-static const TYPE* _C_PUBLIC_MEMBER(LIST_NAME, element_back_const)(const LIST_NAME* target)                                                                    \
+static const TYPE* _C_PUBLIC_MEMBER(LIST_NAME, celement_back)(const LIST_NAME* target)                                                                         \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
     _C_CUSTOM_ASSERT(target->_size != 0, "List is empty");                                                                                                     \
     return &target->_head->prev->value;                                                                                                                        \
 }                                                                                                                                                              \
                                                                                                                                                                \
-static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, begin_const)(const LIST_NAME* target)                                                              \
+static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, cbegin)(const LIST_NAME* target)                                                                   \
 {                                                                                                                                                              \
     return (LIST_CONST_ITERATOR_NAME){                                                                                                                         \
         ._node = target->_head->next,                                                                                                                          \
@@ -494,7 +494,7 @@ static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, begin_const)(const L
     };                                                                                                                                                         \
 }                                                                                                                                                              \
                                                                                                                                                                \
-static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, end_const)(const LIST_NAME* target)                                                                \
+static LIST_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, cend)(const LIST_NAME* target)                                                                     \
 {                                                                                                                                                              \
     return (LIST_CONST_ITERATOR_NAME){                                                                                                                         \
         ._node = target->_head,                                                                                                                                \

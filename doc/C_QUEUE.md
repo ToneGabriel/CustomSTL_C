@@ -76,7 +76,7 @@
 - `@param` `target` Pointer to queue.
 - `@return` Pointer to the first element.
 
-##### QUEUE_peek_const
+##### QUEUE_cpeek
 - `@brief` Returns a pointer to the top element of the queue.
 - `@param` `target` Pointer to queue.
 - `@return` Pointer to the first element.

@@ -86,7 +86,7 @@
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the data array.
 
-##### VECTOR_data_const
+##### VECTOR_cdata
 - `@brief` Returns the internal data array.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the data array.
@@ -96,7 +96,7 @@
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the first element.
 
-##### VECTOR_element_front_const
+##### VECTOR_celement_front
 - `@brief` Returns a pointer to the first element.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the first element.
@@ -106,7 +106,7 @@
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the last element.
 
-##### VECTOR_element_back_const
+##### VECTOR_celement_back
 - `@brief` Returns a pointer to the last element.
 - `@param` `target` Pointer to vector.
 - `@return` Pointer to the last element.
@@ -117,7 +117,7 @@
 - `@param` `index` Position of the element to get.
 - `@return` Pointer to the element at index.
 
-##### VECTOR_element_at_const
+##### VECTOR_celement_at
 - `@brief` Returns a pointer to the element at index.
 - `@param` `target` Pointer to vector.
 - `@param` `index` Position of the element to get.
@@ -195,7 +195,7 @@
 <details>
 <summary><b>Iterators</b></summary>
 
-##### VECTOR_begin_const
+##### VECTOR_cbegin
 - `@brief` Returns an iterator to the first element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `VECTOR_ConstIterator`.
@@ -205,7 +205,7 @@
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `VECTOR_Iterator`.
 
-##### VECTOR_end_const
+##### VECTOR_cend
 - `@brief` Returns an iterator past the last element in vector.
 - `@param` `target` Pointer to vector.
 - `@return` A new instance of `VECTOR_ConstIterator`.

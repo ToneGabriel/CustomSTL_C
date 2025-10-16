@@ -34,7 +34,7 @@ static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert_copy)(QUEUE_NAME* target
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, insert_move)(QUEUE_NAME* target, TYPE* item);          \
 static void         _C_PUBLIC_MEMBER(QUEUE_NAME, pop)(QUEUE_NAME* target);                              \
 static TYPE*        _C_PUBLIC_MEMBER(QUEUE_NAME, peek)(QUEUE_NAME* target);                             \
-static const TYPE*  _C_PUBLIC_MEMBER(QUEUE_NAME, peek_const)(const QUEUE_NAME* target);                 \
+static const TYPE*  _C_PUBLIC_MEMBER(QUEUE_NAME, cpeek)(const QUEUE_NAME* target);                      \
                                                                                                         \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(QUEUE_NAME)                                                    \
 {                                                                                                       \
@@ -118,10 +118,10 @@ static TYPE* _C_PUBLIC_MEMBER(QUEUE_NAME, peek)(QUEUE_NAME* target)             
     return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, element_front)(&target->_list);                     \
 }                                                                                                       \
                                                                                                         \
-static const TYPE* _C_PUBLIC_MEMBER(QUEUE_NAME, peek_const)(const QUEUE_NAME* target)                   \
+static const TYPE* _C_PUBLIC_MEMBER(QUEUE_NAME, cpeek)(const QUEUE_NAME* target)                        \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Queue is NULL");                                                  \
-    return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, element_front_const)(&target->_list);               \
+    return _C_PUBLIC_MEMBER(QUEUE_LIST_HELPER_NAME, celement_front)(&target->_list);                    \
 }                                                                                                       \
 
 

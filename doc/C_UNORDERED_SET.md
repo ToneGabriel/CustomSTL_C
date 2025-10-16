@@ -82,7 +82,7 @@
 - `@return` Pointer to the element at key or `NULL` if not found.
 - `@note` Recommended only for `UNORDERED_MAP`
 
-##### UNORDERED_SET_element_at_const
+##### UNORDERED_SET_celement_at
 - `@brief` Returns a pointer to the element at key.
 - `@param` `target` Pointer to uset.
 - `@param` `key` Pointer to key object.
@@ -101,7 +101,7 @@
 - `@param` `key` Pointer to key object.
 - `@return` New instance of `UNORDERED_SET_Iterator`.
 
-##### UNORDERED_SET_find_const
+##### UNORDERED_SET_cfind
 - `@brief` Returns an iterator to the element at key. If not found, `end` iterator is returned.
 - `@param` `target` Pointer to uset.
 - `@param` `key` Pointer to key object.
@@ -225,7 +225,7 @@
 <details>
 <summary><b>Iterators</b></summary>
 
-##### UNORDERED_SET_begin_const
+##### UNORDERED_SET_cbegin
 - `@brief` Returns an iterator to the first element in uset.
 - `@param` `target` Pointer to uset.
 - `@return` A new instance of `UNORDERED_SET_ConstIterator`.
@@ -235,7 +235,7 @@
 - `@param` `target` Pointer to uset.
 - `@return` A new instance of `UNORDERED_SET_Iterator`.
 
-##### UNORDERED_SET_end_const
+##### UNORDERED_SET_cend
 - `@brief` Returns an iterator past the last element in uset.
 - `@param` `target` Pointer to uset.
 - `@return` A new instance of `UNORDERED_SET_ConstIterator`.

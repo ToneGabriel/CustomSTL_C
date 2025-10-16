@@ -77,7 +77,7 @@
 - `@param` `target` Pointer to list.
 - `@return` Pointer to the first element.
 
-##### LIST_element_front_const
+##### LIST_celement_front
 - `@brief` Returns a pointer to the first element.
 - `@param` `target` Pointer to list.
 - `@return` Pointer to the first element.
@@ -87,7 +87,7 @@
 - `@param` `target` Pointer to list.
 - `@return` Pointer to the last element.
 
-##### LIST_element_back_const
+##### LIST_celement_back
 - `@brief` Returns a pointer to the last element.
 - `@param` `target` Pointer to list.
 - `@return` Pointer to the last element.
@@ -166,7 +166,7 @@
 <details>
 <summary><b>Iterators</b></summary>
 
-##### LIST_begin_const
+##### LIST_cbegin
 - `@brief` Returns an iterator to the first element in list.
 - `@param` `target` Pointer to list.
 - `@return` A new instance of `LIST_ConstIterator`.
@@ -176,7 +176,7 @@
 - `@param` `target` Pointer to list.
 - `@return` A new instance of `LIST_Iterator`.
 
-##### LIST_end_const
+##### LIST_cend
 - `@brief` Returns an iterator past the last element in list.
 - `@param` `target` Pointer to list.
 - `@return` A new instance of `LIST_ConstIterator`.

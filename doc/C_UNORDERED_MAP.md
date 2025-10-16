@@ -84,7 +84,7 @@
 - `@param` `key` Pointer to key object.
 - `@return` Pointer to the element at key or `NULL` if not found.
 
-##### UNORDERED_MAP_element_at_const
+##### UNORDERED_MAP_celement_at
 - `@brief` Returns a pointer to the element at key.
 - `@param` `target` Pointer to umap.
 - `@param` `key` Pointer to key object.
@@ -102,7 +102,7 @@
 - `@param` `key` Pointer to key object.
 - `@return` New instance of `UNORDERED_MAP_Iterator`.
 
-##### UNORDERED_MAP_find_const
+##### UNORDERED_MAP_cfind
 - `@brief` Returns an iterator to the element at key. If not found, `end` iterator is returned.
 - `@param` `target` Pointer to umap.
 - `@param` `key` Pointer to key object.
@@ -225,7 +225,7 @@
 <details>
 <summary><b>Iterators</b></summary>
 
-##### UNORDERED_MAP_begin_const
+##### UNORDERED_MAP_cbegin
 - `@brief` Returns an iterator to the first element in umap.
 - `@param` `target` Pointer to umap.
 - `@return` A new instance of `UNORDERED_MAP_ConstIterator`.
@@ -235,7 +235,7 @@
 - `@param` `target` Pointer to umap.
 - `@return` A new instance of `UNORDERED_MAP_Iterator`.
 
-##### UNORDERED_MAP_end_const
+##### UNORDERED_MAP_cend
 - `@brief` Returns an iterator past the last element in umap.
 - `@param` `target` Pointer to umap.
 - `@return` A new instance of `UNORDERED_MAP_ConstIterator`.

@@ -210,18 +210,18 @@ static float                                _C_PUBLIC_MEMBER(HASH_TABLE_NAME, lo
 static float                                _C_PUBLIC_MEMBER(HASH_TABLE_NAME, max_load_factor)(const HASH_TABLE_NAME* target);                                                          \
 static void                                 _C_PUBLIC_MEMBER(HASH_TABLE_NAME, rehash)(HASH_TABLE_NAME* target, size_t nobuckets);                                                       \
 static bool                                 _C_PUBLIC_MEMBER(HASH_TABLE_NAME, contains)(const HASH_TABLE_NAME* target, const KEY_TYPE* key);                                            \
-static HASH_TABLE_CONST_ITERATOR_NAME       _C_PUBLIC_MEMBER(HASH_TABLE_NAME, begin_const)(const HASH_TABLE_NAME* target);                                                              \
+static HASH_TABLE_CONST_ITERATOR_NAME       _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cbegin)(const HASH_TABLE_NAME* target);                                                                   \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, begin)(HASH_TABLE_NAME* target);                                                                          \
-static HASH_TABLE_CONST_ITERATOR_NAME       _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end_const)(const HASH_TABLE_NAME* target);                                                                \
+static HASH_TABLE_CONST_ITERATOR_NAME       _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cend)(const HASH_TABLE_NAME* target);                                                                     \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABLE_NAME* target);                                                                            \
-static HASH_TABLE_CONST_ITERATOR_NAME       _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find_const)(const HASH_TABLE_NAME* target, const KEY_TYPE* key);                                          \
+static HASH_TABLE_CONST_ITERATOR_NAME       _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cfind)(const HASH_TABLE_NAME* target, const KEY_TYPE* key);                                               \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find)(HASH_TABLE_NAME* target, const KEY_TYPE* key);                                                      \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(HASH_TABLE_NAME* target, VAL_TYPE* item);                                                        \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase)(HASH_TABLE_NAME* target, const KEY_TYPE* key);                                                     \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase_iterator_const)(HASH_TABLE_NAME* target, HASH_TABLE_CONST_ITERATOR_NAME* where);                    \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, erase_iterator)(HASH_TABLE_NAME* target, HASH_TABLE_ITERATOR_NAME* where);                                \
 static HASH_TABLE_ITERATOR_NAME             _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace_key_map)(HASH_TABLE_NAME* target, const KEY_TYPE* key, const MAP_TYPE* item);                     \
-static const MAP_TYPE*                      _C_PUBLIC_MEMBER(HASH_TABLE_NAME, element_at_const)(const HASH_TABLE_NAME* target, const KEY_TYPE* key);                                    \
+static const MAP_TYPE*                      _C_PUBLIC_MEMBER(HASH_TABLE_NAME, celement_at)(const HASH_TABLE_NAME* target, const KEY_TYPE* key);                                         \
 static MAP_TYPE*                            _C_PUBLIC_MEMBER(HASH_TABLE_NAME, element_at)(HASH_TABLE_NAME* target, const KEY_TYPE* key);                                                \
                                                                                                                                                                                         \
 static HASH_TABLE_LIST_VAL_TYPE_NODE_NAME*  _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(const HASH_TABLE_NAME* target, const KEY_TYPE* key);                                        \
@@ -299,7 +299,7 @@ static size_t _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket_count)(const HASH_TABLE_N
                                                                                                                                                                                         \
 static size_t _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket_size)(const HASH_TABLE_NAME* target, size_t index)                                                                               \
 {                                                                                                                                                                                       \
-    return _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at_const)(&target->_buckets, index)->first;                                                             \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, celement_at)(&target->_buckets, index)->first;                                                                  \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
 static size_t _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket)(const HASH_TABLE_NAME* target, const KEY_TYPE* key)                                                                             \
@@ -334,14 +334,14 @@ static void _C_PUBLIC_MEMBER(HASH_TABLE_NAME, rehash)(HASH_TABLE_NAME* target, s
                                                                                                                                                                                         \
 static bool _C_PUBLIC_MEMBER(HASH_TABLE_NAME, contains)(const HASH_TABLE_NAME* target, const KEY_TYPE* key)                                                                             \
 {                                                                                                                                                                                       \
-    HASH_TABLE_CONST_ITERATOR_NAME it_found = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find_const)(target, key);                                                                               \
-    HASH_TABLE_CONST_ITERATOR_NAME it_end = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end_const)(target);                                                                                       \
+    HASH_TABLE_CONST_ITERATOR_NAME it_found = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cfind)(target, key);                                                                                    \
+    HASH_TABLE_CONST_ITERATOR_NAME it_end = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cend)(target);                                                                                            \
     return !_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_CONST_ITERATOR_NAME)(&it_found, &it_end);                                                                                    \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
-static HASH_TABLE_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, begin_const)(const HASH_TABLE_NAME* target)                                                                     \
+static HASH_TABLE_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cbegin)(const HASH_TABLE_NAME* target)                                                                          \
 {                                                                                                                                                                                       \
-    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, begin_const)(&target->_elems);                                                                                               \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, cbegin)(&target->_elems);                                                                                                    \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
 static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, begin)(HASH_TABLE_NAME* target)                                                                                       \
@@ -349,9 +349,9 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, begin)(HASH_TA
     return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, begin)(&target->_elems);                                                                                                     \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
-static HASH_TABLE_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end_const)(const HASH_TABLE_NAME* target)                                                                       \
+static HASH_TABLE_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cend)(const HASH_TABLE_NAME* target)                                                                            \
 {                                                                                                                                                                                       \
-    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, end_const)(&target->_elems);                                                                                                 \
+    return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, cend)(&target->_elems);                                                                                                      \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
 static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABLE_NAME* target)                                                                                         \
@@ -359,7 +359,7 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end)(HASH_TABL
     return _C_PUBLIC_MEMBER(HASH_TABLE_LIST_VAL_TYPE_NAME, end)(&target->_elems);                                                                                                       \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
-static HASH_TABLE_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find_const)(const HASH_TABLE_NAME* target, const KEY_TYPE* key)                                                 \
+static HASH_TABLE_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cfind)(const HASH_TABLE_NAME* target, const KEY_TYPE* key)                                                      \
 {                                                                                                                                                                                       \
     HASH_TABLE_CONST_ITERATOR_NAME it = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(HASH_TABLE_CONST_ITERATOR_NAME)();                                                                          \
     it._node = _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(target, key);                                                                                                            \
@@ -440,10 +440,10 @@ static HASH_TABLE_ITERATOR_NAME _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace_key_ma
     return _C_PUBLIC_MEMBER(HASH_TABLE_NAME, emplace)(target, &val);                                                                                                                    \
 }                                                                                                                                                                                       \
                                                                                                                                                                                         \
-static const MAP_TYPE* _C_PUBLIC_MEMBER(HASH_TABLE_NAME, element_at_const)(const HASH_TABLE_NAME* target, const KEY_TYPE* key)                                                          \
+static const MAP_TYPE* _C_PUBLIC_MEMBER(HASH_TABLE_NAME, celement_at)(const HASH_TABLE_NAME* target, const KEY_TYPE* key)                                                               \
 {                                                                                                                                                                                       \
-    HASH_TABLE_CONST_ITERATOR_NAME it_found = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, find_const)(target, key);                                                                               \
-    HASH_TABLE_CONST_ITERATOR_NAME it_end = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, end_const)(target);                                                                                       \
+    HASH_TABLE_CONST_ITERATOR_NAME it_found = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cfind)(target, key);                                                                                    \
+    HASH_TABLE_CONST_ITERATOR_NAME it_end = _C_PUBLIC_MEMBER(HASH_TABLE_NAME, cend)(target);                                                                                            \
     if (_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(HASH_TABLE_CONST_ITERATOR_NAME)(&it_found, &it_end)) return NULL;                                                                           \
     return _HASH_TABLE_PRIVATE_MEMBER_EXTRACT_MAP(HASH_TABLE_NAME)(_C_PUBLIC_MEMBER(HASH_TABLE_CONST_ITERATOR_NAME, dereference)(&it_found));                                           \
 }                                                                                                                                                                                       \
@@ -459,11 +459,11 @@ static MAP_TYPE* _C_PUBLIC_MEMBER(HASH_TABLE_NAME, element_at)(HASH_TABLE_NAME* 
 static HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* _C_PRIVATE_MEMBER(HASH_TABLE_NAME, find_helper)(const HASH_TABLE_NAME* target, const KEY_TYPE* key)                                          \
 {                                                                                                                                                                                       \
     size_t remaining_nodes =                                                                                                                                                            \
-        _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at_const)(                                                                                                 \
+        _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, celement_at)(                                                                                                      \
                                                 &target->_buckets,                                                                                                                      \
                                                 _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket)(target, key))->first;                                                                         \
     HASH_TABLE_LIST_VAL_TYPE_NODE_NAME* current_node =                                                                                                                                  \
-        _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, element_at_const)(                                                                                                 \
+        _C_PUBLIC_MEMBER(HASH_TABLE_VECTOR_PAIR_COUNT_NODE_PTR_NAME, celement_at)(                                                                                                      \
                                                 &target->_buckets,                                                                                                                      \
                                                 _C_PUBLIC_MEMBER(HASH_TABLE_NAME, bucket)(target, key))->second;                                                                        \
     while ( remaining_nodes &&                                                                                                                                                          \
