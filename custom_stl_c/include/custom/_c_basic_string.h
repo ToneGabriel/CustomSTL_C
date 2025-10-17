@@ -17,6 +17,14 @@
                                                         \
 typedef struct                                          \
 {                                                       \
+    union                                               \
+    {                                                   \
+        CHAR_TYPE _buff[16];                            \
+        CHAR_TYPE* _ptr;                                \
+    } _storage;                                         \
+    size_t _size;                                       \
+    size_t _capacity;                                   \
+                                                        \
     CHAR_TYPE* first;                                   \
     CHAR_TYPE* last;                                    \
     CHAR_TYPE* final;                                   \
@@ -36,8 +44,8 @@ typedef struct                                          \
                                                                                                                                                                             \
 typedef struct                                                                                                                                                              \
 {                                                                                                                                                                           \
-    CHAR_TYPE* ptr;                                                                                                                                                         \
-    const BASIC_STRING_NAME* bstr;                                                                                                                                          \
+    CHAR_TYPE* _ptr;                                                                                                                                                        \
+    const BASIC_STRING_NAME* _str;                                                                                                                                          \
 } BASIC_STRING_CONST_ITERATOR_NAME, BASIC_STRING_ITERATOR_NAME;                                                                                                             \
                                                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(BASIC_STRING_CONST_ITERATOR_NAME);                                                                                                 \
@@ -85,8 +93,8 @@ static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_ITERAT
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(BASIC_STRING_CONST_ITERATOR_NAME)                                                                                                  \
 {                                                                                                                                                                           \
     return (BASIC_STRING_CONST_ITERATOR_NAME){                                                                                                                              \
-        .ptr = NULL,                                                                                                                                                        \
-        .bstr = NULL                                                                                                                                                        \
+        ._ptr = NULL,                                                                                                                                                       \
+        ._str = NULL                                                                                                                                                        \
     };                                                                                                                                                                      \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
@@ -98,8 +106,8 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(BASIC_STRING_ITERATOR_NAME)            
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(BASIC_STRING_CONST_ITERATOR_NAME)                                                                                                 \
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
-    target->ptr = NULL;                                                                                                                                                     \
-    target->bstr = NULL;                                                                                                                                                    \
+    target->_ptr = NULL;                                                                                                                                                    \
+    target->_str = NULL;                                                                                                                                                    \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(BASIC_STRING_ITERATOR_NAME)                                                                                                       \
@@ -111,8 +119,8 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(BASIC_STRING_CONST_ITERATOR_NAME)        
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != dest, "String Iterator dest is NULL");                                                                                                         \
     _C_CUSTOM_ASSERT(NULL != source, "String Iterator source is NULL");                                                                                                     \
-    dest->ptr = source->ptr;                                                                                                                                                \
-    dest->bstr = source->bstr;                                                                                                                                              \
+    dest->_ptr = source->_ptr;                                                                                                                                              \
+    dest->_str = source->_str;                                                                                                                                              \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(BASIC_STRING_ITERATOR_NAME)                                                                                                          \
@@ -124,8 +132,8 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(BASIC_STRING_CONST_ITERATOR_NAME)        
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != dest, "String Iterator dest is NULL");                                                                                                         \
     _C_CUSTOM_ASSERT(NULL != source, "String Iterator source is NULL");                                                                                                     \
-    dest->ptr = source->ptr;                                                                                                                                                \
-    dest->bstr = source->bstr;                                                                                                                                              \
+    dest->_ptr = source->_ptr;                                                                                                                                              \
+    dest->_str = source->_str;                                                                                                                                              \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(BASIC_STRING_ITERATOR_NAME)                                                                                                          \
@@ -137,7 +145,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(BASIC_STRING_CONST_ITERATOR_NAME)      
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != left, "String Iterator left is NULL");                                                                                                         \
     _C_CUSTOM_ASSERT(NULL != right, "String Iterator right is NULL");                                                                                                       \
-    return left->ptr == right->ptr;                                                                                                                                         \
+    return left->_ptr == right->_ptr;                                                                                                                                       \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(BASIC_STRING_ITERATOR_NAME)                                                                                                        \
@@ -148,8 +156,8 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(BASIC_STRING_ITERATOR_NAME)            
 static void _C_PUBLIC_MEMBER(BASIC_STRING_CONST_ITERATOR_NAME, pre_increment)(BASIC_STRING_CONST_ITERATOR_NAME* target)                                                     \
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
-    _C_CUSTOM_ASSERT(target->ptr < target->bstr->last, "Cannot increment end iterator.");                                                                                   \
-    ++target->ptr;                                                                                                                                                          \
+    _C_CUSTOM_ASSERT(target->_ptr < target->_str->last, "Cannot increment end iterator.");                                                                                  \
+    ++target->_ptr;                                                                                                                                                         \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(BASIC_STRING_ITERATOR_NAME, pre_increment)(BASIC_STRING_ITERATOR_NAME* target)                                                                 \
@@ -172,8 +180,8 @@ static BASIC_STRING_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_ITERATOR_NAME, p
 static void _C_PUBLIC_MEMBER(BASIC_STRING_CONST_ITERATOR_NAME, increment_by)(BASIC_STRING_CONST_ITERATOR_NAME* target, ptrdiff_t diff)                                      \
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
-    _C_CUSTOM_ASSERT(target->ptr + diff < target->bstr->last, "Cannot increment end iterator.");                                                                            \
-    target->ptr += diff;                                                                                                                                                    \
+    _C_CUSTOM_ASSERT(target->_ptr + diff < target->_str->last, "Cannot increment end iterator.");                                                                           \
+    target->_ptr += diff;                                                                                                                                                   \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(BASIC_STRING_ITERATOR_NAME, increment_by)(BASIC_STRING_ITERATOR_NAME* target, ptrdiff_t diff)                                                  \
@@ -196,8 +204,8 @@ static BASIC_STRING_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_ITERATOR_NAME, i
 static void _C_PUBLIC_MEMBER(BASIC_STRING_CONST_ITERATOR_NAME, pre_decrement)(BASIC_STRING_CONST_ITERATOR_NAME* target)                                                     \
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
-    _C_CUSTOM_ASSERT(target->ptr > target->bstr->first, "Cannot decrement begin iterator.");                                                                                \
-    --target->ptr;                                                                                                                                                          \
+    _C_CUSTOM_ASSERT(target->_ptr > target->_str->first, "Cannot decrement begin iterator.");                                                                               \
+    --target->_ptr;                                                                                                                                                         \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(BASIC_STRING_ITERATOR_NAME, pre_decrement)(BASIC_STRING_ITERATOR_NAME* target)                                                                 \
@@ -220,8 +228,8 @@ static BASIC_STRING_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_ITERATOR_NAME, p
 static void _C_PUBLIC_MEMBER(BASIC_STRING_CONST_ITERATOR_NAME, decrement_by)(BASIC_STRING_CONST_ITERATOR_NAME* target, ptrdiff_t diff)                                      \
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
-    _C_CUSTOM_ASSERT(target->ptr + diff > target->bstr->first, "Cannot decrement begin iterator.");                                                                         \
-    target->ptr -= diff;                                                                                                                                                    \
+    _C_CUSTOM_ASSERT(target->_ptr + diff > target->_str->first, "Cannot decrement begin iterator.");                                                                        \
+    target->_ptr -= diff;                                                                                                                                                   \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(BASIC_STRING_ITERATOR_NAME, decrement_by)(BASIC_STRING_ITERATOR_NAME* target, ptrdiff_t diff)                                                  \
@@ -244,8 +252,8 @@ static BASIC_STRING_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_ITERATOR_NAME, d
 static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_CONST_ITERATOR_NAME, dereference)(BASIC_STRING_CONST_ITERATOR_NAME* target)                                           \
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
-    _C_CUSTOM_ASSERT(target->ptr < target->bstr->last, "Cannot dereference end iterator.");                                                                                 \
-    return target->ptr;                                                                                                                                                     \
+    _C_CUSTOM_ASSERT(target->_ptr < target->_str->last, "Cannot dereference end iterator.");                                                                                \
+    return target->_ptr;                                                                                                                                                    \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
 static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_ITERATOR_NAME, dereference)(BASIC_STRING_ITERATOR_NAME* target)                                                             \
