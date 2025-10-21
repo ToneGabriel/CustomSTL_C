@@ -219,7 +219,7 @@ static VECTOR_ITERATOR_NAME _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, post_decremen
 static void _C_PUBLIC_MEMBER(VECTOR_CONST_ITERATOR_NAME, decrement_by)(VECTOR_CONST_ITERATOR_NAME* target, ptrdiff_t diff)                             \
 {                                                                                                                                                      \
     _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                                       \
-    _C_CUSTOM_ASSERT(target->_ptr + diff > target->_vec->_first, "Cannot decrement begin iterator.");                                                  \
+    _C_CUSTOM_ASSERT(target->_ptr - diff > target->_vec->_first, "Cannot decrement begin iterator.");                                                  \
     target->_ptr -= diff;                                                                                                                              \
 }                                                                                                                                                      \
                                                                                                                                                        \
