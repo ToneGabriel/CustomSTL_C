@@ -33,9 +33,9 @@ void test_default_create()
 
 void test_copy()
 {
-    String_insert(&g_customStringInstance);
-    String_insert(&g_customStringInstance);
-    String_insert(&g_customStringInstance);
+    String_push_back(&g_customStringInstance, 'a');
+    String_push_back(&g_customStringInstance, 'b');
+    String_push_back(&g_customStringInstance, 'c');
 
     String other = String_create();
     TEST_ASSERT_FALSE_MESSAGE(String_equals(&other, &g_customStringInstance), "Other queue should NOT be equal to original");
@@ -48,9 +48,9 @@ void test_copy()
 
 void test_move()
 {
-    String_insert(&g_customStringInstance);
-    String_insert(&g_customStringInstance);
-    String_insert(&g_customStringInstance);
+    String_push_back(&g_customStringInstance, 'a');
+    String_push_back(&g_customStringInstance, 'b');
+    String_push_back(&g_customStringInstance, 'c');
 
     String original_copy = String_create();
     String_copy(&original_copy, &g_customStringInstance);

@@ -39,6 +39,7 @@ typedef struct                                                                  
     const VECTOR_NAME* _vec;                                                                                                                           \
 } VECTOR_CONST_ITERATOR_NAME, VECTOR_ITERATOR_NAME;                                                                                                    \
                                                                                                                                                        \
+/* Core Operations */                                                                                                                                  \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_CONST_ITERATOR_NAME);                                                                                  \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_ITERATOR_NAME);                                                                                        \
                                                                                                                                                        \
@@ -54,6 +55,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(VECTOR_ITERATOR_NAME);                   
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_CONST_ITERATOR_NAME);                                                                                  \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_ITERATOR_NAME);                                                                                        \
                                                                                                                                                        \
+/* Iteration */                                                                                                                                        \
 static void                         _C_PUBLIC_MEMBER(VECTOR_CONST_ITERATOR_NAME, pre_increment)(VECTOR_CONST_ITERATOR_NAME* target);                   \
 static void                         _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, pre_increment)(VECTOR_ITERATOR_NAME* target);                               \
                                                                                                                                                        \
@@ -78,6 +80,7 @@ static void                         _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decre
 static VECTOR_CONST_ITERATOR_NAME   _C_PUBLIC_MEMBER(VECTOR_CONST_ITERATOR_NAME, decrement)(VECTOR_CONST_ITERATOR_NAME* target, ptrdiff_t diff);       \
 static VECTOR_ITERATOR_NAME         _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, decrement)(VECTOR_ITERATOR_NAME* target, ptrdiff_t diff);                   \
                                                                                                                                                        \
+/* Element Access */                                                                                                                                   \
 static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_CONST_ITERATOR_NAME, dereference)(VECTOR_CONST_ITERATOR_NAME* target);                     \
 static TYPE*                        _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, dereference)(VECTOR_ITERATOR_NAME* target);                                 \
                                                                                                                                                        \
@@ -269,6 +272,7 @@ static TYPE* _C_PUBLIC_MEMBER(VECTOR_ITERATOR_NAME, dereference)(VECTOR_ITERATOR
     TYPE                                                                                                                                    \
 )                                                                                                                                           \
                                                                                                                                             \
+/* Core Operations */                                                                                                                       \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_NAME);                                                                                      \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME);                                                                                     \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(VECTOR_NAME);                                                                                        \
@@ -276,16 +280,22 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(VECTOR_NAME);                            
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_NAME);                                                                                      \
                                                                                                                                             \
 static VECTOR_NAME                  _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(size_t capacity);                                        \
-static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, clear)(VECTOR_NAME* target);                                              \
+                                                                                                                                            \
+/* Capacity */                                                                                                                              \
 static size_t                       _C_PUBLIC_MEMBER(VECTOR_NAME, size)(const VECTOR_NAME* target);                                         \
 static size_t                       _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(const VECTOR_NAME* target);                                     \
 static bool                         _C_PUBLIC_MEMBER(VECTOR_NAME, empty)(const VECTOR_NAME* target);                                        \
-static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, realloc)(VECTOR_NAME* target, size_t capacity);                           \
-static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, realloc_copy)(VECTOR_NAME* target, size_t capacity, const TYPE* item);    \
+                                                                                                                                            \
+/* Modifiers */                                                                                                                             \
+static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, clear)(VECTOR_NAME* target);                                              \
 static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME* target);                                          \
 static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_copy)(VECTOR_NAME* target, const TYPE* item);                   \
 static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_move)(VECTOR_NAME* target, TYPE* item);                         \
 static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, pop_back)(VECTOR_NAME* target);                                           \
+static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, realloc)(VECTOR_NAME* target, size_t capacity);                           \
+static void                         _C_PUBLIC_MEMBER(VECTOR_NAME, realloc_copy)(VECTOR_NAME* target, size_t capacity, const TYPE* item);    \
+                                                                                                                                            \
+/* Element Access */                                                                                                                        \
 static TYPE*                        _C_PUBLIC_MEMBER(VECTOR_NAME, data)(VECTOR_NAME* target);                                               \
 static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, cdata)(const VECTOR_NAME* target);                                        \
 static TYPE*                        _C_PUBLIC_MEMBER(VECTOR_NAME, element_front)(VECTOR_NAME* target);                                      \
@@ -294,6 +304,8 @@ static TYPE*                        _C_PUBLIC_MEMBER(VECTOR_NAME, element_back)(
 static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, celement_back)(const VECTOR_NAME* target);                                \
 static TYPE*                        _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* target, size_t index);                           \
 static const TYPE*                  _C_PUBLIC_MEMBER(VECTOR_NAME, celement_at)(const VECTOR_NAME* target, size_t index);                    \
+                                                                                                                                            \
+/* Iterators */                                                                                                                             \
 static VECTOR_CONST_ITERATOR_NAME   _C_PUBLIC_MEMBER(VECTOR_NAME, cbegin)(const VECTOR_NAME* target);                                       \
 static VECTOR_CONST_ITERATOR_NAME   _C_PUBLIC_MEMBER(VECTOR_NAME, cend)(const VECTOR_NAME* target);                                         \
 static VECTOR_ITERATOR_NAME         _C_PUBLIC_MEMBER(VECTOR_NAME, begin)(VECTOR_NAME* target);                                              \

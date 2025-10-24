@@ -289,184 +289,222 @@ static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_ITERATOR_NAME, dereference)(BASI
 // Basic String Implementation
 // ======================================================================================================================================================
 
-#define _DEFINE_BASIC_STRING_IMPL(                                                                                                              \
-    BASIC_STRING_NAME,                                                                                                                          \
-    BASIC_STRING_CONST_ITERATOR_NAME,                                                                                                           \
-    BASIC_STRING_ITERATOR_NAME,                                                                                                                 \
-    CHAR_TYPE_TRAITS_NAME,                                                                                                                      \
-    CHAR_TYPE                                                                                                                                   \
-)                                                                                                                                               \
-                                                                                                                                                \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(BASIC_STRING_NAME);                                                                                    \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(BASIC_STRING_NAME);                                                                                   \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(BASIC_STRING_NAME);                                                                                      \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(BASIC_STRING_NAME);                                                                                      \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(BASIC_STRING_NAME);                                                                                    \
-                                                                                                                                                \
-static BASIC_STRING_NAME                    _C_PUBLIC_MEMBER(BASIC_STRING_NAME, create_capacity)(size_t capacity);                              \
-static void                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, clear)(BASIC_STRING_NAME* target);                              \
-static size_t                               _C_PUBLIC_MEMBER(BASIC_STRING_NAME, size)(const BASIC_STRING_NAME* target);                         \
-static size_t                               _C_PUBLIC_MEMBER(BASIC_STRING_NAME, capacity)(const BASIC_STRING_NAME* target);                     \
-static bool                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, empty)(const BASIC_STRING_NAME* target);                        \
-static void                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, push_back)(BASIC_STRING_NAME* target, CHAR_TYPE chr);           \
-static void                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, pop_back)(BASIC_STRING_NAME* target);                           \
-static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, data)(BASIC_STRING_NAME* target);                               \
-static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cdata)(const BASIC_STRING_NAME* target);                        \
-static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_front)(BASIC_STRING_NAME* target);                      \
-static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_front)(const BASIC_STRING_NAME* target);               \
-static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_back)(BASIC_STRING_NAME* target);                       \
-static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_back)(const BASIC_STRING_NAME* target);                \
-static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_at)(BASIC_STRING_NAME* target, size_t index);           \
-static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_at)(const BASIC_STRING_NAME* target, size_t index);    \
-static BASIC_STRING_CONST_ITERATOR_NAME     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cbegin)(const BASIC_STRING_NAME* target);                       \
-static BASIC_STRING_CONST_ITERATOR_NAME     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cend)(const BASIC_STRING_NAME* target);                         \
-static BASIC_STRING_ITERATOR_NAME           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, begin)(BASIC_STRING_NAME* target);                              \
-static BASIC_STRING_ITERATOR_NAME           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, end)(BASIC_STRING_NAME* target);                                \
-                                                                                                                                                \
-static void                                 _C_PRIVATE_MEMBER(BASIC_STRING_NAME, realloc_if_full)(BASIC_STRING_NAME* target);                   \
-                                                                                                                                                \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(BASIC_STRING_NAME)                                                                                     \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return (BASIC_STRING_NAME){};                                                                                                               \
-}                                                                                                                                               \
-                                                                                                                                                \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(BASIC_STRING_NAME)                                                                                    \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-}                                                                                                                                               \
-                                                                                                                                                \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(BASIC_STRING_NAME)                                                                                       \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-}                                                                                                                                               \
-                                                                                                                                                \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(BASIC_STRING_NAME)                                                                                       \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-}                                                                                                                                               \
-                                                                                                                                                \
-DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(BASIC_STRING_NAME)                                                                                     \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return false;                                                                                                                               \
-}                                                                                                                                               \
-                                                                                                                                                \
-static BASIC_STRING_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, create_capacity)(size_t capacity)                                                  \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return (BASIC_STRING_NAME){};                                                                                                               \
-}                                                                                                                                               \
-                                                                                                                                                \
-static void _C_PUBLIC_MEMBER(BASIC_STRING_NAME, clear)(BASIC_STRING_NAME* target)                                                               \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-}                                                                                                                                               \
-                                                                                                                                                \
-static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, size)(const BASIC_STRING_NAME* target)                                                        \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return 0;                                                                                                                                   \
-}                                                                                                                                               \
-                                                                                                                                                \
-static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, capacity)(const BASIC_STRING_NAME* target)                                                    \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return 0;                                                                                                                                   \
-}                                                                                                                                               \
-                                                                                                                                                \
-static bool _C_PUBLIC_MEMBER(BASIC_STRING_NAME, empty)(const BASIC_STRING_NAME* target)                                                         \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return false;                                                                                                                               \
-}                                                                                                                                               \
-                                                                                                                                                \
-static void _C_PUBLIC_MEMBER(BASIC_STRING_NAME, push_back)(BASIC_STRING_NAME* target, CHAR_TYPE chr)                                            \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-}                                                                                                                                               \
-                                                                                                                                                \
-static void _C_PUBLIC_MEMBER(BASIC_STRING_NAME, pop_back)(BASIC_STRING_NAME* target)                                                            \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-}                                                                                                                                               \
-                                                                                                                                                \
-static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, data)(BASIC_STRING_NAME* target)                                                          \
-{                                                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                         \
-    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target);   /* defined in SSO data section */                                           \
-}                                                                                                                                               \
-                                                                                                                                                \
-static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cdata)(const BASIC_STRING_NAME* target)                                             \
-{                                                                                                                                               \
-    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                         \
-    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target);  /* defined in SSO data section */                                           \
-}                                                                                                                                               \
-                                                                                                                                                \
-static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_front)(BASIC_STRING_NAME* target)                                                 \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return NULL;                                                                                                                                \
-}                                                                                                                                               \
-                                                                                                                                                \
-static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_front)(const BASIC_STRING_NAME* target)                                    \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return NULL;                                                                                                                                \
-}                                                                                                                                               \
-                                                                                                                                                \
-static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_back)(BASIC_STRING_NAME* target)                                                  \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return NULL;                                                                                                                                \
-}                                                                                                                                               \
-                                                                                                                                                \
-static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_back)(const BASIC_STRING_NAME* target)                                     \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return NULL;                                                                                                                                \
-}                                                                                                                                               \
-                                                                                                                                                \
-static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_at)(BASIC_STRING_NAME* target, size_t index)                                      \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return NULL;                                                                                                                                \
-}                                                                                                                                               \
-                                                                                                                                                \
-static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_at)(const BASIC_STRING_NAME* target, size_t index)                         \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return NULL;                                                                                                                                \
-}                                                                                                                                               \
-                                                                                                                                                \
-static BASIC_STRING_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cbegin)(const BASIC_STRING_NAME* target)                            \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return (BASIC_STRING_CONST_ITERATOR_NAME){};                                                                                                \
-}                                                                                                                                               \
-                                                                                                                                                \
-static BASIC_STRING_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cend)(const BASIC_STRING_NAME* target)                              \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return (BASIC_STRING_CONST_ITERATOR_NAME){};                                                                                                \
-}                                                                                                                                               \
-                                                                                                                                                \
-static BASIC_STRING_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, begin)(BASIC_STRING_NAME* target)                                         \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return (BASIC_STRING_ITERATOR_NAME){};                                                                                                      \
-}                                                                                                                                               \
-                                                                                                                                                \
-static BASIC_STRING_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, end)(BASIC_STRING_NAME* target)                                           \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-    return (BASIC_STRING_ITERATOR_NAME){};                                                                                                      \
-}                                                                                                                                               \
-                                                                                                                                                \
-static void _C_PRIVATE_MEMBER(BASIC_STRING_NAME, realloc_if_full)(BASIC_STRING_NAME* target)                                                    \
-{                                                                                                                                               \
-    /* TODO */                                                                                                                                  \
-}                                                                                                                                               \
+#define _DEFINE_BASIC_STRING_IMPL(                                                                                                                                                                                       \
+    BASIC_STRING_NAME,                                                                                                                                                                                                   \
+    BASIC_STRING_CONST_ITERATOR_NAME,                                                                                                                                                                                    \
+    BASIC_STRING_ITERATOR_NAME,                                                                                                                                                                                          \
+    CHAR_TYPE_TRAITS_NAME,                                                                                                                                                                                               \
+    CHAR_TYPE                                                                                                                                                                                                            \
+)                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(BASIC_STRING_NAME);                                                                                                                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(BASIC_STRING_NAME);                                                                                                                                                            \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(BASIC_STRING_NAME);                                                                                                                                                               \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(BASIC_STRING_NAME);                                                                                                                                                               \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(BASIC_STRING_NAME);                                                                                                                                                             \
+                                                                                                                                                                                                                         \
+static BASIC_STRING_NAME                    _C_PUBLIC_MEMBER(BASIC_STRING_NAME, create_from_cstring)(const CHAR_TYPE* cstr);                                                                                             \
+                                                                                                                                                                                                                         \
+static size_t                               _C_PUBLIC_MEMBER(BASIC_STRING_NAME, size)(const BASIC_STRING_NAME* target);                                                                                                  \
+static size_t                               _C_PUBLIC_MEMBER(BASIC_STRING_NAME, capacity)(const BASIC_STRING_NAME* target);                                                                                              \
+static bool                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, empty)(const BASIC_STRING_NAME* target);                                                                                                 \
+                                                                                                                                                                                                                         \
+static void                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, clear)(BASIC_STRING_NAME* target);                                                                                                       \
+static void                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, push_back)(BASIC_STRING_NAME* target, CHAR_TYPE chr);                                                                                    \
+static void                                 _C_PUBLIC_MEMBER(BASIC_STRING_NAME, pop_back)(BASIC_STRING_NAME* target);                                                                                                    \
+                                                                                                                                                                                                                         \
+static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, data)(BASIC_STRING_NAME* target);                                                                                                        \
+static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cdata)(const BASIC_STRING_NAME* target);                                                                                                 \
+static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_front)(BASIC_STRING_NAME* target);                                                                                               \
+static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_front)(const BASIC_STRING_NAME* target);                                                                                        \
+static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_back)(BASIC_STRING_NAME* target);                                                                                                \
+static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_back)(const BASIC_STRING_NAME* target);                                                                                         \
+static CHAR_TYPE*                           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_at)(BASIC_STRING_NAME* target, size_t index);                                                                                    \
+static const CHAR_TYPE*                     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_at)(const BASIC_STRING_NAME* target, size_t index);                                                                             \
+                                                                                                                                                                                                                         \
+static BASIC_STRING_CONST_ITERATOR_NAME     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cbegin)(const BASIC_STRING_NAME* target);                                                                                                \
+static BASIC_STRING_CONST_ITERATOR_NAME     _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cend)(const BASIC_STRING_NAME* target);                                                                                                  \
+static BASIC_STRING_ITERATOR_NAME           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, begin)(BASIC_STRING_NAME* target);                                                                                                       \
+static BASIC_STRING_ITERATOR_NAME           _C_PUBLIC_MEMBER(BASIC_STRING_NAME, end)(BASIC_STRING_NAME* target);                                                                                                         \
+                                                                                                                                                                                                                         \
+static BASIC_STRING_NAME                    _C_PUBLIC_MEMBER(BASIC_STRING_NAME, substr)(BASIC_STRING_NAME* target, size_t pos, size_t len);                                                                              \
+                                                                                                                                                                                                                         \
+static void                                 _C_PRIVATE_MEMBER(BASIC_STRING_NAME, realloc_if_full)(BASIC_STRING_NAME* target);                                                                                            \
+static void                                 _C_PRIVATE_MEMBER(BASIC_STRING_NAME, init_from_cstring)(BASIC_STRING_NAME* target, const CHAR_TYPE* cstr);                                                                   \
+static int                                  _C_PRIVATE_MEMBER(BASIC_STRING_NAME, compare_with_cstring)(const BASIC_STRING_NAME* target, size_t pos, size_t len, const CHAR_TYPE* cstr, size_t subpos, size_t sublen);    \
+                                                                                                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(BASIC_STRING_NAME)                                                                                                                                                              \
+{                                                                                                                                                                                                                        \
+    BASIC_STRING_NAME ret = {};                                                                                                                                                                                          \
+    _C_PRIVATE_MEMBER(BASIC_STRING_NAME, init_from_cstring)(&ret, NULL);                                                                                                                                                 \
+    return ret;                                                                                                                                                                                                          \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(BASIC_STRING_NAME)                                                                                                                                                             \
+{                                                                                                                                                                                                                        \
+    /* TODO */                                                                                                                                                                                                           \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(BASIC_STRING_NAME)                                                                                                                                                                \
+{                                                                                                                                                                                                                        \
+    /* TODO */                                                                                                                                                                                                           \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(BASIC_STRING_NAME)                                                                                                                                                                \
+{                                                                                                                                                                                                                        \
+    /* TODO */                                                                                                                                                                                                           \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(BASIC_STRING_NAME)                                                                                                                                                              \
+{                                                                                                                                                                                                                        \
+    /* TODO */                                                                                                                                                                                                           \
+    return false;                                                                                                                                                                                                        \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static BASIC_STRING_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, create_from_cstring)(const CHAR_TYPE* cstr)                                                                                                                 \
+{                                                                                                                                                                                                                        \
+    BASIC_STRING_NAME ret = {};                                                                                                                                                                                          \
+    _C_PRIVATE_MEMBER(BASIC_STRING_NAME, init_from_cstring)(&ret, cstr);                                                                                                                                                 \
+    return ret;                                                                                                                                                                                                          \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static void _C_PUBLIC_MEMBER(BASIC_STRING_NAME, clear)(BASIC_STRING_NAME* target)                                                                                                                                        \
+{                                                                                                                                                                                                                        \
+    /* TODO */                                                                                                                                                                                                           \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, size)(const BASIC_STRING_NAME* target)                                                                                                                                 \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    return target->_size;                                                                                                                                                                                                \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, capacity)(const BASIC_STRING_NAME* target)                                                                                                                             \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    return target->_capacity;                                                                                                                                                                                            \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static bool _C_PUBLIC_MEMBER(BASIC_STRING_NAME, empty)(const BASIC_STRING_NAME* target)                                                                                                                                  \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    return 0 == target->_size;                                                                                                                                                                                           \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static void _C_PUBLIC_MEMBER(BASIC_STRING_NAME, push_back)(BASIC_STRING_NAME* target, CHAR_TYPE chr)                                                                                                                     \
+{                                                                                                                                                                                                                        \
+    /* TODO */                                                                                                                                                                                                           \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static void _C_PUBLIC_MEMBER(BASIC_STRING_NAME, pop_back)(BASIC_STRING_NAME* target)                                                                                                                                     \
+{                                                                                                                                                                                                                        \
+    /* TODO */                                                                                                                                                                                                           \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, data)(BASIC_STRING_NAME* target)                                                                                                                                   \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target);   /* defined in SSO data section */                                                                                                                    \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cdata)(const BASIC_STRING_NAME* target)                                                                                                                      \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target);  /* defined in SSO data section */                                                                                                                    \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_front)(BASIC_STRING_NAME* target)                                                                                                                          \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target);   /* defined in SSO data section */                                                                                                                    \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_front)(const BASIC_STRING_NAME* target)                                                                                                             \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target);   /* defined in SSO data section */                                                                                                                   \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_back)(BASIC_STRING_NAME* target)                                                                                                                           \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target) + target->_size;   /* defined in SSO data section */                                                                                                    \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_back)(const BASIC_STRING_NAME* target)                                                                                                              \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target) + target->_size;   /* defined in SSO data section */                                                                                                   \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_at)(BASIC_STRING_NAME* target, size_t index)                                                                                                               \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    _C_CUSTOM_ASSERT(index < target->_size, "Index out of bounds");                                                                                                                                                      \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target) + index;   /* defined in SSO data section */                                                                                                            \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_at)(const BASIC_STRING_NAME* target, size_t index)                                                                                                  \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+    _C_CUSTOM_ASSERT(index < target->_size, "Index out of bounds");                                                                                                                                                      \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target) + index;   /* defined in SSO data section */                                                                                                           \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static BASIC_STRING_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cbegin)(const BASIC_STRING_NAME* target)                                                                                                     \
+{                                                                                                                                                                                                                        \
+    return (BASIC_STRING_CONST_ITERATOR_NAME){                                                                                                                                                                           \
+        ._ptr = (CHAR_TYPE*)_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target),                                                                                                                                      \
+        ._str = target                                                                                                                                                                                                   \
+    };                                                                                                                                                                                                                   \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static BASIC_STRING_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cend)(const BASIC_STRING_NAME* target)                                                                                                       \
+{                                                                                                                                                                                                                        \
+    return (BASIC_STRING_CONST_ITERATOR_NAME){                                                                                                                                                                           \
+        ._ptr = (CHAR_TYPE*)_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target) + target->_size + 1,                                                                                                                  \
+        ._str = target                                                                                                                                                                                                   \
+    };                                                                                                                                                                                                                   \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static BASIC_STRING_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, begin)(BASIC_STRING_NAME* target)                                                                                                                  \
+{                                                                                                                                                                                                                        \
+    return (BASIC_STRING_ITERATOR_NAME){                                                                                                                                                                                 \
+        ._ptr = _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target),                                                                                                                                                   \
+        ._str = target                                                                                                                                                                                                   \
+    };                                                                                                                                                                                                                   \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static BASIC_STRING_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, end)(BASIC_STRING_NAME* target)                                                                                                                    \
+{                                                                                                                                                                                                                        \
+    return (BASIC_STRING_ITERATOR_NAME){                                                                                                                                                                                 \
+        ._ptr = _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target) + target->_size + 1,                                                                                                                               \
+        ._str = target                                                                                                                                                                                                   \
+    };                                                                                                                                                                                                                   \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static void _C_PRIVATE_MEMBER(BASIC_STRING_NAME, realloc_if_full)(BASIC_STRING_NAME* target)                                                                                                                             \
+{                                                                                                                                                                                                                        \
+    /* TODO */                                                                                                                                                                                                           \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static void _C_PRIVATE_MEMBER(BASIC_STRING_NAME, init_from_cstring)(BASIC_STRING_NAME* target, const CHAR_TYPE* cstr)                                                                                                    \
+{                                                                                                                                                                                                                        \
+    /* TODO */                                                                                                                                                                                                           \
+    if (NULL == cstr)                                                                                                                                                                                                    \
+        NULL;                                                                                                                                                                                                            \
+    else                                                                                                                                                                                                                 \
+    {                                                                                                                                                                                                                    \
+        size_t len = _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, length)(cstr);                                                                                                                                              \
+    }                                                                                                                                                                                                                    \
+}                                                                                                                                                                                                                        \
+                                                                                                                                                                                                                         \
+static int _C_PRIVATE_MEMBER(BASIC_STRING_NAME, compare_with_cstring)(const BASIC_STRING_NAME* target, size_t pos, size_t len, const CHAR_TYPE* cstr, size_t subpos, size_t sublen)                                      \
+{                                                                                                                                                                                                                        \
+    _C_CUSTOM_ASSERT(   pos + len <= _C_PUBLIC_MEMBER(BASIC_STRING_NAME, size)(target) &&                                                                                                                                \
+                        subpos + sublen <= _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, length)(cstr), "String invalid length or starting position");                                                                         \
+    return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, substr_compare)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), pos, len, cstr, subpos, sublen);                                                              \
+}                                                                                                                                                                                                                        \
 
 
 // ======================================================================================================================================================
