@@ -62,6 +62,9 @@ static const CHAR_TYPE* _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, assign)(CHAR_T
                                                                                                                                                                                             \
 static int _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, substr_compare)(const CHAR_TYPE* str1, size_t pos1, size_t len1, const CHAR_TYPE* str2, size_t pos2, size_t len2)                      \
 {                                                                                                                                                                                           \
+    _C_CUSTOM_ASSERT(   pos1 + len1 <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str1) &&                                                                                           \
+                        pos2 + len2 <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str2),                                                                                             \
+                        "Char Traits invalid length or starting position");                                                                                                                 \
     if (len1 != len2) return len1 - len2;                                                                                                                                                   \
 	return _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(str1 + pos1, str2 + pos2, len1);  /* same length */                                                                           \
 }                                                                                                                                                                                           \
@@ -69,6 +72,9 @@ static int _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, substr_compare)(const CHAR_
 static size_t _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, substr_find)(const CHAR_TYPE* str1, const CHAR_TYPE* str2, size_t pos, size_t len)                                                  \
 {                                                                                                                                                                                           \
     /* search in [str1 + pos, end) the string [str2, str2 + len] */                                                                                                                         \
+    _C_CUSTOM_ASSERT(   pos <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str1) &&                                                                                                   \
+                        len <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str2),                                                                                                     \
+                        "Char Traits invalid length or starting position");                                                                                                                 \
     size_t last_substr_pos = _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str1) - len;                                                                                                 \
 	for (size_t i = pos; i <= last_substr_pos; ++i)                                                                                                                                         \
 		if (_C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(str1 + i, str2, len) == 0) return i;                                                                                         \
@@ -78,6 +84,9 @@ static size_t _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, substr_find)(const CHAR_
 static size_t _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, substr_rfind)(const CHAR_TYPE* str1, const CHAR_TYPE* str2, size_t pos, size_t len)                                                 \
 {                                                                                                                                                                                           \
 	/* search in [str1, str1 + pos) the string [str2, str2 + len] from right to left */                                                                                                     \
+    _C_CUSTOM_ASSERT(   pos <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str1) &&                                                                                                   \
+                        len <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str2),                                                                                                     \
+                        "Char Traits invalid length or starting position");                                                                                                                 \
     size_t len1 = _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str1);                                                                                                                  \
 	size_t last_substr_pos 	= (pos > len1) ? len1 - len : pos;                                                                                                                              \
 	for (size_t i = last_substr_pos; i > 0; --i)                                                                                                                                            \
