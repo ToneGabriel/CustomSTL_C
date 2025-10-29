@@ -2,8 +2,7 @@
 #define _C_BASIC_STRING_H
 
 
-#include "custom/c_utility.h"
-#include "custom/_c_char_traits.h"
+#include "custom/_c_basic_string_view.h"
 
 
 // ======================================================================================================================================================
