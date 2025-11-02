@@ -159,20 +159,40 @@ static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_CONST_ITERATOR_NAME, 
 // Basic String View Implementation
 // ======================================================================================================================================================
 
-#define _DEFINE_BASIC_STRING_VIEW_IMPL(       \
-    BASIC_STRING_VIEW_NAME,                   \
-    BASIC_STRING_VIEW_CONST_ITERATOR_NAME,    \
-    CHAR_TYPE_TRAITS_NAME,                    \
-    CHAR_TYPE                                 \
-)                                             \
-
-/* TODO */
-
-// ======================================================================================================================================================
-// Basic String View COMPLETE Definition
-// ======================================================================================================================================================
-
-/* TODO */
+#define _DEFINE_BASIC_STRING_VIEW_IMPL(                                                                                                                       \
+    BASIC_STRING_VIEW_NAME,                                                                                                                                   \
+    BASIC_STRING_VIEW_CONST_ITERATOR_NAME,                                                                                                                    \
+    CHAR_TYPE_TRAITS_NAME,                                                                                                                                    \
+    CHAR_TYPE                                                                                                                                                 \
+)                                                                                                                                                             \
+                                                                                                                                                              \
+/* Core Operations */                                                                                                                                         \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(BASIC_STRING_VIEW_NAME);                                                                                             \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(BASIC_STRING_VIEW_NAME);                                                                                            \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(BASIC_STRING_VIEW_NAME);                                                                                               \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(BASIC_STRING_VIEW_NAME);                                                                                               \
+DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(BASIC_STRING_VIEW_NAME);                                                                                             \
+                                                                                                                                                              \
+/* Capacity */                                                                                                                                                \
+static size_t                                   _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, size)(const BASIC_STRING_VIEW_NAME* target);                         \
+static bool                                     _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, empty)(const BASIC_STRING_VIEW_NAME* target);                        \
+                                                                                                                                                              \
+/* Element Access */                                                                                                                                          \
+static CHAR_TYPE*                               _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, data)(BASIC_STRING_VIEW_NAME* target);                               \
+static const CHAR_TYPE*                         _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, cdata)(const BASIC_STRING_VIEW_NAME* target);                        \
+static CHAR_TYPE*                               _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, element_front)(BASIC_STRING_VIEW_NAME* target);                      \
+static const CHAR_TYPE*                         _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, celement_front)(const BASIC_STRING_VIEW_NAME* target);               \
+static CHAR_TYPE*                               _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, element_back)(BASIC_STRING_VIEW_NAME* target);                       \
+static const CHAR_TYPE*                         _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, celement_back)(const BASIC_STRING_VIEW_NAME* target);                \
+static CHAR_TYPE*                               _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, element_at)(BASIC_STRING_VIEW_NAME* target, size_t index);           \
+static const CHAR_TYPE*                         _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, celement_at)(const BASIC_STRING_VIEW_NAME* target, size_t index);    \
+                                                                                                                                                              \
+/* Iterators */                                                                                                                                               \
+static BASIC_STRING_VIEW_CONST_ITERATOR_NAME    _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, cbegin)(const BASIC_STRING_VIEW_NAME* target);                       \
+static BASIC_STRING_VIEW_CONST_ITERATOR_NAME    _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, cend)(const BASIC_STRING_VIEW_NAME* target);                         \
+                                                                                                                                                              \
+/* Substring */                                                                                                                                               \
+static BASIC_STRING_VIEW_NAME                    _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_NAME, substr)(BASIC_STRING_VIEW_NAME* target, size_t pos, size_t len);    \
 
 
 #endif  // _C_BASIC_STRING_VIEW_H

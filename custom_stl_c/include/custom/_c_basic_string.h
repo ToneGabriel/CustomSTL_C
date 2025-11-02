@@ -6,10 +6,10 @@
 
 
 // ======================================================================================================================================================
-// SSO Data
+// Basic String Data
 // ======================================================================================================================================================
 
-#define _DEFINE_GENERIC_SSO_DATA(                                                                                                     \
+#define _DEFINE_GENERIC_BASIC_STRING_DATA(                                                                                            \
     BASIC_STRING_NAME,                                                                                                                \
     CHAR_TYPE                                                                                                                         \
 )                                                                                                                                     \
@@ -444,51 +444,51 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_NAME, pop_back)(BASIC_STRING_NAME* tar
 static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, data)(BASIC_STRING_NAME* target)                                                                                                                                   \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
-    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target);   /* defined in SSO data section */                                                                                                                    \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target);                                                                                                                                                        \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cdata)(const BASIC_STRING_NAME* target)                                                                                                                      \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
-    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target);  /* defined in SSO data section */                                                                                                                    \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target);                                                                                                                                                       \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_front)(BASIC_STRING_NAME* target)                                                                                                                          \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
-    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target);   /* defined in SSO data section */                                                                                                                    \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target);                                                                                                                                                        \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_front)(const BASIC_STRING_NAME* target)                                                                                                             \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
-    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target);   /* defined in SSO data section */                                                                                                                   \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target);                                                                                                                                                       \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_back)(BASIC_STRING_NAME* target)                                                                                                                           \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
-    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target) + target->_size;   /* defined in SSO data section */                                                                                                    \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target) + target->_size;                                                                                                                                        \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_back)(const BASIC_STRING_NAME* target)                                                                                                              \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
-    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target) + target->_size;   /* defined in SSO data section */                                                                                                   \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target) + target->_size;                                                                                                                                       \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_at)(BASIC_STRING_NAME* target, size_t index)                                                                                                               \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
     _C_CUSTOM_ASSERT(index < target->_size, "Index out of bounds");                                                                                                                                                      \
-    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target) + index;   /* defined in SSO data section */                                                                                                            \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target) + index;                                                                                                                                                \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_at)(const BASIC_STRING_NAME* target, size_t index)                                                                                                  \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
     _C_CUSTOM_ASSERT(index < target->_size, "Index out of bounds");                                                                                                                                                      \
-    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target) + index;   /* defined in SSO data section */                                                                                                           \
+    return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target) + index;                                                                                                                                               \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static BASIC_STRING_CONST_ITERATOR_NAME _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cbegin)(const BASIC_STRING_NAME* target)                                                                                                     \
@@ -705,20 +705,45 @@ static void _C_PRIVATE_MEMBER(BASIC_STRING_NAME, init_from_cstring)(BASIC_STRING
 
 /**
  * @brief Public macro to define a generic basic string and iterators for a given char type with all required dependencies.
- * @param BASIC_STRING_PUBLIC_PREFIX    The public name prefix for generated string (e.g., `String` -> `String_create`, etc.).
- * @param CHAR_TYPE                     Char type stored in the string.
+ * @param BASIC_STRING_PUBLIC_PREFIX        The public name prefix for generated string (e.g., `String` -> `String_create`, etc.).
+ * @param BASIC_STRING_VIEW_PUBLIC_PREFIX   The public name prefix for generated string view (e.g., `StringView` -> `StringView_create`, etc.).
+ * @param CHAR_TRAITS_NAME_PREFIX           The public name prefix for generated char traits (e.g., `CharTraits` -> `CharTraits_compare`, etc.).
+ * @param CHAR_TYPE                         Char type stored in the string.
  */
 #define _DEFINE_BASIC_STRING(                                                           \
     BASIC_STRING_PUBLIC_PREFIX,                                                         \
+    BASIC_STRING_VIEW_PUBLIC_PREFIX,                                                    \
+    CHAR_TRAITS_NAME_PREFIX,                                                            \
     CHAR_TYPE                                                                           \
 )                                                                                       \
                                                                                         \
+/* Common Char Traits */                                                                \
 _DEFINE_GENERIC_CHAR_TRAITS(                                                            \
-    _C_PRIVATE_MEMBER(BASIC_STRING_PUBLIC_PREFIX, CharTraits),                          \
+    CHAR_TRAITS_NAME_PREFIX,                                                            \
     CHAR_TYPE                                                                           \
 )                                                                                       \
                                                                                         \
-_DEFINE_GENERIC_SSO_DATA(                                                               \
+/* Basic String View */                                                                 \
+_DEFINE_GENERIC_BASIC_STRING_VIEW_DATA(                                                 \
+    BASIC_STRING_VIEW_PUBLIC_PREFIX,                                                    \
+    CHAR_TYPE                                                                           \
+)                                                                                       \
+                                                                                        \
+_DEFINE_GENERIC_BASIC_STRING_VIEW_ITERATOR(                                             \
+    _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_PUBLIC_PREFIX, ConstIterator),                   \
+    BASIC_STRING_VIEW_PUBLIC_PREFIX,                                                    \
+    CHAR_TYPE                                                                           \
+)                                                                                       \
+                                                                                        \
+_DEFINE_BASIC_STRING_VIEW_IMPL(                                                         \
+    BASIC_STRING_VIEW_PUBLIC_PREFIX,                                                    \
+    _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_PUBLIC_PREFIX, ConstIterator), /*same as above*/ \
+    CHAR_TRAITS_NAME_PREFIX,                                                            \
+    CHAR_TYPE                                                                           \
+)                                                                                       \
+                                                                                        \
+/* Basic String */                                                                      \
+_DEFINE_GENERIC_BASIC_STRING_DATA(                                                      \
     BASIC_STRING_PUBLIC_PREFIX,                                                         \
     CHAR_TYPE                                                                           \
 )                                                                                       \
@@ -734,7 +759,7 @@ _DEFINE_BASIC_STRING_IMPL(                                                      
     BASIC_STRING_PUBLIC_PREFIX,                                                         \
     _C_PUBLIC_MEMBER(BASIC_STRING_PUBLIC_PREFIX, ConstIterator),    /*same as above*/   \
     _C_PUBLIC_MEMBER(BASIC_STRING_PUBLIC_PREFIX, Iterator),         /*same as above*/   \
-    _C_PRIVATE_MEMBER(BASIC_STRING_PUBLIC_PREFIX, CharTraits),      /*same as above*/   \
+    CHAR_TRAITS_NAME_PREFIX,                                                            \
     CHAR_TYPE                                                                           \
 )                                                                                       \
 
