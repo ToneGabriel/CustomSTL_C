@@ -33,6 +33,7 @@ static SINGLE_NODE_NAME* _C_IDENTIFIER_BIND(SINGLE_NODE_NAME, create_ptr)()     
 static void _C_IDENTIFIER_BIND(SINGLE_NODE_NAME, destroy_ptr)(SINGLE_NODE_NAME* node)                                   \
 {                                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != node, "Single Node is NULL");                                                              \
+                                                                                                                        \
     node->next = NULL;                                                                                                  \
     free(node);                                                                                                         \
 }                                                                                                                       \
@@ -67,6 +68,7 @@ static DOUBLE_NODE_NAME* _C_IDENTIFIER_BIND(DOUBLE_NODE_NAME, create_ptr)()     
 static void _C_IDENTIFIER_BIND(DOUBLE_NODE_NAME, destroy_ptr)(DOUBLE_NODE_NAME* node)                                   \
 {                                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != node, "Double Node is NULL");                                                              \
+                                                                                                                        \
     node->next = node->prev = NULL;                                                                                     \
     free(node);                                                                                                         \
 }                                                                                                                       \

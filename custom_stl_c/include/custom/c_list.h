@@ -92,6 +92,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_ITERATOR_NAME)                    
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_CONST_ITERATOR_NAME)                                                                  \
 {                                                                                                                                    \
     _C_CUSTOM_ASSERT(NULL != target, "List Iterator is NULL");                                                                       \
+                                                                                                                                     \
     target->_node = NULL;                                                                                                            \
     target->_list = NULL;                                                                                                            \
 }                                                                                                                                    \
@@ -105,6 +106,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(LIST_CONST_ITERATOR_NAME)                
 {                                                                                                                                    \
     _C_CUSTOM_ASSERT(NULL != dest, "List Iterator dest is NULL");                                                                    \
     _C_CUSTOM_ASSERT(NULL != source, "List Iterator source is NULL");                                                                \
+                                                                                                                                     \
     dest->_node = source->_node;                                                                                                     \
     dest->_list = source->_list;                                                                                                     \
 }                                                                                                                                    \
@@ -118,6 +120,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_CONST_ITERATOR_NAME)                
 {                                                                                                                                    \
     _C_CUSTOM_ASSERT(NULL != dest, "List Iterator dest is NULL");                                                                    \
     _C_CUSTOM_ASSERT(NULL != source, "List Iterator source is NULL");                                                                \
+                                                                                                                                     \
     dest->_node = source->_node;                                                                                                     \
     dest->_list = source->_list;                                                                                                     \
 }                                                                                                                                    \
@@ -131,6 +134,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_CONST_ITERATOR_NAME)              
 {                                                                                                                                    \
     _C_CUSTOM_ASSERT(NULL != left, "List Iterator left is NULL");                                                                    \
     _C_CUSTOM_ASSERT(NULL != right, "List Iterator right is NULL");                                                                  \
+                                                                                                                                     \
     return left->_node == right->_node;                                                                                              \
 }                                                                                                                                    \
                                                                                                                                      \
@@ -143,6 +147,7 @@ static void _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, pre_increment)(LIST_CONST
 {                                                                                                                                    \
     _C_CUSTOM_ASSERT(NULL != target, "List Iterator is NULL");                                                                       \
     _C_CUSTOM_ASSERT(target->_node != target->_list->_head, "Cannot increment end iterator.");                                       \
+                                                                                                                                     \
     target->_node = target->_node->next;                                                                                             \
 }                                                                                                                                    \
                                                                                                                                      \
@@ -167,6 +172,7 @@ static void _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, pre_decrement)(LIST_CONST
 {                                                                                                                                    \
     _C_CUSTOM_ASSERT(NULL != target, "List Iterator is NULL");                                                                       \
     _C_CUSTOM_ASSERT(target->_node != target->_list->_head->next, "Cannot decrement begin iterator.");                               \
+                                                                                                                                     \
     target->_node = target->_node->prev;                                                                                             \
 }                                                                                                                                    \
                                                                                                                                      \
@@ -191,6 +197,7 @@ static const TYPE* _C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, dereference)(LIST_
 {                                                                                                                                    \
     _C_CUSTOM_ASSERT(NULL != target, "List Iterator is NULL");                                                                       \
     _C_CUSTOM_ASSERT(target->_node != target->_list->_head, "Cannot dereference end iterator.");                                     \
+                                                                                                                                     \
     return &target->_node->value;                                                                                                    \
 }                                                                                                                                    \
                                                                                                                                      \
@@ -279,71 +286,106 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_NAME)                             
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_NAME)                                                                                                           \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
-    if (NULL == target->_head) return;                                                                                                                         \
-    _C_PUBLIC_MEMBER(LIST_NAME, clear)(target);                                                                                                                \
-    _C_PUBLIC_MEMBER(NODE_NAME, destroy_ptr)(target->_head);                                                                                                   \
-    target->_size = 0;                                                                                                                                         \
-    target->_head = NULL;                                                                                                                                      \
+                                                                                                                                                               \
+    if (NULL != target->_head)                                                                                                                                 \
+    {                                                                                                                                                          \
+        _C_PUBLIC_MEMBER(LIST_NAME, clear)(target);                                                                                                            \
+        _C_PUBLIC_MEMBER(NODE_NAME, destroy_ptr)(target->_head);                                                                                               \
+        target->_size = 0;                                                                                                                                     \
+        target->_head = NULL;                                                                                                                                  \
+    }                                                                                                                                                          \
 }                                                                                                                                                              \
                                                                                                                                                                \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(LIST_NAME)                                                                                                              \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != dest, "List dest is NULL");                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != source, "List source is NULL");                                                                                                   \
-    if (dest == source) return;                                                                                                                                \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_NAME)(dest);                                                                                                     \
-    if (NULL == source->_head) return;                                                                                                                         \
-    *dest = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_NAME)();                                                                                                  \
-    for (NODE_NAME* temp = source->_head->next; dest->_size < source->_size; temp = temp->next)                                                                \
-        _C_PUBLIC_MEMBER(LIST_NAME, push_back_copy)(dest, &temp->value);                                                                                       \
+                                                                                                                                                               \
+    if (dest != source)                                                                                                                                        \
+    {                                                                                                                                                          \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_NAME)(dest);                                                                                                 \
+                                                                                                                                                               \
+        if (NULL != source->_head)                                                                                                                             \
+        {                                                                                                                                                      \
+            *dest = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(LIST_NAME)();                                                                                          \
+            for (NODE_NAME* temp = source->_head->next; dest->_size < source->_size; temp = temp->next)                                                        \
+            {                                                                                                                                                  \
+                _C_PUBLIC_MEMBER(LIST_NAME, push_back_copy)(dest, &temp->value);                                                                               \
+            }                                                                                                                                                  \
+        }                                                                                                                                                      \
+    }                                                                                                                                                          \
 }                                                                                                                                                              \
                                                                                                                                                                \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(LIST_NAME)                                                                                                              \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != dest, "List dest is NULL");                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != source, "List source is NULL");                                                                                                   \
-    if (dest == source) return;                                                                                                                                \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_NAME)(dest);                                                                                                     \
-    if (NULL == source->_head) return;                                                                                                                         \
-    *dest = *source;                                                                                                                                           \
-    source->_size = 0;                                                                                                                                         \
-    source->_head = NULL;                                                                                                                                      \
+                                                                                                                                                               \
+    if (dest != source)                                                                                                                                        \
+    {                                                                                                                                                          \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(LIST_NAME)(dest);                                                                                                 \
+                                                                                                                                                               \
+        if (NULL != source->_head)                                                                                                                             \
+        {                                                                                                                                                      \
+            *dest = *source;                                                                                                                                   \
+            source->_size = 0;                                                                                                                                 \
+            source->_head = NULL;                                                                                                                              \
+        }                                                                                                                                                      \
+    }                                                                                                                                                          \
 }                                                                                                                                                              \
                                                                                                                                                                \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(LIST_NAME)                                                                                                            \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != left, "List left is NULL");                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != right, "List right is NULL");                                                                                                     \
-    if (left->_size != right->_size) return false;                                                                                                             \
-    NODE_NAME* currentLeft = left->_head->next;                                                                                                                \
-    NODE_NAME* currentRight = right->_head->next;                                                                                                              \
-    for (/* Empty */; currentLeft != left->_head; currentLeft = currentLeft->next, currentRight = currentRight->next)                                          \
-        if (!_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)(&currentLeft->value, &currentRight->value)) return false;                                               \
+                                                                                                                                                               \
+    if (left->_size != right->_size)                                                                                                                           \
+    {                                                                                                                                                          \
+        return false;                                                                                                                                          \
+    }                                                                                                                                                          \
+                                                                                                                                                               \
+    for (NODE_NAME  *currentLeft = left->_head->next,                                                                                                          \
+                    *currentRight = right->_head->next;                                                                                                        \
+        currentLeft != left->_head;                                                                                                                            \
+        currentLeft = currentLeft->next, currentRight = currentRight->next)                                                                                    \
+    {                                                                                                                                                          \
+        if (!_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)(&currentLeft->value, &currentRight->value))                                                             \
+        {                                                                                                                                                      \
+            return false;                                                                                                                                      \
+        }                                                                                                                                                      \
+    }                                                                                                                                                          \
+                                                                                                                                                               \
     return true;                                                                                                                                               \
 }                                                                                                                                                              \
                                                                                                                                                                \
 static void _C_PUBLIC_MEMBER(LIST_NAME, clear)(LIST_NAME* target)                                                                                              \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     while (target->_size)                                                                                                                                      \
+    {                                                                                                                                                          \
         _C_PUBLIC_MEMBER(LIST_NAME, pop_back)(target);                                                                                                         \
+    }                                                                                                                                                          \
 }                                                                                                                                                              \
                                                                                                                                                                \
 static size_t _C_PUBLIC_MEMBER(LIST_NAME, size)(const LIST_NAME* target)                                                                                       \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     return target->_size;                                                                                                                                      \
 }                                                                                                                                                              \
                                                                                                                                                                \
 static bool _C_PUBLIC_MEMBER(LIST_NAME, empty)(const LIST_NAME* target)                                                                                        \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     return 0 == target->_size;                                                                                                                                 \
 }                                                                                                                                                              \
                                                                                                                                                                \
 static void _C_PUBLIC_MEMBER(LIST_NAME, push_back)(LIST_NAME* target)                                                                                          \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     NODE_NAME* new_node = _C_PUBLIC_MEMBER(NODE_NAME, create_ptr)();                                                                                           \
     new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                                             \
     _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(target, target->_head, new_node);                                                                           \
@@ -352,24 +394,37 @@ static void _C_PUBLIC_MEMBER(LIST_NAME, push_back)(LIST_NAME* target)           
 static void _C_PUBLIC_MEMBER(LIST_NAME, push_back_copy)(LIST_NAME* target, const TYPE* item)                                                                   \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     NODE_NAME* new_node = _C_PUBLIC_MEMBER(NODE_NAME, create_ptr)();                                                                                           \
     new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                                             \
-    if (NULL != item) _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(&new_node->value, item);                                                                         \
+                                                                                                                                                               \
+    if (NULL != item)                                                                                                                                          \
+    {                                                                                                                                                          \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(&new_node->value, item);                                                                                       \
+    }                                                                                                                                                          \
+                                                                                                                                                               \
     _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(target, target->_head, new_node);                                                                           \
 }                                                                                                                                                              \
                                                                                                                                                                \
 static void _C_PUBLIC_MEMBER(LIST_NAME, push_back_move)(LIST_NAME* target, TYPE* item)                                                                         \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     NODE_NAME* new_node = _C_PUBLIC_MEMBER(NODE_NAME, create_ptr)();                                                                                           \
     new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                                             \
-    if (NULL != item) _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(&new_node->value, item);                                                                         \
+                                                                                                                                                               \
+    if (NULL != item)                                                                                                                                          \
+    {                                                                                                                                                          \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(&new_node->value, item);                                                                                       \
+    }                                                                                                                                                          \
+                                                                                                                                                               \
     _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(target, target->_head, new_node);                                                                           \
 }                                                                                                                                                              \
                                                                                                                                                                \
 static void _C_PUBLIC_MEMBER(LIST_NAME, push_front)(LIST_NAME* target)                                                                                         \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     NODE_NAME* new_node = _C_PUBLIC_MEMBER(NODE_NAME, create_ptr)();                                                                                           \
     new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                                             \
     _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(target, target->_head->next, new_node);                                                                     \
@@ -378,41 +433,61 @@ static void _C_PUBLIC_MEMBER(LIST_NAME, push_front)(LIST_NAME* target)          
 static void _C_PUBLIC_MEMBER(LIST_NAME, push_front_copy)(LIST_NAME* target, const TYPE* item)                                                                  \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     NODE_NAME* new_node = _C_PUBLIC_MEMBER(NODE_NAME, create_ptr)();                                                                                           \
     new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                                             \
-    if (NULL != item) _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(&new_node->value, item);                                                                         \
+                                                                                                                                                               \
+    if (NULL != item)                                                                                                                                          \
+    {                                                                                                                                                          \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(&new_node->value, item);                                                                                       \
+    }                                                                                                                                                          \
+                                                                                                                                                               \
     _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(target, target->_head->next, new_node);                                                                     \
 }                                                                                                                                                              \
                                                                                                                                                                \
 static void _C_PUBLIC_MEMBER(LIST_NAME, push_front_move)(LIST_NAME* target, TYPE* item)                                                                        \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     NODE_NAME* new_node = _C_PUBLIC_MEMBER(NODE_NAME, create_ptr)();                                                                                           \
     new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                                             \
-    if (NULL != item) _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(&new_node->value, item);                                                                         \
+                                                                                                                                                               \
+    if (NULL != item)                                                                                                                                          \
+    {                                                                                                                                                          \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(&new_node->value, item);                                                                                       \
+    }                                                                                                                                                          \
+                                                                                                                                                               \
     _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(target, target->_head->next, new_node);                                                                     \
 }                                                                                                                                                              \
                                                                                                                                                                \
 static void _C_PUBLIC_MEMBER(LIST_NAME, pop_back)(LIST_NAME* target)                                                                                           \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
-    if (0 == target->_size) return;                                                                                                                            \
-    _C_PRIVATE_MEMBER(LIST_NAME, remove_node)(target, target->_head->prev);                                                                                    \
+                                                                                                                                                               \
+    if (0 != target->_size)                                                                                                                                    \
+    {                                                                                                                                                          \
+        _C_PRIVATE_MEMBER(LIST_NAME, remove_node)(target, target->_head->prev);                                                                                \
+    }                                                                                                                                                          \
 }                                                                                                                                                              \
                                                                                                                                                                \
 static void _C_PUBLIC_MEMBER(LIST_NAME, pop_front)(LIST_NAME* target)                                                                                          \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
-    if (0 == target->_size) return;                                                                                                                            \
-    _C_PRIVATE_MEMBER(LIST_NAME, remove_node)(target, target->_head->next);                                                                                    \
+                                                                                                                                                               \
+    if (0 != target->_size)                                                                                                                                    \
+    {                                                                                                                                                          \
+        _C_PRIVATE_MEMBER(LIST_NAME, remove_node)(target, target->_head->next);                                                                                \
+    }                                                                                                                                                          \
 }                                                                                                                                                              \
                                                                                                                                                                \
 static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, insert_at_iterator)(LIST_NAME* target, LIST_CONST_ITERATOR_NAME* where)                                  \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     NODE_NAME* new_node = _C_PUBLIC_MEMBER(NODE_NAME, create_ptr)();                                                                                           \
     new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                                             \
     _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(target, where->_node, new_node);                                                                            \
+                                                                                                                                                               \
     return (LIST_ITERATOR_NAME){                                                                                                                               \
         ._node = new_node,                                                                                                                                     \
         ._list = target                                                                                                                                        \
@@ -422,10 +497,17 @@ static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, insert_at_iterator)(LIST_N
 static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, insert_at_iterator_copy)(LIST_NAME* target, LIST_CONST_ITERATOR_NAME* where, const TYPE* item)           \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     NODE_NAME* new_node = _C_PUBLIC_MEMBER(NODE_NAME, create_ptr)();                                                                                           \
     new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                                             \
-    if (NULL != item) _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(&new_node->value, item);                                                                         \
+                                                                                                                                                               \
+    if (NULL != item)                                                                                                                                          \
+    {                                                                                                                                                          \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(&new_node->value, item);                                                                                       \
+    }                                                                                                                                                          \
+                                                                                                                                                               \
     _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(target, where->_node, new_node);                                                                            \
+                                                                                                                                                               \
     return (LIST_ITERATOR_NAME){                                                                                                                               \
         ._node = new_node,                                                                                                                                     \
         ._list = target                                                                                                                                        \
@@ -435,10 +517,17 @@ static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, insert_at_iterator_copy)(L
 static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, insert_at_iterator_move)(LIST_NAME* target, LIST_CONST_ITERATOR_NAME* where, TYPE* item)                 \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     NODE_NAME* new_node = _C_PUBLIC_MEMBER(NODE_NAME, create_ptr)();                                                                                           \
     new_node->value = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                                             \
-    if (NULL != item) _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(&new_node->value, item);                                                                         \
+                                                                                                                                                               \
+    if (NULL != item)                                                                                                                                          \
+    {                                                                                                                                                          \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(&new_node->value, item);                                                                                       \
+    }                                                                                                                                                          \
+                                                                                                                                                               \
     _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(target, where->_node, new_node);                                                                            \
+                                                                                                                                                               \
     return (LIST_ITERATOR_NAME){                                                                                                                               \
         ._node = new_node,                                                                                                                                     \
         ._list = target                                                                                                                                        \
@@ -449,12 +538,15 @@ static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, erase_at_iterator)(LIST_NA
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
     _C_CUSTOM_ASSERT(!_C_PUBLIC_MEMBER(LIST_CONST_ITERATOR_NAME, is_end)(where), "List cannot erase end iterator");                                            \
+                                                                                                                                                               \
     NODE_NAME* temp = where->_node;                                                                                                                            \
     LIST_ITERATOR_NAME it_next = (LIST_ITERATOR_NAME){                                                                                                         \
         ._node = temp->next,                                                                                                                                   \
         ._list = target                                                                                                                                        \
     };                                                                                                                                                         \
+                                                                                                                                                               \
     _C_PRIVATE_MEMBER(LIST_NAME, remove_node)(target, temp);                                                                                                   \
+                                                                                                                                                               \
     return it_next;                                                                                                                                            \
 }                                                                                                                                                              \
                                                                                                                                                                \
@@ -462,6 +554,7 @@ static TYPE* _C_PUBLIC_MEMBER(LIST_NAME, element_front)(LIST_NAME* target)      
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
     _C_CUSTOM_ASSERT(target->_size != 0, "List is empty");                                                                                                     \
+                                                                                                                                                               \
     return &target->_head->next->value;                                                                                                                        \
 }                                                                                                                                                              \
                                                                                                                                                                \
@@ -469,6 +562,7 @@ static const TYPE* _C_PUBLIC_MEMBER(LIST_NAME, celement_front)(const LIST_NAME* 
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
     _C_CUSTOM_ASSERT(target->_size != 0, "List is empty");                                                                                                     \
+                                                                                                                                                               \
     return &target->_head->next->value;                                                                                                                        \
 }                                                                                                                                                              \
                                                                                                                                                                \
@@ -476,6 +570,7 @@ static TYPE* _C_PUBLIC_MEMBER(LIST_NAME, element_back)(LIST_NAME* target)       
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
     _C_CUSTOM_ASSERT(target->_size != 0, "List is empty");                                                                                                     \
+                                                                                                                                                               \
     return &target->_head->prev->value;                                                                                                                        \
 }                                                                                                                                                              \
                                                                                                                                                                \
@@ -483,6 +578,7 @@ static const TYPE* _C_PUBLIC_MEMBER(LIST_NAME, celement_back)(const LIST_NAME* t
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
     _C_CUSTOM_ASSERT(target->_size != 0, "List is empty");                                                                                                     \
+                                                                                                                                                               \
     return &target->_head->prev->value;                                                                                                                        \
 }                                                                                                                                                              \
                                                                                                                                                                \
@@ -521,6 +617,7 @@ static LIST_ITERATOR_NAME _C_PUBLIC_MEMBER(LIST_NAME, end)(LIST_NAME* target)   
 static void _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(LIST_NAME* target, NODE_NAME* before, NODE_NAME* node)                                              \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     node->prev = before->prev;                                                                                                                                 \
     node->next = before;                                                                                                                                       \
     before->prev->next = node;                                                                                                                                 \
@@ -531,6 +628,7 @@ static void _C_PRIVATE_MEMBER(LIST_NAME, link_node_before)(LIST_NAME* target, NO
 static void _C_PRIVATE_MEMBER(LIST_NAME, unlink_node)(LIST_NAME* target, NODE_NAME* node)                                                                      \
 {                                                                                                                                                              \
     _C_CUSTOM_ASSERT(NULL != target, "List is NULL");                                                                                                          \
+                                                                                                                                                               \
     node->prev->next = node->next;                                                                                                                             \
     node->next->prev = node->prev;                                                                                                                             \
     node->next = node->prev = NULL;                                                                                                                            \

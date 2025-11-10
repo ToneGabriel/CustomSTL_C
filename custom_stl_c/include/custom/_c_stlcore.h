@@ -21,20 +21,19 @@
 
 
 #ifndef NDEBUG
-#   define _C_CUSTOM_ASSERT(Expr, Msg) __Assert(Expr, Msg, #Expr, __FILE__, __LINE__)
+#   define _C_CUSTOM_ASSERT(Expr, Msg) __Assert(Expr, Msg, #Expr, __func__)
 #else
 #   define _C_CUSTOM_ASSERT(Expr, Msg) ((void)0)
 #endif
 
 
-static inline void __Assert(bool expr, const char* msg, const char* expected, const char* file, int line)
+static inline void __Assert(bool expr, const char* msg, const char* expected, const char* func)
 {
     if (!expr)
     {
         fprintf(stderr, "Assert failed:\t%s\n", msg);
-        fprintf(stderr, "Expected:\t%s\n", expected);
-        fprintf(stderr, "File:\t\t%s\n", file);
-        fprintf(stderr, "Line:\t\t%d\n", line);
+        fprintf(stderr, "Function:\t\t%s\n", func);
+        fprintf(stderr, "Expected:\t\t%s\n", expected);
         abort();
     }
     else

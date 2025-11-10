@@ -44,6 +44,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(PAIR_NAME)                             
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(PAIR_NAME)                                                        \
 {                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Pair is NULL");                                                       \
+                                                                                                            \
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE_1)(&target->first);                                           \
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE_2)(&target->second);                                          \
 }                                                                                                           \
@@ -52,22 +53,31 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(PAIR_NAME)                               
 {                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != dest, "Pair dest is NULL");                                                    \
     _C_CUSTOM_ASSERT(NULL != source, "Pair source is NULL");                                                \
-    if (dest == source) return;                                                                             \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE_1)(&dest->first, &source->first);                                \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE_2)(&dest->second, &source->second);                              \
+                                                                                                            \
+    if (dest != source)                                                                                     \
+    {                                                                                                       \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE_1)(&dest->first, &source->first);                            \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE_2)(&dest->second, &source->second);                          \
+    }                                                                                                       \
 }                                                                                                           \
                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(PAIR_NAME)                                                           \
 {                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != dest, "Pair dest is NULL");                                                    \
     _C_CUSTOM_ASSERT(NULL != source, "Pair source is NULL");                                                \
-    if (dest == source) return;                                                                             \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE_1)(&dest->first, &source->first);                                \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE_2)(&dest->second, &source->second);                              \
+                                                                                                            \
+    if (dest != source)                                                                                     \
+    {                                                                                                       \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE_1)(&dest->first, &source->first);                            \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE_2)(&dest->second, &source->second);                          \
+    }                                                                                                       \
 }                                                                                                           \
                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(PAIR_NAME)                                                         \
 {                                                                                                           \
+    _C_CUSTOM_ASSERT(NULL != left, "Pair left is NULL");                                                    \
+    _C_CUSTOM_ASSERT(NULL != right, "Pair right is NULL");                                                  \
+                                                                                                            \
     return  _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE_1)(&left->first, &right->first) &&                     \
             _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE_2)(&left->second, &right->second);                     \
 }                                                                                                           \

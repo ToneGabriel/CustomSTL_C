@@ -132,13 +132,17 @@ static void _C_PUBLIC_MEMBER(RANGE_UTILS_NAME_PREFIX, create_range_copy)(TYPE* c
 static void _C_PUBLIC_MEMBER(RANGE_UTILS_NAME_PREFIX, destroy_range)(TYPE* const ptr, size_t len)                           \
 {                                                                                                                           \
     for (size_t i = 0; i < len; ++i)                                                                                        \
+    {                                                                                                                       \
         _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(ptr + i);                                                                \
+    }                                                                                                                       \
 }                                                                                                                           \
                                                                                                                             \
 static void _C_PUBLIC_MEMBER(RANGE_UTILS_NAME_PREFIX, create_range)(TYPE* const ptr, size_t len)                            \
 {                                                                                                                           \
     for (size_t i = 0; i < len; ++i)                                                                                        \
+    {                                                                                                                       \
         *(ptr + i) = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                           \
+    }                                                                                                                       \
 }                                                                                                                           \
                                                                                                                             \
 static void _C_PUBLIC_MEMBER(RANGE_UTILS_NAME_PREFIX, create_range_copy)(TYPE* const ptr, size_t len, const TYPE* item)     \
@@ -219,9 +223,22 @@ static void _C_PUBLIC_MEMBER(HEAP_ADJUST_NAME, heapify_down)(TYPE* const arr, si
         smallest = idx;                                                                                         \
         left = 2 * idx + 1;                                                                                     \
         right = 2 * idx + 2;                                                                                    \
-        if (left < arr_size && TYPE_REF_COMPARE_FUNC(&arr[left], &arr[smallest])) smallest = left;              \
-        if (right < arr_size && TYPE_REF_COMPARE_FUNC(&arr[right], &arr[smallest])) smallest = right;           \
-        if (smallest == idx) return;                                                                            \
+                                                                                                                \
+        if (left < arr_size && TYPE_REF_COMPARE_FUNC(&arr[left], &arr[smallest]))                               \
+        {                                                                                                       \
+            smallest = left;                                                                                    \
+        }                                                                                                       \
+                                                                                                                \
+        if (right < arr_size && TYPE_REF_COMPARE_FUNC(&arr[right], &arr[smallest]))                             \
+        {                                                                                                       \
+            smallest = right;                                                                                   \
+        }                                                                                                       \
+                                                                                                                \
+        if (smallest == idx)                                                                                    \
+        {                                                                                                       \
+            return;                                                                                             \
+        }                                                                                                       \
+                                                                                                                \
         _C_PUBLIC_MEMBER(HEAP_ADJUST_SWAP_HELPER_NAME, do_swap)(&arr[idx], &arr[smallest]);                     \
         idx = smallest;                                                                                         \
     }                                                                                                           \

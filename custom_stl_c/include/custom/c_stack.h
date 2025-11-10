@@ -46,6 +46,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(STACK_NAME)                            
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(STACK_NAME)                                                   \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                  \
+                                                                                                        \
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(STACK_VECTOR_HELPER_NAME)(&target->_vec);                      \
 }                                                                                                       \
                                                                                                         \
@@ -53,6 +54,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(STACK_NAME)                              
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != dest, "Stack dest is NULL");                                               \
     _C_CUSTOM_ASSERT(NULL != source, "Stack source is NULL");                                           \
+                                                                                                        \
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(STACK_VECTOR_HELPER_NAME)(&dest->_vec, &source->_vec);            \
 }                                                                                                       \
                                                                                                         \
@@ -60,6 +62,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(STACK_NAME)                              
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != dest, "Stack dest is NULL");                                               \
     _C_CUSTOM_ASSERT(NULL != source, "Stack source is NULL");                                           \
+                                                                                                        \
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(STACK_VECTOR_HELPER_NAME)(&dest->_vec, &source->_vec);            \
 }                                                                                                       \
                                                                                                         \
@@ -67,60 +70,70 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(STACK_NAME)                            
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != left, "Stack left is NULL");                                               \
     _C_CUSTOM_ASSERT(NULL != right, "Stack right is NULL");                                             \
+                                                                                                        \
     return _C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(STACK_VECTOR_HELPER_NAME)(&left->_vec, &right->_vec);    \
 }                                                                                                       \
                                                                                                         \
 static void _C_PUBLIC_MEMBER(STACK_NAME, clear)(STACK_NAME* target)                                     \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                  \
+                                                                                                        \
     _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, clear)(&target->_vec);                                   \
 }                                                                                                       \
                                                                                                         \
 static size_t _C_PUBLIC_MEMBER(STACK_NAME, size)(const STACK_NAME* target)                              \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                  \
+                                                                                                        \
     return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, size)(&target->_vec);                             \
 }                                                                                                       \
                                                                                                         \
 static bool _C_PUBLIC_MEMBER(STACK_NAME, empty)(const STACK_NAME* target)                               \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                  \
+                                                                                                        \
     return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, empty)(&target->_vec);                            \
 }                                                                                                       \
                                                                                                         \
 static void _C_PUBLIC_MEMBER(STACK_NAME, insert)(STACK_NAME* target)                                    \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                  \
+                                                                                                        \
     _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, push_back)(&target->_vec);                               \
 }                                                                                                       \
                                                                                                         \
 static void _C_PUBLIC_MEMBER(STACK_NAME, insert_copy)(STACK_NAME* target, const TYPE* item)             \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                  \
+                                                                                                        \
     _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, push_back_copy)(&target->_vec, item);                    \
 }                                                                                                       \
                                                                                                         \
 static void _C_PUBLIC_MEMBER(STACK_NAME, insert_move)(STACK_NAME* target, TYPE* item)                   \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                  \
+                                                                                                        \
     _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, push_back_move)(&target->_vec, item);                    \
 }                                                                                                       \
                                                                                                         \
 static void _C_PUBLIC_MEMBER(STACK_NAME, pop)(STACK_NAME* target)                                       \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                  \
+                                                                                                        \
     _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, pop_back)(&target->_vec);                                \
 }                                                                                                       \
                                                                                                         \
 static TYPE* _C_PUBLIC_MEMBER(STACK_NAME, peek)(STACK_NAME* target)                                     \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                  \
+                                                                                                        \
     return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, element_back)(&target->_vec);                     \
 }                                                                                                       \
                                                                                                         \
 static const TYPE* _C_PUBLIC_MEMBER(STACK_NAME, cpeek)(const STACK_NAME* target)                        \
 {                                                                                                       \
     _C_CUSTOM_ASSERT(NULL != target, "Stack is NULL");                                                  \
+                                                                                                        \
     return _C_PUBLIC_MEMBER(STACK_VECTOR_HELPER_NAME, celement_back)(&target->_vec);                    \
 }                                                                                                       \
 

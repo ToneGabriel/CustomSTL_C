@@ -100,6 +100,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_ITERATOR_NAME)                  
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_CONST_ITERATOR_NAME)                                                                                  \
 {                                                                                                                                                      \
     _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                                       \
+                                                                                                                                                       \
     target->_ptr = NULL;                                                                                                                               \
     target->_vec = NULL;                                                                                                                               \
 }                                                                                                                                                      \
@@ -113,6 +114,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(VECTOR_CONST_ITERATOR_NAME)              
 {                                                                                                                                                      \
     _C_CUSTOM_ASSERT(NULL != dest, "Vector Iterator dest is NULL");                                                                                    \
     _C_CUSTOM_ASSERT(NULL != source, "Vector Iterator source is NULL");                                                                                \
+                                                                                                                                                       \
     dest->_ptr = source->_ptr;                                                                                                                         \
     dest->_vec = source->_vec;                                                                                                                         \
 }                                                                                                                                                      \
@@ -126,6 +128,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(VECTOR_CONST_ITERATOR_NAME)              
 {                                                                                                                                                      \
     _C_CUSTOM_ASSERT(NULL != dest, "Vector Iterator dest is NULL");                                                                                    \
     _C_CUSTOM_ASSERT(NULL != source, "Vector Iterator source is NULL");                                                                                \
+                                                                                                                                                       \
     dest->_ptr = source->_ptr;                                                                                                                         \
     dest->_vec = source->_vec;                                                                                                                         \
 }                                                                                                                                                      \
@@ -139,6 +142,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_CONST_ITERATOR_NAME)            
 {                                                                                                                                                      \
     _C_CUSTOM_ASSERT(NULL != left, "Vector Iterator left is NULL");                                                                                    \
     _C_CUSTOM_ASSERT(NULL != right, "Vector Iterator right is NULL");                                                                                  \
+                                                                                                                                                       \
     return left->_ptr == right->_ptr;                                                                                                                  \
 }                                                                                                                                                      \
                                                                                                                                                        \
@@ -151,6 +155,7 @@ static void _C_PUBLIC_MEMBER(VECTOR_CONST_ITERATOR_NAME, pre_increment)(VECTOR_C
 {                                                                                                                                                      \
     _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                                       \
     _C_CUSTOM_ASSERT(target->_ptr < target->_vec->_last, "Cannot increment end iterator.");                                                            \
+                                                                                                                                                       \
     ++target->_ptr;                                                                                                                                    \
 }                                                                                                                                                      \
                                                                                                                                                        \
@@ -175,6 +180,7 @@ static void _C_PUBLIC_MEMBER(VECTOR_CONST_ITERATOR_NAME, increment_by)(VECTOR_CO
 {                                                                                                                                                      \
     _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                                       \
     _C_CUSTOM_ASSERT(target->_ptr + diff < target->_vec->_last, "Cannot increment end iterator.");                                                     \
+                                                                                                                                                       \
     target->_ptr += diff;                                                                                                                              \
 }                                                                                                                                                      \
                                                                                                                                                        \
@@ -199,6 +205,7 @@ static void _C_PUBLIC_MEMBER(VECTOR_CONST_ITERATOR_NAME, pre_decrement)(VECTOR_C
 {                                                                                                                                                      \
     _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                                       \
     _C_CUSTOM_ASSERT(target->_ptr > target->_vec->_first, "Cannot decrement begin iterator.");                                                         \
+                                                                                                                                                       \
     --target->_ptr;                                                                                                                                    \
 }                                                                                                                                                      \
                                                                                                                                                        \
@@ -223,6 +230,7 @@ static void _C_PUBLIC_MEMBER(VECTOR_CONST_ITERATOR_NAME, decrement_by)(VECTOR_CO
 {                                                                                                                                                      \
     _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                                       \
     _C_CUSTOM_ASSERT(target->_ptr - diff > target->_vec->_first, "Cannot decrement begin iterator.");                                                  \
+                                                                                                                                                       \
     target->_ptr -= diff;                                                                                                                              \
 }                                                                                                                                                      \
                                                                                                                                                        \
@@ -247,6 +255,7 @@ static const TYPE* _C_PUBLIC_MEMBER(VECTOR_CONST_ITERATOR_NAME, dereference)(VEC
 {                                                                                                                                                      \
     _C_CUSTOM_ASSERT(NULL != target, "Vector Iterator is NULL");                                                                                       \
     _C_CUSTOM_ASSERT(target->_ptr < target->_vec->_last, "Cannot dereference end iterator.");                                                          \
+                                                                                                                                                       \
     return target->_ptr;                                                                                                                               \
 }                                                                                                                                                      \
                                                                                                                                                        \
@@ -321,47 +330,77 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(VECTOR_NAME)                           
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)                                                                                      \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
-    if (NULL == target->_first) return;                                                                                                     \
-    _C_PUBLIC_MEMBER(VECTOR_RANGE_UTILS_NAME, destroy_range)(target->_first, _C_PUBLIC_MEMBER(VECTOR_NAME, size)(target));                  \
-    free(target->_first);                                                                                                                   \
-    target->_first = target->_last = target->_final = NULL;                                                                                 \
+                                                                                                                                            \
+    if (NULL != target->_first)                                                                                                             \
+    {                                                                                                                                       \
+        _C_PUBLIC_MEMBER(VECTOR_RANGE_UTILS_NAME, destroy_range)(target->_first, _C_PUBLIC_MEMBER(VECTOR_NAME, size)(target));              \
+        free(target->_first);                                                                                                               \
+        target->_first = target->_last = target->_final = NULL;                                                                             \
+    }                                                                                                                                       \
 }                                                                                                                                           \
                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(VECTOR_NAME)                                                                                         \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != dest, "Vector dest is NULL");                                                                                  \
     _C_CUSTOM_ASSERT(NULL != source, "Vector source is NULL");                                                                              \
-    if (dest == source) return;                                                                                                             \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)(dest);                                                                                \
-    if (NULL == source->_first) return;                                                                                                     \
-    size_t new_capacity = _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(source);                                                                  \
-    size_t new_size = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(source);                                                                          \
-    *dest = _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(new_capacity);                                                                   \
-    for (size_t i = 0; i < new_size; ++i)                                                                                                   \
-        _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(dest->_first + i, source->_first + i);                                                      \
-    dest->_last = dest->_first + new_size;                                                                                                  \
+                                                                                                                                            \
+    if (dest != source)                                                                                                                     \
+    {                                                                                                                                       \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)(dest);                                                                            \
+                                                                                                                                            \
+        if (NULL != source->_first)                                                                                                         \
+        {                                                                                                                                   \
+            size_t new_capacity = _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(source);                                                          \
+            size_t new_size = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(source);                                                                  \
+            *dest = _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(new_capacity);                                                           \
+                                                                                                                                            \
+            for (size_t i = 0; i < new_size; ++i)                                                                                           \
+            {                                                                                                                               \
+                _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(dest->_first + i, source->_first + i);                                              \
+            }                                                                                                                               \
+                                                                                                                                            \
+            dest->_last = dest->_first + new_size;                                                                                          \
+        }                                                                                                                                   \
+                                                                                                                                            \
+    }                                                                                                                                       \
 }                                                                                                                                           \
                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(VECTOR_NAME)                                                                                         \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != dest, "Vector dest is NULL");                                                                                  \
     _C_CUSTOM_ASSERT(NULL != source, "Vector source is NULL");                                                                              \
-    if (dest == source) return;                                                                                                             \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)(dest);                                                                                \
-    if (NULL == source->_first) return;                                                                                                     \
-    *dest = *source;                                                                                                                        \
-    source->_first = source->_last = source->_final = NULL;                                                                                 \
+                                                                                                                                            \
+    if (dest != source)                                                                                                                     \
+    {                                                                                                                                       \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)(dest);                                                                            \
+                                                                                                                                            \
+        if (NULL != source->_first)                                                                                                         \
+        {                                                                                                                                   \
+            *dest = *source;                                                                                                                \
+            source->_first = source->_last = source->_final = NULL;                                                                         \
+        }                                                                                                                                   \
+    }                                                                                                                                       \
 }                                                                                                                                           \
                                                                                                                                             \
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(VECTOR_NAME)                                                                                       \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != left, "Vector left is NULL");                                                                                  \
     _C_CUSTOM_ASSERT(NULL != right, "Vector right is NULL");                                                                                \
+                                                                                                                                            \
     if (_C_PUBLIC_MEMBER(VECTOR_NAME, size)(left) !=                                                                                        \
-        _C_PUBLIC_MEMBER(VECTOR_NAME, size)(right)) return false;                                                                           \
-    size_t s = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(left);                                                                                   \
-    for (size_t i = 0; i < s; ++i)                                                                                                          \
-        if (!_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)(left->_first + i, right->_first + i)) return false;                                  \
+        _C_PUBLIC_MEMBER(VECTOR_NAME, size)(right))                                                                                         \
+    {                                                                                                                                       \
+        return false;                                                                                                                       \
+    }                                                                                                                                       \
+                                                                                                                                            \
+    for (size_t i = 0, s = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(left); i < s; ++i)                                                           \
+    {                                                                                                                                       \
+        if (!_C_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(TYPE)(left->_first + i, right->_first + i))                                                \
+        {                                                                                                                                   \
+            return false;                                                                                                                   \
+        }                                                                                                                                   \
+    }                                                                                                                                       \
+                                                                                                                                            \
     return true;                                                                                                                            \
 }                                                                                                                                           \
                                                                                                                                             \
@@ -379,46 +418,57 @@ static VECTOR_NAME _C_PUBLIC_MEMBER(VECTOR_NAME, create_capacity)(size_t capacit
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, clear)(VECTOR_NAME* target)                                                                       \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
-    if (NULL == target->_first) return;                                                                                                     \
-    size_t vec_size = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(target);                                                                          \
-    for (size_t i = 0; i < vec_size; ++i)                                                                                                   \
-        _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(target->_first + i);                                                                     \
-    target->_last = target->_first;                                                                                                         \
+                                                                                                                                            \
+    if (NULL != target->_first)                                                                                                             \
+    {                                                                                                                                       \
+        for (size_t i = 0, s = _C_PUBLIC_MEMBER(VECTOR_NAME, size)(target); i < s; ++i)                                                     \
+        {                                                                                                                                   \
+            _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(target->_first + i);                                                                 \
+        }                                                                                                                                   \
+                                                                                                                                            \
+        target->_last = target->_first;                                                                                                     \
+    }                                                                                                                                       \
 }                                                                                                                                           \
                                                                                                                                             \
 static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, data)(VECTOR_NAME* target)                                                                       \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
+                                                                                                                                            \
     return target->_first;                                                                                                                  \
 }                                                                                                                                           \
                                                                                                                                             \
 static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, cdata)(const VECTOR_NAME* target)                                                          \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
+                                                                                                                                            \
     return target->_first;                                                                                                                  \
 }                                                                                                                                           \
                                                                                                                                             \
 static size_t _C_PUBLIC_MEMBER(VECTOR_NAME, size)(const VECTOR_NAME* target)                                                                \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
+                                                                                                                                            \
     return target->_last - target->_first;                                                                                                  \
 }                                                                                                                                           \
                                                                                                                                             \
 static size_t _C_PUBLIC_MEMBER(VECTOR_NAME, capacity)(const VECTOR_NAME* target)                                                            \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
+                                                                                                                                            \
     return target->_final - target->_first;                                                                                                 \
 }                                                                                                                                           \
                                                                                                                                             \
 static bool _C_PUBLIC_MEMBER(VECTOR_NAME, empty)(const VECTOR_NAME* target)                                                                 \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
+                                                                                                                                            \
     return target->_last == target->_first;                                                                                                 \
 }                                                                                                                                           \
                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, realloc)(VECTOR_NAME* target, size_t capacity)                                                    \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
+                                                                                                                                            \
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)(target);                                                                              \
     target->_first = (TYPE*)malloc(sizeof(TYPE) * capacity);                                                                                \
     target->_last = target->_final = target->_first + capacity;                                                                             \
@@ -428,6 +478,7 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, realloc)(VECTOR_NAME* target, size_t c
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, realloc_copy)(VECTOR_NAME* target, size_t capacity, const TYPE* item)                             \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
+                                                                                                                                            \
     _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(VECTOR_NAME)(target);                                                                              \
     target->_first = (TYPE*)malloc(sizeof(TYPE) * capacity);                                                                                \
     target->_last = target->_final = target->_first + capacity;                                                                             \
@@ -437,43 +488,66 @@ static void _C_PUBLIC_MEMBER(VECTOR_NAME, realloc_copy)(VECTOR_NAME* target, siz
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back)(VECTOR_NAME* target)                                                                   \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
-    if (NULL == target->_first) return;                                                                                                     \
-    _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(target);                                                                                \
-    *target->_last = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                           \
-    ++target->_last;                                                                                                                        \
+                                                                                                                                            \
+    if (NULL != target->_first)                                                                                                             \
+    {                                                                                                                                       \
+        _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(target);                                                                            \
+        *target->_last = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                       \
+        ++target->_last;                                                                                                                    \
+    }                                                                                                                                       \
 }                                                                                                                                           \
                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_copy)(VECTOR_NAME* target, const TYPE* item)                                            \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
-    if (NULL == target->_first) return;                                                                                                     \
-    _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(target);                                                                                \
-    *target->_last = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                           \
-    if (NULL != item) _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(target->_last, item);                                                         \
-    ++target->_last;                                                                                                                        \
+                                                                                                                                            \
+    if (NULL != target->_first)                                                                                                             \
+    {                                                                                                                                       \
+        _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(target);                                                                            \
+        *target->_last = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                       \
+                                                                                                                                            \
+        if (NULL != item)                                                                                                                   \
+        {                                                                                                                                   \
+            _C_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(TYPE)(target->_last, item);                                                                   \
+        }                                                                                                                                   \
+                                                                                                                                            \
+        ++target->_last;                                                                                                                    \
+    }                                                                                                                                       \
 }                                                                                                                                           \
                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, push_back_move)(VECTOR_NAME* target, TYPE* item)                                                  \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
-    if (NULL == target->_first) return;                                                                                                     \
-    _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(target);                                                                                \
-    *target->_last = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                           \
-    if (NULL != item) _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(target->_last, item);                                                         \
-    ++target->_last;                                                                                                                        \
+                                                                                                                                            \
+    if (NULL != target->_first)                                                                                                             \
+    {                                                                                                                                       \
+        _C_PRIVATE_MEMBER(VECTOR_NAME, realloc_if_full)(target);                                                                            \
+        *target->_last = _C_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(TYPE)();                                                                       \
+                                                                                                                                            \
+        if (NULL != item)                                                                                                                   \
+        {                                                                                                                                   \
+            _C_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(TYPE)(target->_last, item);                                                                   \
+        }                                                                                                                                   \
+                                                                                                                                            \
+        ++target->_last;                                                                                                                    \
+    }                                                                                                                                       \
 }                                                                                                                                           \
                                                                                                                                             \
 static void _C_PUBLIC_MEMBER(VECTOR_NAME, pop_back)(VECTOR_NAME* target)                                                                    \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
-    if (target->_first == target->_last) return;                                                                                            \
-    _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(--target->_last);                                                                            \
+                                                                                                                                            \
+    if (target->_first != target->_last)                                                                                                    \
+    {                                                                                                                                       \
+        _C_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(TYPE)(--target->_last);                                                                        \
+    }                                                                                                                                       \
 }                                                                                                                                           \
                                                                                                                                             \
 static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_front)(VECTOR_NAME* target)                                                              \
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
     _C_CUSTOM_ASSERT(target->_first < target->_last, "Vector element out of range");                                                        \
+                                                                                                                                            \
     return target->_first;                                                                                                                  \
 }                                                                                                                                           \
                                                                                                                                             \
@@ -481,6 +555,7 @@ static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, celement_front)(const VECTOR_NA
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
     _C_CUSTOM_ASSERT(target->_first < target->_last, "Vector element out of range");                                                        \
+                                                                                                                                            \
     return target->_first;                                                                                                                  \
 }                                                                                                                                           \
                                                                                                                                             \
@@ -488,6 +563,7 @@ static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_back)(VECTOR_NAME* target)   
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
     _C_CUSTOM_ASSERT(target->_first < target->_last, "Vector element out of range");                                                        \
+                                                                                                                                            \
     return target->_last - 1;                                                                                                               \
 }                                                                                                                                           \
                                                                                                                                             \
@@ -495,6 +571,7 @@ static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, celement_back)(const VECTOR_NAM
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
     _C_CUSTOM_ASSERT(target->_first < target->_last, "Vector element out of range");                                                        \
+                                                                                                                                            \
     return target->_last - 1;                                                                                                               \
 }                                                                                                                                           \
                                                                                                                                             \
@@ -502,6 +579,7 @@ static TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, element_at)(VECTOR_NAME* target, size
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
     _C_CUSTOM_ASSERT(target->_first + index < target->_last, "Vector element out of range");                                                \
+                                                                                                                                            \
     return target->_first + index;                                                                                                          \
 }                                                                                                                                           \
                                                                                                                                             \
@@ -509,6 +587,7 @@ static const TYPE* _C_PUBLIC_MEMBER(VECTOR_NAME, celement_at)(const VECTOR_NAME*
 {                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "Vector is NULL");                                                                                     \
     _C_CUSTOM_ASSERT(target->_first + index < target->_last, "Vector element out of range");                                                \
+                                                                                                                                            \
     return target->_first + index;                                                                                                          \
 }                                                                                                                                           \
                                                                                                                                             \
