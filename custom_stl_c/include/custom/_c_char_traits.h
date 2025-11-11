@@ -42,21 +42,35 @@ static int _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(const CHAR_TYPE* s
 static size_t _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(const CHAR_TYPE* str)                                                                                                       \
 {                                                                                                                                                                                           \
     size_t count = 0;                                                                                                                                                                       \
-    for (/*Empty*/; *str != NULLCHR; ++count, ++str) { /*do nothing*/ }                                                                                                                     \
+                                                                                                                                                                                            \
+    for (/*Empty*/; *str != NULLCHR; ++count, ++str)                                                                                                                                        \
+    {                                                                                                                                                                                       \
+        /*do nothing*/                                                                                                                                                                      \
+    }                                                                                                                                                                                       \
+                                                                                                                                                                                            \
     return count;                                                                                                                                                                           \
 }                                                                                                                                                                                           \
                                                                                                                                                                                             \
 static const CHAR_TYPE* _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, find)(const CHAR_TYPE* str, size_t count, CHAR_TYPE chr)                                                                  \
 {                                                                                                                                                                                           \
     for (/*Empty*/; 0 < count; --count, ++str)                                                                                                                                              \
-        if (*str == chr) return str;                                                                                                                                                        \
+    {                                                                                                                                                                                       \
+        if (*str == chr)                                                                                                                                                                    \
+        {                                                                                                                                                                                   \
+            return str;                                                                                                                                                                     \
+        }                                                                                                                                                                                   \
+    }                                                                                                                                                                                       \
+                                                                                                                                                                                            \
     return NULL;                                                                                                                                                                            \
 }                                                                                                                                                                                           \
                                                                                                                                                                                             \
 static const CHAR_TYPE* _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, assign)(CHAR_TYPE* const str, size_t count, CHAR_TYPE chr)                                                                \
 {                                                                                                                                                                                           \
     for (CHAR_TYPE* next = str; count > 0; --count, ++next)                                                                                                                                 \
+    {                                                                                                                                                                                       \
         *next = chr;                                                                                                                                                                        \
+    }                                                                                                                                                                                       \
+                                                                                                                                                                                            \
     return str;                                                                                                                                                                             \
 }                                                                                                                                                                                           \
                                                                                                                                                                                             \
@@ -65,8 +79,13 @@ static int _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare_substr)(const CHAR_
     _C_CUSTOM_ASSERT(   pos1 + len1 <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str1) &&                                                                                           \
                         pos2 + len2 <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str2),                                                                                             \
                         "Char Traits invalid length or starting position");                                                                                                                 \
-    if (len1 != len2) return len1 - len2;                                                                                                                                                   \
-	return _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(str1 + pos1, str2 + pos2, len1);  /* same length */                                                                           \
+                                                                                                                                                                                            \
+    if (len1 != len2)                                                                                                                                                                       \
+    {                                                                                                                                                                                       \
+        return len1 - len2;                                                                                                                                                                 \
+    }                                                                                                                                                                                       \
+                                                                                                                                                                                            \
+    return _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(str1 + pos1, str2 + pos2, len1);  /* same length */                                                                           \
 }                                                                                                                                                                                           \
                                                                                                                                                                                             \
 static size_t _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, find_substr)(const CHAR_TYPE* str1, const CHAR_TYPE* str2, size_t pos, size_t len)                                                  \
@@ -75,9 +94,17 @@ static size_t _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, find_substr)(const CHAR_
     _C_CUSTOM_ASSERT(   pos <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str1) &&                                                                                                   \
                         len <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str2),                                                                                                     \
                         "Char Traits invalid length or starting position");                                                                                                                 \
+                                                                                                                                                                                            \
     size_t last_substr_pos = _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str1) - len;                                                                                                 \
-	for (size_t i = pos; i <= last_substr_pos; ++i)                                                                                                                                         \
-		if (_C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(str1 + i, str2, len) == 0) return i;                                                                                         \
+                                                                                                                                                                                            \
+    for (size_t i = pos; i <= last_substr_pos; ++i)                                                                                                                                         \
+	{                                                                                                                                                                                       \
+        if (_C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(str1 + i, str2, len) == 0)                                                                                                   \
+        {                                                                                                                                                                                   \
+            return i;                                                                                                                                                                       \
+        }                                                                                                                                                                                   \
+    }                                                                                                                                                                                       \
+                                                                                                                                                                                            \
     return NPOS;                                                                                                                                                                            \
 }                                                                                                                                                                                           \
                                                                                                                                                                                             \
@@ -87,11 +114,23 @@ static size_t _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, rfind_substr)(const CHAR
     _C_CUSTOM_ASSERT(   pos <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str1) &&                                                                                                   \
                         len <= _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str2),                                                                                                     \
                         "Char Traits invalid length or starting position");                                                                                                                 \
+                                                                                                                                                                                            \
     size_t len1 = _C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, length)(str1);                                                                                                                  \
 	size_t last_substr_pos 	= (pos > len1) ? len1 - len : pos;                                                                                                                              \
-	for (size_t i = last_substr_pos; i > 0; --i)                                                                                                                                            \
-		if (_C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(str1 + i, str2, len) == 0) return i;                                                                                         \
-	if (_C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(str1, str2, len) == 0) return 0; /* if i == 0 */                                                                                 \
+                                                                                                                                                                                            \
+    for (size_t i = last_substr_pos; i > 0; --i)                                                                                                                                            \
+	{                                                                                                                                                                                       \
+        if (_C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(str1 + i, str2, len) == 0)                                                                                                   \
+        {                                                                                                                                                                                   \
+            return i;                                                                                                                                                                       \
+        }                                                                                                                                                                                   \
+    }                                                                                                                                                                                       \
+                                                                                                                                                                                            \
+    if (_C_PUBLIC_MEMBER(CHAR_TRAITS_NAME_PREFIX, compare)(str1, str2, len) == 0)                                                                                                           \
+    {                                                                                                                                                                                       \
+        return 0; /* if i == 0 */                                                                                                                                                           \
+    }                                                                                                                                                                                       \
+                                                                                                                                                                                            \
     return NPOS;                                                                                                                                                                            \
 }                                                                                                                                                                                           \
 

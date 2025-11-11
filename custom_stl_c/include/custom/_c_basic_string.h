@@ -33,18 +33,22 @@ static bool                 _C_PRIVATE_MEMBER(BASIC_STRING_NAME, is_large)(const
                                                                                                                                       \
 static CHAR_TYPE* _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(BASIC_STRING_NAME* target)                                            \
 {                                                                                                                                     \
-    CHAR_TYPE* ret = NULL;                                                                                                            \
-    if (_C_PRIVATE_MEMBER(BASIC_STRING_NAME, is_large)(target)) ret = target->_storage._ptr;                                          \
-    else ret = target->_storage._buff;                                                                                                \
-    return ret;                                                                                                                       \
+    if (_C_PRIVATE_MEMBER(BASIC_STRING_NAME, is_large)(target))                                                                       \
+    {                                                                                                                                 \
+        return target->_storage._ptr;                                                                                                 \
+    }                                                                                                                                 \
+                                                                                                                                      \
+    return target->_storage._buff;                                                                                                    \
 }                                                                                                                                     \
                                                                                                                                       \
 static const CHAR_TYPE* _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(const BASIC_STRING_NAME* target)                               \
 {                                                                                                                                     \
-    const CHAR_TYPE* ret = NULL;                                                                                                      \
-    if (_C_PRIVATE_MEMBER(BASIC_STRING_NAME, is_large)(target)) ret = target->_storage._ptr;                                          \
-    else ret = target->_storage._buff;                                                                                                \
-    return ret;                                                                                                                       \
+    if (_C_PRIVATE_MEMBER(BASIC_STRING_NAME, is_large)(target))                                                                       \
+    {                                                                                                                                 \
+        return target->_storage._ptr;                                                                                                 \
+    }                                                                                                                                 \
+                                                                                                                                      \
+    return target->_storage._buff;                                                                                                    \
 }                                                                                                                                     \
                                                                                                                                       \
 static bool _C_PRIVATE_MEMBER(BASIC_STRING_NAME, is_large)(const BASIC_STRING_NAME* target)                                           \
@@ -128,6 +132,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(BASIC_STRING_ITERATOR_NAME)            
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(BASIC_STRING_CONST_ITERATOR_NAME)                                                                                                 \
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
+                                                                                                                                                                            \
     target->_ptr = NULL;                                                                                                                                                    \
     target->_str = NULL;                                                                                                                                                    \
 }                                                                                                                                                                           \
@@ -141,6 +146,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(BASIC_STRING_CONST_ITERATOR_NAME)        
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != dest, "String Iterator dest is NULL");                                                                                                         \
     _C_CUSTOM_ASSERT(NULL != source, "String Iterator source is NULL");                                                                                                     \
+                                                                                                                                                                            \
     dest->_ptr = source->_ptr;                                                                                                                                              \
     dest->_str = source->_str;                                                                                                                                              \
 }                                                                                                                                                                           \
@@ -154,6 +160,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(BASIC_STRING_CONST_ITERATOR_NAME)        
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != dest, "String Iterator dest is NULL");                                                                                                         \
     _C_CUSTOM_ASSERT(NULL != source, "String Iterator source is NULL");                                                                                                     \
+                                                                                                                                                                            \
     dest->_ptr = source->_ptr;                                                                                                                                              \
     dest->_str = source->_str;                                                                                                                                              \
 }                                                                                                                                                                           \
@@ -167,6 +174,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(BASIC_STRING_CONST_ITERATOR_NAME)      
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != left, "String Iterator left is NULL");                                                                                                         \
     _C_CUSTOM_ASSERT(NULL != right, "String Iterator right is NULL");                                                                                                       \
+                                                                                                                                                                            \
     return left->_ptr == right->_ptr;                                                                                                                                       \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
@@ -179,6 +187,7 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_CONST_ITERATOR_NAME, pre_increment)(BA
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
     _C_CUSTOM_ASSERT(target->_ptr < _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target->_str) + target->_str->_size, "Cannot increment end iterator.");                  \
+                                                                                                                                                                            \
     ++target->_ptr;                                                                                                                                                         \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
@@ -203,6 +212,7 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_CONST_ITERATOR_NAME, increment_by)(BAS
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
     _C_CUSTOM_ASSERT(target->_ptr + diff < _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target->_str) + target->_str->_size, "Cannot increment end iterator.");           \
+                                                                                                                                                                            \
     target->_ptr += diff;                                                                                                                                                   \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
@@ -227,6 +237,7 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_CONST_ITERATOR_NAME, pre_decrement)(BA
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
     _C_CUSTOM_ASSERT(target->_ptr > _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target->_str), "Cannot decrement begin iterator.");                                      \
+                                                                                                                                                                            \
     --target->_ptr;                                                                                                                                                         \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
@@ -251,6 +262,7 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_CONST_ITERATOR_NAME, decrement_by)(BAS
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
     _C_CUSTOM_ASSERT(target->_ptr - diff > _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target->_str), "Cannot decrement begin iterator.");                               \
+                                                                                                                                                                            \
     target->_ptr -= diff;                                                                                                                                                   \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
@@ -275,6 +287,7 @@ static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_CONST_ITERATOR_NAME, deref
 {                                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != target, "String Iterator is NULL");                                                                                                            \
     _C_CUSTOM_ASSERT(target->_ptr < _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target->_str) + target->_str->_size, "Cannot dereference end iterator.");                \
+                                                                                                                                                                            \
     return target->_ptr;                                                                                                                                                    \
 }                                                                                                                                                                           \
                                                                                                                                                                             \
@@ -416,18 +429,21 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_NAME, clear)(BASIC_STRING_NAME* target
 static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, size)(const BASIC_STRING_NAME* target)                                                                                                                                 \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return target->_size;                                                                                                                                                                                                \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, capacity)(const BASIC_STRING_NAME* target)                                                                                                                             \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return target->_capacity;                                                                                                                                                                                            \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static bool _C_PUBLIC_MEMBER(BASIC_STRING_NAME, empty)(const BASIC_STRING_NAME* target)                                                                                                                                  \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return 0 == target->_size;                                                                                                                                                                                           \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -444,36 +460,42 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_NAME, pop_back)(BASIC_STRING_NAME* tar
 static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, data)(BASIC_STRING_NAME* target)                                                                                                                                   \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target);                                                                                                                                                        \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, cdata)(const BASIC_STRING_NAME* target)                                                                                                                      \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target);                                                                                                                                                       \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_front)(BASIC_STRING_NAME* target)                                                                                                                          \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target);                                                                                                                                                        \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_front)(const BASIC_STRING_NAME* target)                                                                                                             \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target);                                                                                                                                                       \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_back)(BASIC_STRING_NAME* target)                                                                                                                           \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target) + target->_size;                                                                                                                                        \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_back)(const BASIC_STRING_NAME* target)                                                                                                              \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target) + target->_size;                                                                                                                                       \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -481,6 +503,7 @@ static CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, element_at)(BASIC_STRING_N
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
     _C_CUSTOM_ASSERT(index < target->_size, "Index out of bounds");                                                                                                                                                      \
+                                                                                                                                                                                                                         \
     return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, get_ptr)(target) + index;                                                                                                                                                \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -488,6 +511,7 @@ static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_at)(const B
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
     _C_CUSTOM_ASSERT(index < target->_size, "Index out of bounds");                                                                                                                                                      \
+                                                                                                                                                                                                                         \
     return _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target) + index;                                                                                                                                               \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -527,6 +551,7 @@ static int _C_PUBLIC_MEMBER(BASIC_STRING_NAME, compare)(const BASIC_STRING_NAME*
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String target is NULL");                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != other, "String other is NULL");                                                                                                                                                             \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, compare_substr)( _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), 0, target->_size,                                                                            \
                                                                     _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(other), 0, other->_size);                                                                             \
 }                                                                                                                                                                                                                        \
@@ -535,6 +560,7 @@ static int _C_PUBLIC_MEMBER(BASIC_STRING_NAME, compare_substr)(const BASIC_STRIN
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String target is NULL");                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != other, "String other is NULL");                                                                                                                                                             \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, compare_substr)( _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), pos1, len1,                                                                                  \
                                                                     _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(other), pos2, len2);                                                                                  \
 }                                                                                                                                                                                                                        \
@@ -543,6 +569,7 @@ static int _C_PUBLIC_MEMBER(BASIC_STRING_NAME, compare_cstr)(const BASIC_STRING_
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
     _C_CUSTOM_ASSERT(NULL != cstr, "CString is NULL");                                                                                                                                                                   \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, compare_substr)( _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), 0, target->_size,                                                                            \
                                                                     cstr, 0, _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, length)(cstr));                                                                                     \
 }                                                                                                                                                                                                                        \
@@ -551,6 +578,7 @@ static int _C_PUBLIC_MEMBER(BASIC_STRING_NAME, compare_subcstr)(const BASIC_STRI
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
     _C_CUSTOM_ASSERT(NULL != cstr, "CString is NULL");                                                                                                                                                                   \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, compare_substr)( _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), pos1, len1,                                                                                  \
                                                                     cstr, pos2, len2);                                                                                                                                   \
 }                                                                                                                                                                                                                        \
@@ -559,6 +587,7 @@ static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, find)(const BASIC_STRING_NAME*
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String target is NULL");                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != other, "String other is NULL");                                                                                                                                                             \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, find_substr)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(other), 0, other->_size);                         \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -566,6 +595,7 @@ static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, find_substr)(const BASIC_STRIN
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String target is NULL");                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != other, "String other is NULL");                                                                                                                                                             \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, find_substr)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(other), pos, len);                                \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -573,6 +603,7 @@ static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, find_cstr)(const BASIC_STRING_
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
     _C_CUSTOM_ASSERT(NULL != cstr, "CString is NULL");                                                                                                                                                                   \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, find_substr)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), cstr, 0, _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, length)(cstr));                                 \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -580,12 +611,14 @@ static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, find_subcstr)(const BASIC_STRI
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
     _C_CUSTOM_ASSERT(NULL != cstr, "CString is NULL");                                                                                                                                                                   \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, find_substr)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), cstr, pos, len);                                                                                 \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, find_char)(const BASIC_STRING_NAME* target, CHAR_TYPE chr, size_t pos)                                                                                                 \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, find_substr)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), &chr, pos, 1);                                                                                   \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -593,6 +626,7 @@ static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, rfind)(const BASIC_STRING_NAME
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String target is NULL");                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != other, "String other is NULL");                                                                                                                                                             \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, rfind_substr)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(other), NPOS, other->_size);                     \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -600,6 +634,7 @@ static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, rfind_substr)(const BASIC_STRI
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String target is NULL");                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != other, "String other is NULL");                                                                                                                                                             \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, rfind_substr)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(other), pos, len);                               \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -607,6 +642,7 @@ static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, rfind_cstr)(const BASIC_STRING
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
     _C_CUSTOM_ASSERT(NULL != cstr, "CString is NULL");                                                                                                                                                                   \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, rfind_substr)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), cstr, NPOS, _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, length)(cstr));                             \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -614,12 +650,14 @@ static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, rfind_subcstr)(const BASIC_STR
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
     _C_CUSTOM_ASSERT(NULL != cstr, "CString is NULL");                                                                                                                                                                   \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, rfind_substr)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), cstr, pos, len);                                                                                \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
 static size_t _C_PUBLIC_MEMBER(BASIC_STRING_NAME, rfind_char)(const BASIC_STRING_NAME* target, CHAR_TYPE chr, size_t pos)                                                                                                \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String is NULL");                                                                                                                                                                  \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, rfind_substr)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target), &chr, pos, 1);                                                                                  \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -642,7 +680,12 @@ static bool _C_PUBLIC_MEMBER(BASIC_STRING_NAME, starts_with)(const BASIC_STRING_
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String target is NULL");                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != other, "String other is NULL");                                                                                                                                                             \
-    if (target->_size < other->_size) return false;                                                                                                                                                                      \
+                                                                                                                                                                                                                         \
+    if (target->_size < other->_size)                                                                                                                                                                                    \
+    {                                                                                                                                                                                                                    \
+        return false;                                                                                                                                                                                                    \
+    }                                                                                                                                                                                                                    \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, compare)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target),                                                                                                      \
                                                             _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(other),                                                                                                       \
                                                             other->_size);                                                                                                                                               \
@@ -657,6 +700,7 @@ static bool _C_PUBLIC_MEMBER(BASIC_STRING_NAME, starts_with_cstr)(const BASIC_ST
 static bool _C_PUBLIC_MEMBER(BASIC_STRING_NAME, starts_with_char)(const BASIC_STRING_NAME* target, CHAR_TYPE chr)                                                                                                        \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String target is NULL");                                                                                                                                                           \
+                                                                                                                                                                                                                         \
     return (!_C_PUBLIC_MEMBER(BASIC_STRING_NAME, empty)(target) && *_C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_front)(target) == chr);                                                                                 \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \
@@ -664,7 +708,12 @@ static bool _C_PUBLIC_MEMBER(BASIC_STRING_NAME, ends_with)(const BASIC_STRING_NA
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String target is NULL");                                                                                                                                                           \
     _C_CUSTOM_ASSERT(NULL != other, "String other is NULL");                                                                                                                                                             \
-    if (target->_size < other->_size) return false;                                                                                                                                                                      \
+                                                                                                                                                                                                                         \
+    if (target->_size < other->_size)                                                                                                                                                                                    \
+    {                                                                                                                                                                                                                    \
+        return false;                                                                                                                                                                                                    \
+    }                                                                                                                                                                                                                    \
+                                                                                                                                                                                                                         \
     return _C_PUBLIC_MEMBER(CHAR_TYPE_TRAITS_NAME, compare)(_C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(target) + target->_size + 1 - other->_size,                                                                   \
                                                             _C_PRIVATE_MEMBER(BASIC_STRING_NAME, cget_ptr)(other),                                                                                                       \
                                                             other->_size);                                                                                                                                               \
@@ -679,6 +728,7 @@ static bool _C_PUBLIC_MEMBER(BASIC_STRING_NAME, ends_with_cstr)(const BASIC_STRI
 static bool _C_PUBLIC_MEMBER(BASIC_STRING_NAME, ends_with_char)(const BASIC_STRING_NAME* target, CHAR_TYPE chr)                                                                                                          \
 {                                                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String target is NULL");                                                                                                                                                           \
+                                                                                                                                                                                                                         \
     return (!_C_PUBLIC_MEMBER(BASIC_STRING_NAME, empty)(target) && *_C_PUBLIC_MEMBER(BASIC_STRING_NAME, celement_back)(target) == chr);                                                                                  \
 }                                                                                                                                                                                                                        \
                                                                                                                                                                                                                          \

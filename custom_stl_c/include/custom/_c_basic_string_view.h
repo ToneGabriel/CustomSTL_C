@@ -65,6 +65,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_CREATE(BASIC_STRING_VIEW_CONST_ITERATOR_NAME) 
 DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_DESTROY(BASIC_STRING_VIEW_CONST_ITERATOR_NAME)                                                                                                         \
 {                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String View Iterator is NULL");                                                                                                                    \
+                                                                                                                                                                                         \
     target->_ptr = NULL;                                                                                                                                                                 \
     target->_strview = NULL;                                                                                                                                                             \
 }                                                                                                                                                                                        \
@@ -73,6 +74,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_COPY(BASIC_STRING_VIEW_CONST_ITERATOR_NAME)   
 {                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != dest, "String View Iterator dest is NULL");                                                                                                                 \
     _C_CUSTOM_ASSERT(NULL != source, "String View Iterator source is NULL");                                                                                                             \
+                                                                                                                                                                                         \
     dest->_ptr = source->_ptr;                                                                                                                                                           \
     dest->_strview = source->_strview;                                                                                                                                                   \
 }                                                                                                                                                                                        \
@@ -81,6 +83,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_MOVE(BASIC_STRING_VIEW_CONST_ITERATOR_NAME)   
 {                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != dest, "String View Iterator dest is NULL");                                                                                                                 \
     _C_CUSTOM_ASSERT(NULL != source, "String View Iterator source is NULL");                                                                                                             \
+                                                                                                                                                                                         \
     dest->_ptr = source->_ptr;                                                                                                                                                           \
     dest->_strview = source->_strview;                                                                                                                                                   \
 }                                                                                                                                                                                        \
@@ -89,6 +92,7 @@ DECLARE_CUSTOM_TYPE_PUBLIC_MEMBER_EQUALS(BASIC_STRING_VIEW_CONST_ITERATOR_NAME) 
 {                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != left, "String View Iterator left is NULL");                                                                                                                 \
     _C_CUSTOM_ASSERT(NULL != right, "String View Iterator right is NULL");                                                                                                               \
+                                                                                                                                                                                         \
     return left->_ptr == right->_ptr;                                                                                                                                                    \
 }                                                                                                                                                                                        \
                                                                                                                                                                                          \
@@ -96,6 +100,7 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_CONST_ITERATOR_NAME, pre_incremen
 {                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String View Iterator is NULL");                                                                                                                    \
     _C_CUSTOM_ASSERT(target->_ptr < target->_strview->_last, "Cannot increment end iterator.");                                                                                          \
+                                                                                                                                                                                         \
     ++target->_ptr;                                                                                                                                                                      \
 }                                                                                                                                                                                        \
                                                                                                                                                                                          \
@@ -110,6 +115,7 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_CONST_ITERATOR_NAME, increment_by
 {                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String View Iterator is NULL");                                                                                                                    \
     _C_CUSTOM_ASSERT(target->_ptr + diff < target->_strview->_last, "Cannot increment end iterator.");                                                                                   \
+                                                                                                                                                                                         \
     target->_ptr += diff;                                                                                                                                                                \
 }                                                                                                                                                                                        \
                                                                                                                                                                                          \
@@ -124,6 +130,7 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_CONST_ITERATOR_NAME, pre_decremen
 {                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String View Iterator is NULL");                                                                                                                    \
     _C_CUSTOM_ASSERT(target->_ptr > target->_strview->_first, "Cannot decrement begin iterator.");                                                                                       \
+                                                                                                                                                                                         \
     --target->_ptr;                                                                                                                                                                      \
 }                                                                                                                                                                                        \
                                                                                                                                                                                          \
@@ -138,6 +145,7 @@ static void _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_CONST_ITERATOR_NAME, decrement_by
 {                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String View Iterator is NULL");                                                                                                                    \
     _C_CUSTOM_ASSERT(target->_ptr - diff > target->_strview->_first, "Cannot decrement begin iterator.");                                                                                \
+                                                                                                                                                                                         \
     target->_ptr -= diff;                                                                                                                                                                \
 }                                                                                                                                                                                        \
                                                                                                                                                                                          \
@@ -152,6 +160,7 @@ static const CHAR_TYPE* _C_PUBLIC_MEMBER(BASIC_STRING_VIEW_CONST_ITERATOR_NAME, 
 {                                                                                                                                                                                        \
     _C_CUSTOM_ASSERT(NULL != target, "String View Iterator is NULL");                                                                                                                    \
     _C_CUSTOM_ASSERT(target->_ptr < target->_strview->_last, "Cannot dereference end iterator.");                                                                                        \
+                                                                                                                                                                                         \
     return target->_ptr;                                                                                                                                                                 \
 }                                                                                                                                                                                        \
 
